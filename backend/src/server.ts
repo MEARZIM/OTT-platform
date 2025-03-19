@@ -1,11 +1,11 @@
 
 import dotenv from "dotenv";
-import appAuth from "./modules/auth";
+import app from "./app";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 
-appAuth.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
