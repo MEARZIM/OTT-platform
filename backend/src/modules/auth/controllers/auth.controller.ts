@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 import AuthService from "../service/auth.service";
 import UserData from "../types/user-auth";
+
+dotenv.config();
 
 class AuthController {
     async googleCallback(req: Request, res: Response) {
@@ -10,7 +13,7 @@ class AuthController {
         const token = AuthService.generateToken(user);
         res.cookie("token", token, { httpOnly: true });
 
-        res.redirect(`http://localhost:5174/dashboard/${user.email}`); // Redirect to the dashboard
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard/${user.email}`); // Redirect to the dashboard
     }
 
     async logout(req: Request, res: Response) {
@@ -19,7 +22,7 @@ class AuthController {
                 return res.status(500).json({ status: 500, message: 'Logout failed', error: err });
             }
             res.clearCookie("token");
-            return res.redirect("http://localhost:5174/");
+            return res.redirect(`${process.env.FRONTEND_URL}/`);
         });
     }
 

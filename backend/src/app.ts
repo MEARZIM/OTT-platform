@@ -1,5 +1,6 @@
 import express from "express";
 import passport from "passport";
+import dotenv from "dotenv";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -8,12 +9,12 @@ import { errorHandler } from "./middleware/error.middleware";
 import userRoutes from "./modules/users/routes/user.routes";
 import authRoutes from "./modules/auth/routes/auth.routes";
 
-
+dotenv.config();
 const app = express();
 
 app.use(
     cors({
-        origin: "http://localhost:5174", 
+        origin: process.env.FRONTEND_URL || "http://localhost:5174", 
         methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
     })

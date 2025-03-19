@@ -20,6 +20,8 @@ const Dashboard = () => {
         
     }, [email, navigate]);
     console.log(user);
+
+    
     return user ? (
         <div>
             <h1>Welcome, {user.name}</h1>
