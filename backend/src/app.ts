@@ -8,6 +8,7 @@ import cors from "cors";
 import { errorHandler } from "./middleware/error.middleware";
 import userRoutes from "./modules/users/routes/user.routes";
 import authRoutes from "./modules/auth/routes/auth.routes";
+import adminRoutes from "./modules/admins/routes/admin.routes";
 
 dotenv.config();
 const app = express();
@@ -22,10 +23,12 @@ app.use(
 
 // ✅ Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({ secret: process.env.SESSION_SECRET as string || "bdjbcvijsdbijvbsd", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("../uploads",express.static("uploads"));
 
 // ✅ Global error handler
 app.use(errorHandler);
@@ -33,6 +36,7 @@ app.use(errorHandler);
 // ✅ Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 export default app;

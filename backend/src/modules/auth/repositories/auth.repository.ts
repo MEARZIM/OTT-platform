@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { Profile } from "passport";
 
-const prisma = new PrismaClient();
+import { prisma } from "../../../libs/prisma";
 
 class AuthRepository {
 

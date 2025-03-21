@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { CreateUserDTO } from "../dtos/user.dto";
 
-const prisma = new PrismaClient();
+import { prisma } from "../../../libs/prisma";
 
 class UserRepository {
 
