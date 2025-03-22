@@ -9,8 +9,10 @@ class AdminController {
                 return res.status(400).json({ message: "No file uploaded" });
             }
 
-            const videoUrl = await AdminServices.uploadVideoService(req.file);
-            console.log(videoUrl);
+            const fileName = `${Date.now()}-${req.file.originalname}`;
+            const mimeType = req.file.mimetype;
+
+            const videoUrl = await AdminServices.uploadToS3(req.file.buffer,fileName, mimeType);
 
             res.status(200).json({ message: "Video uploaded successfully", videoUrl });
         } catch (error) {

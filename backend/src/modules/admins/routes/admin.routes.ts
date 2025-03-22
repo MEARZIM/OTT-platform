@@ -6,17 +6,19 @@ import path from "path";
 
 const router = Router();
 
-// Multer storage setup
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/videos/");
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${uuidv4()}-${Date.now()}${path.extname(file.originalname)}`);
+// Store file in memory (RAM) instead of disk
+const storage = multer.memoryStorage();
+
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith("video/")) {
+            cb(null, true);
+        } else {
+            cb(new Error("Invalid file type. Only mp4 is allowed"));
+        }
     }
 });
-
-const upload = multer({ storage });
 
 router.post("/upload", upload.single("file"), AdminController.uploadVideoController as any);
 
