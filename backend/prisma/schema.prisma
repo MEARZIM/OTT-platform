@@ -32,13 +32,19 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+enum AdminRole {
+  ADMIN
+  SUPER_ADMIN
+}
+
 model Admin {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
-  email          String   @unique
+  email          String    @unique
   password       String
-  uploadedVideos Video[]  @relation("UploadedBy") // Admin uploads videos
-  createdAt      DateTime @default(now())
+  role           AdminRole @default(ADMIN)
+  uploadedVideos Video[]   @relation("UploadedBy") // Admin uploads videos
+  createdAt      DateTime  @default(now())
 }
 
 model User {

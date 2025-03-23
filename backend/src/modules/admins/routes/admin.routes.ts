@@ -1,8 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
-import { v4 as uuidv4 } from 'uuid';
 import AdminController from "../controllers/admin.controller";
-import path from "path";
+import AdminAuthController from "../../auth/controllers/adminAuth.controller";
 
 const router = Router();
 
@@ -20,6 +19,9 @@ const upload = multer({
     }
 });
 
-router.post("/upload", upload.single("file"), AdminController.uploadVideoController as any);
+router.post("/upload", upload.single("file"), AdminController.uploadVideoController as any); // Admin can only upload videos
+router.get("/:id", AdminController.getAdminById as any);
+router.post("/create", AdminController.createAdmin as any); // SUPER_ADMINS only create Admin
+router.post("/auth/login", AdminAuthController.credentialsAdminLogin as any); // Super Admin login TODO: ADD admin login in same route
 
 export default router;
