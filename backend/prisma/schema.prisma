@@ -66,6 +66,8 @@ model Video {
   uploadedById String        @db.ObjectId
   uploadedBy   Admin         @relation("UploadedBy", fields: [uploadedById], references: [id])
   ratedUsers   VideoRating[]
+  muxAssetId   String
+  playbackId   String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 

@@ -1,7 +1,9 @@
 import { Router } from "express";
 import multer from "multer";
+
 import AdminController from "../controllers/admin.controller";
-import AdminAuthController from "../../auth/controllers/adminAuth.controller";
+import AdminAuthController from "../auth/controller/adminAuth.controller";
+
 
 const router = Router();
 

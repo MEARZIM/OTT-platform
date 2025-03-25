@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 
 import { prisma } from "../../../libs/prisma";
 import { CreateAdminDTO } from "../types/admin";
+import { Video } from "@prisma/client";
 
 class AdminRepository {
     async findById(id: string) {
@@ -36,6 +37,12 @@ class AdminRepository {
             },
         })
     }
+
+    async saveVideo(data: Video) {
+        return await prisma.video.create({
+            data
+        });
+    }   
 }
 
 export default new AdminRepository();
