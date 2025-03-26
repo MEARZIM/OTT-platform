@@ -36,7 +36,7 @@ const AuthScreen = () => {
         >
           {/* Navbar */}
           <header className="max-w-screen-lg mx-auto flex items-center justify-between p-6 w-full h-1/4">
-            <img src={Logo} alt="Netflix Logo" className="w-36 md:w-48" />
+            <img src={Logo} alt="Netflix Logo" className="size-15" />
             <Link
               to={"/login"}
               className="bg-[#EEF207] text-xl px-6 py-3 rounded flex items-center justify-center font-semibold hover:bg-[#EDFB14] hover:scale-105 transition transform duration-200 text-black"
