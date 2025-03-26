@@ -4,23 +4,7 @@ import adminService from "../services/admin.service";
 
 
 class AdminController {
-    async uploadVideoController(req: Request, res: Response) {
-        try {
-            if (!req.file) {
-                return res.status(400).json({ message: "No file uploaded" });
-            }
-
-            const fileName = `${Date.now()}-${req.file.originalname}`;
-            const mimeType = req.file.mimetype;
-
-            const videoUrl = await adminService.uploadVideo(req.file.buffer, fileName, mimeType);
-
-            res.status(200).json({ message: "Video uploaded successfully", videoUrl });
-        } catch (error: any) {
-            console.error(error);
-            res.status(500).json({ message: "Internal server error" });
-        }
-    };
+    
 
     async getAdminById(req: Request, res: Response) {
         const { id } = req.params;

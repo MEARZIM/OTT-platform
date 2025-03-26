@@ -10,6 +10,7 @@ import userRoutes from "./modules/users/routes/user.routes";
 import authRoutes from "./modules/auth/routes/auth.routes";
 import adminRoutes from "./modules/admins/routes/admin.routes";
 import categoryRouter from "./modules/contents/categories/routes/category.routes";
+import videoRouter from "./modules/contents/video/routes/video.routes";
 
 dotenv.config();
 const app = express();
@@ -39,6 +40,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/category", categoryRouter);
+app.use("/api/content/video", videoRouter);
 
 
 export default app;

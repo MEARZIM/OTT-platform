@@ -36,13 +36,7 @@ class AdminRepository {
                 password: hashedPassword,
             },
         })
-    }
-
-    async saveVideo(data: Video) {
-        return await prisma.video.create({
-            data
-        });
-    }   
+    } 
 }
 
 export default new AdminRepository();
