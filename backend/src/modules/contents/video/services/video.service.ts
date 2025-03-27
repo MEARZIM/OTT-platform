@@ -10,13 +10,13 @@ class VideoService {
 
         const command = new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME!,
-            Key: fileName,
+            Key: `videos/${fileName}`,
             Body: file,
         });
 
         await s3.send(command);
 
-        return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
+        return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/videos/${fileName}`;
 
         // return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
     }
