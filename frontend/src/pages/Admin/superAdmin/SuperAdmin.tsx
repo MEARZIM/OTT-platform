@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { Award, BarChart, ChevronLeft, CreditCard, Home, Menu, MessageSquare, ShieldUser, Star, Utensils } from "lucide-react";
+import { Award, BarChart, ChevronLeft, Menu, Settings, ShieldUser } from "lucide-react";
 
 import { Button } from "../../../components/ui/button";
 import { useAdminRouteStore } from "../../../lib/store";
@@ -10,18 +10,14 @@ import AdminRoutes from "./routes";
 export const NAV_ITEMS = [
   { id: "dashboard", label: "Super Admin Dashboard", icon: BarChart, path: "/super-admin/dashboard" },
   { id: "manage-admins", label: "Manage Admins", icon: ShieldUser, path: "/super-admin/manage-admins" },
-  { id: "rooms", label: "Rooms", icon: Home, path: "/super-admin/rooms" },
-  { id: "messages", label: "Messages", icon: MessageSquare, path: "/super-admin/messages" },
-  { id: "customer-review", label: "Customer Review", icon: Star, path: "/super-admin/customer-review" },
-  { id: "billing", label: "Billing System", icon: CreditCard, path: "/super-admin/billing" },
-  { id: "food-delivery", label: "Food Delivery", icon: Utensils, path: "/super-admin/food-delivery" },
-  { id: "premium", label: "Try Premium Version", icon: Award, path: "/super-admin/premium" },
+  { id: "adds", label: "Adds Mangement", icon: Award, path: "/super-admin/manage-adds" },
+  { id: "settings", label: "Settings", icon: Settings, path: "/super-admin/settings" },
 ];
 
 const SuperAdmin = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const { activeSection, setActiveSection } = useAdminRouteStore();
+  const { setActiveSection } = useAdminRouteStore();
 
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -55,7 +51,7 @@ const SuperAdmin = () => {
         )}
 
         <div className="p-6 border-b border-gray-200">
-          <h1 className="text-2xl font-semibold text-purple-600">TripyTrip</h1>
+          <h1 className="text-2xl font-semibold text-blue-600">PRIMEVIEW</h1>
         </div>
 
         <nav className="flex-1 py-4 overflow-y-auto space-y-1 px-2">

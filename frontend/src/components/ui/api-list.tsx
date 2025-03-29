@@ -32,19 +32,19 @@ export const ApiList = ({
             <ApiAlert
                 title={"POST"}
                 description={`${baseUrl}/${entityName}`}
-                variant={"admin"}
+                variant={"superAdmin"}
             />
 
             <ApiAlert
                 title={"PATCH"}
                 description={`${baseUrl}/${entityName}/{${entityIdName}}`}
-                variant={"admin"}
+                variant={"superAdmin"}
             />
 
             <ApiAlert
                 title={"DELETE"}
                 description={`${baseUrl}/${entityName}/{${entityIdName}}`}
-                variant={"admin"}
+                variant={"superAdmin"}
             />
         </>
     )

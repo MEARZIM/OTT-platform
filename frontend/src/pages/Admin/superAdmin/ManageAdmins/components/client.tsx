@@ -8,6 +8,7 @@ import { Separator } from "../../../../../components/ui/separator"
 import { AdminTable } from "../../../../../components/ui/admin-table"
 import { CategoryColumn, columns } from "./columns"
 import { ApiList } from "../../../../../components/ui/api-list"
+import { Link } from "react-router-dom"
 
 interface CategoryClientProps {
     data: CategoryColumn[]
@@ -26,13 +27,15 @@ export const AdminClient = ({
                     description="Manage Admin of PrimeView"
                 />
                 <Button >
+                    <Link to={"/super-admin/manage-admins/new"} className="flex gap-1 items-center">
                     <Plus className="w-4 h-4 mr-2" />
                     Add New Admin
+                    </Link>
                 </Button>
             </div>
 
             <Separator />
-            <AdminTable columns={columns} data={data} searchKey="name" />
+            <AdminTable columns={columns} data={data} searchKey="email" />
 
 
             <Heading

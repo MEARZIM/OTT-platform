@@ -11,17 +11,17 @@ import { toast } from "../../hooks/use-toast";
 interface ApiAlertProps {
     title: string;
     description: string;
-    variant: "public" | "admin";
+    variant: "public" | "superAdmin";
 }
 
 const textMap: Record<ApiAlertProps["variant"], string> = {
-    public: "public",
-    admin: "Admin",
+    public: "Public",
+    superAdmin: "Super Admin",
 }
 
 const varientMap: Record<ApiAlertProps["variant"], BadgeProps["variant"]> = {
     public: "secondary",
-    admin: "destructive",
+    superAdmin: "destructive",
 }
 
 export const ApiAlert = ({
@@ -37,6 +37,7 @@ export const ApiAlert = ({
 
     return (
         <>
+        <div className="my-2">
             <Alert>
                 <Server className="h-4 w-4" />
                 <AlertTitle className="flex items-center gap-x-2">
@@ -52,6 +53,7 @@ export const ApiAlert = ({
                     </Button>
                 </AlertDescription>
             </Alert>
+        </div>
         </>
     )
 }

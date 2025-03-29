@@ -16,6 +16,7 @@ import { CategoryColumn } from "./columns";
 import { useState } from "react";
 import { useToast } from "../../../../../hooks/use-toast";
 import AlertModal from "../../../../../components/modals/alert-modal";
+import { Link } from "react-router-dom";
 // import AlertModal from "../../../../../components/modals/alert-modal";
 
 
@@ -48,7 +49,7 @@ export const CellAction = ({ data }: CellActionProps) => {
             toast({ title: "Admin Deleted." });
 
         } catch (error) {
-            toast({ 
+            toast({
                 title: "Error",
                 description: "Internal Error",
                 variant: "destructive",
@@ -58,6 +59,8 @@ export const CellAction = ({ data }: CellActionProps) => {
             setOpen(false);
         }
     }
+
+
 
     return (
         <>
@@ -84,9 +87,14 @@ export const CellAction = ({ data }: CellActionProps) => {
                         <Copy className="mr-2 h-4 w-4" />
                         Copy Id
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => console.log("Click")} >
-                        <Edit className="mr-2 h-4 w-4" />
-                        Update
+                    <DropdownMenuItem >
+                        <Link
+                            to={`/super-admin/manage-admins/${data.id}`}
+                            className="flex gap-2 items-center"
+                        >
+                            <Edit className="mr-2 h-4 w-4" />
+                            Update
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => setOpen(true)}>
                         <Trash className="mr-2 h-4 w-4" />

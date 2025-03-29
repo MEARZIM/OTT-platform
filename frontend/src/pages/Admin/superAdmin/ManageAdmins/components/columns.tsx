@@ -9,7 +9,6 @@ export type CategoryColumn
         id: string
         admin: string
         email: string
-        password: string
         video: number;
         createdAt: string
     }
@@ -18,15 +17,12 @@ export const columns: ColumnDef<CategoryColumn>[] = [
     {
         accessorKey: "admin",
         header: "Admin",
+        cell: ({row}) => row.original.admin
     },
     {
         accessorKey: "email",
         header: "Email",
         cell: ({row}) => row.original.email
-    },
-    {
-        accessorKey: "password",
-        header: "Password",
     },
     {
         accessorKey: "videos",
