@@ -33,6 +33,6 @@ const upload = multer({
     }
 });
 
-videoRouter.post("/upload", verifyAdmin as any, upload.single("file"), videoController.uploadVideoController as any); // Admin can only upload videos
+videoRouter.post("/", verifyAdmin as any, upload.single("file"), videoController.uploadVideoController as any); // Admin can only upload videos
 
 export default videoRouter;
