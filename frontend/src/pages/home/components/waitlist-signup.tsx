@@ -2,10 +2,6 @@
 
 import { useState, useEffect } from "react"
 
-import { X, Instagram, Facebook, Linkedin } from "lucide-react"
-
-
-import { SocialIcon } from "./social-icon"
 import { WaitlistForm } from "./waitlist-form"
 
 export function WaitlistSignup() {

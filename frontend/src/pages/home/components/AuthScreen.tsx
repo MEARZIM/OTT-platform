@@ -13,8 +13,6 @@ const AuthScreen = () => {
         {/* Hero Section */}
         <Hero />
 
-        {/* Separator */}
-        <div className="h-2 w-full bg-[#232323]" />
 
         {/* Sections */}
         <section className="max-w-6xl mx-auto px-6 space-y-16 mt-16">
