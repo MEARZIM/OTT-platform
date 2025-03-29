@@ -37,6 +37,19 @@ enum AdminRole {
   SUPER_ADMIN
 }
 
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
+}
+
+enum VideoStatus {
+  PUBLISHED
+  DRAFT
+  PRIVATE
+  BANNED
+}
+
 model Admin {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
@@ -52,26 +65,27 @@ model User {
   name         String?
   email        String        @unique
   profileImage String?
+  status       UserStatus    @default(ACTIVE)
   accounts     Account[]
   ratedVideos  VideoRating[] // Ratings given by users
   createdAt    DateTime      @default(now())
 }
 
 model Video {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   description  String
   url          String
-  rating       Float         @default(0) // Average rating
-  uploadedById String        @db.ObjectId
-  uploadedBy   Admin         @relation("UploadedBy", fields: [uploadedById], references: [id])
+  rating       Float           @default(0) // Average rating
+  uploadedById String          @db.ObjectId
+  uploadedBy   Admin           @relation("UploadedBy", fields: [uploadedById], references: [id])
   ratedUsers   VideoRating[]
   muxAssetId   String
   playbackId   String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-
-  categories VideoCategory[]
+  status       VideoStatus     @default(DRAFT)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  categories   VideoCategory[]
 }
 
 model VideoRating {
