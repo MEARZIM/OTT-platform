@@ -5,6 +5,7 @@ import Register from "./pages/register/Register";
 import AdminLogin from "./pages/Admin/login/Login";
 import { Toaster } from './components/ui/toaster';
 import SuperAdmin from "./pages/Admin/superAdmin/SuperAdmin";
+import AdminPannel from "./pages/Admin/Admin";
 
 const App = () => {
   return (
@@ -17,6 +18,9 @@ const App = () => {
 
         {/* Super Admin Routes */}
         <Route path='/super-admin/*' element={<SuperAdmin />} />
+
+        {/* Admin Routes */}
+        <Route path='/admin/*' element={<AdminPannel />} />
       </Routes>
       <Toaster />
     </Router>

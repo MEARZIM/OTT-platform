@@ -1,15 +1,17 @@
+
 import { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { ChevronLeft, Menu } from "lucide-react";
 
-import { Button } from "../../../components/ui/button";
-import { useAdminRouteStore } from "../../../lib/store";
-import SuperAdminRoutes from "./routes";
-import { NAV_ITEMS } from "./nav-items";
+import { Button } from "../../components/ui/button";
+import { useAdminRouteStore } from "../../lib/store";
+import AdminRoutes from "./routes";
+import { ADMIN_NAV_ITEMS } from "./admin-nav-items";
 
 
 
-const SuperAdmin = () => {
+
+const AdminPannel = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { setActiveSection } = useAdminRouteStore();
@@ -50,7 +52,7 @@ const SuperAdmin = () => {
         </div>
 
         <nav className="flex-1 py-4 overflow-y-auto space-y-1 px-2">
-          {NAV_ITEMS.map(({ id, label, icon: Icon, path }) => (
+          {ADMIN_NAV_ITEMS.map(({ id, label, icon: Icon, path }) => (
             <Link
               key={id}
               to={path}
@@ -68,11 +70,12 @@ const SuperAdmin = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
-          <SuperAdminRoutes />
+          <AdminRoutes />
         </main>
       </div>
     </div>
   );
 };
 
-export default SuperAdmin;
+export default AdminPannel;
+

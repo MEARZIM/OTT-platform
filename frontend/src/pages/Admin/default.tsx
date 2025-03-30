@@ -1,10 +1,11 @@
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../../components/ui/card'
-import { Button } from '../../../components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../../components/ui/card'
+import { Button } from '../../components/ui/button'
 import { Link } from 'react-router-dom'
 
-import { useAdminRouteStore } from '../../../lib/store'
-import { NAV_ITEMS } from './nav-items'
+import { useAdminRouteStore } from '../../lib/store'
+import { ADMIN_NAV_ITEMS } from './admin-nav-items'
+
 
 const Default = () => {
     const { activeSection } = useAdminRouteStore();
@@ -16,11 +17,11 @@ const Default = () => {
                     <CardDescription>This section is under development and will be available soon.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <p>The {NAV_ITEMS.find(item => item.id === activeSection)?.label} module is currently being built. Please check back later.</p>
+                    <p>The {ADMIN_NAV_ITEMS.find(item => item.id === activeSection)?.label} module is currently being built. Please check back later.</p>
                 </CardContent>
                 <CardFooter>
                     <Button asChild>
-                        <Link to="/super-admin/dashboard">Return to Dashboard</Link>
+                        <Link to="/admin/dashboard">Return to Dashboard</Link>
                     </Button>
                 </CardFooter>
             </Card>

@@ -4,7 +4,7 @@ import ManageAdmins from "./ManageAdmins/ManageAdmins";
 import AdminId from "./ManageAdmins/id/adminId";
 import Default from "./default";
 
-const AdminRoutes = () => {
+const SuperAdminRoutes = () => {
     return (
         <div>
             <Routes>
@@ -19,4 +19,4 @@ const AdminRoutes = () => {
     )
 }
 
-export default AdminRoutes
+export default SuperAdminRoutes
