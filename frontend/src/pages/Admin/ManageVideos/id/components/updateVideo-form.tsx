@@ -106,7 +106,7 @@ function UpLoadVideo() {
 
               <div
                 onClick={handleFileInputClick}
-                className="col-span-3 row-span-3 h-fit"
+                className="col-span-3 row-span-3 h-full"
               >
                 {file ?
                   <FilePreview previewUrl={previewUrl} /> :

@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 
-import UpdateAdminForm from './components/updateAdmin-form'
+import UpdateAdminForm from './components/updateSuperAdmin-form'
 
-const AdminId = () => {
+const SuperAdminId = () => {
     const { id } = useParams<{ id: string }>();
     console.log(id);
     return (
@@ -14,4 +14,4 @@ const AdminId = () => {
     )
 }
 
-export default AdminId
+export default SuperAdminId
