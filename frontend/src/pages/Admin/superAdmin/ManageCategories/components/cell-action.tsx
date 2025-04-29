@@ -1,4 +1,7 @@
-"use client"
+import axios from "axios";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import {
     DropdownMenu,
@@ -8,16 +11,12 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../../../../../components/ui/dropdown-menu"
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
-
 import { Button } from "../../../../../components/ui/button";
 import { CategoryColumn } from "./columns";
-// import axios from "axios";
-import { useState } from "react";
 import { useToast } from "../../../../../hooks/use-toast";
 import AlertModal from "../../../../../components/modals/alert-modal";
-import { Link } from "react-router-dom";
-// import AlertModal from "../../../../../components/modals/alert-modal";
+import { BACKEND_URL } from "../../../../../lib/utils";
+
 
 
 interface CellActionProps {
@@ -26,6 +25,7 @@ interface CellActionProps {
 
 
 export const CellAction = ({ data }: CellActionProps) => {
+   
 
 
     const [open, setOpen] = useState(false);
@@ -36,7 +36,7 @@ export const CellAction = ({ data }: CellActionProps) => {
         navigator.clipboard.writeText(id);
         toast({
             title: "Copied!",
-            description: "The Admin ID has been copied to your clipboard.",
+            description: "The Category ID has been copied to your clipboard.",
         });
     }
 
@@ -44,9 +44,10 @@ export const CellAction = ({ data }: CellActionProps) => {
         try {
 
             setLoading(true);
-            // TODO:: DELETE ADMIN
+            await axios.delete(`${BACKEND_URL}/api/category/category-delete/${data.id}`);
+            window.location.reload();
 
-            toast({ title: "Admin Deleted." });
+            toast({ title: "Category Deleted." });
 
         } catch (error) {
             toast({

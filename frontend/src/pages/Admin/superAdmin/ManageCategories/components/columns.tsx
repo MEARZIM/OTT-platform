@@ -1,4 +1,3 @@
-"use client"
 
 import { ColumnDef } from "@tanstack/react-table"
 import { CellAction } from "./cell-action"
@@ -8,20 +7,20 @@ export type CategoryColumn
     = {
         id: string
         categoryName: string
-        video: number;
+        videos: number;
         createdAt: string
     }
 
 export const columns: ColumnDef<CategoryColumn>[] = [
     {
-        accessorKey: "Category Name",
+        accessorKey: "categoryName",
         header: "Category Name",
         cell: ({row}) => row.original.categoryName
     },
     {
         accessorKey: "videos",
         header: "Videos",
-        cell: ({row}) => row.original.video
+        cell: ({row}) => row.original.videos
     },
     {
         accessorKey: "createdAt",

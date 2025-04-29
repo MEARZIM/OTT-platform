@@ -1,11 +1,16 @@
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "../../../../../../components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../../../../components/ui/form";
 import Heading from "../../../../../../components/ui/heading";
 import { Input } from "../../../../../../components/ui/input";
+import { useToast } from "../../../../../../hooks/use-toast";
+import { BACKEND_URL } from "../../../../../../lib/utils";
+
 
 interface AddCategoryFormProps {
     initialData: {
@@ -22,23 +27,51 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const AddCategoryForm = ({ initialData }: AddCategoryFormProps) => {
 
+
+const AddCategoryForm = ({ initialData }: AddCategoryFormProps) => {
+    const { toast } = useToast()
+    
+    const [loading, setLoading] = useState(false);
+    
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
+        defaultValues: initialData ? { categoryName: initialData.name } : {
             categoryName: "",
         },
     });
-
+    
     const action = initialData ? "Save Changes" : "Create";
-
+    
     const title = initialData ? "Edit Category" : "Create Category";
     const description = initialData ? "Edit this Category" : "Add a new Category";
 
-
-    const onSubmit = (values: FormValues) => {
-        console.log(values);
+    
+    
+    const onSubmit = async (values: FormValues) => {
+        const data = {
+            "names":[values.categoryName]
+        };
+        try {
+            setLoading(true);
+            await axios.post(`${BACKEND_URL}/api/category/create-categories`, data);
+            
+            toast({
+                title: "Category Created",
+                description: "Your category has been created.",
+                variant: "default", 
+            });
+        } catch (error: any) {
+            console.log(error);
+            toast({
+                title: "Something went wrong",
+                description: error.response.data.error,
+                variant: "destructive",
+            });
+        } finally {
+            setLoading(false);
+            form.reset();
+        }
     };
 
     return (
@@ -66,7 +99,7 @@ const AddCategoryForm = ({ initialData }: AddCategoryFormProps) => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="cursor-pointer">{action}</Button>
+                        <Button type="submit" disabled={loading} className="cursor-pointer">{action}</Button>
                     </form>
                 </Form>
 
