@@ -102,8 +102,8 @@ model VideoRating {
 
 model VideoCategory {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  video      Video    @relation(fields: [videoId], references: [id])
-  videoId    String   @db.ObjectId
+  video      Video   @relation(fields: [videoId], references: [id])
+  videoId    String  @db.ObjectId
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @db.ObjectId
 
