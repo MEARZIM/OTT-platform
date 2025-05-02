@@ -10,6 +10,9 @@ class AdminRepository {
             where: {
                 id,
                 role: AdminRole.ADMIN
+            },
+            include:{
+                uploadedVideos: true
             }
         })
     }
@@ -18,6 +21,9 @@ class AdminRepository {
         return await prisma.admin.findMany({
             where: {
                 role: AdminRole.ADMIN
+            },
+            include:{
+                uploadedVideos: true
             }
         })
     }
