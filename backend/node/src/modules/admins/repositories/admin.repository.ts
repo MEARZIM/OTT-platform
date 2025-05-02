@@ -2,18 +2,32 @@ import bcrypt from "bcrypt";
 
 import { prisma } from "../../../libs/prisma";
 import { CreateAdminDTO } from "../types/admin";
-import { Video } from "@prisma/client";
+import { AdminRole, Video } from "@prisma/client";
 
 class AdminRepository {
     async findById(id: string) {
         return await prisma.admin.findUnique({
-            where: { id }
+            where: {
+                id,
+                role: AdminRole.ADMIN
+            }
+        })
+    }
+
+    async getAllAdmins() {
+        return await prisma.admin.findMany({
+            where: {
+                role: AdminRole.ADMIN
+            }
         })
     }
 
     async findByEmail(email: string) {
         return await prisma.admin.findUnique({
-            where: { email }
+            where: {
+                email,
+                role: AdminRole.ADMIN
+            }
         })
     }
 
@@ -36,7 +50,7 @@ class AdminRepository {
                 password: hashedPassword,
             },
         })
-    } 
+    }
 }
 
 export default new AdminRepository();

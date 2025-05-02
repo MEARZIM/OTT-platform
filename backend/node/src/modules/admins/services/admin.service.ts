@@ -6,7 +6,10 @@ import { CreateAdminDTO } from "../types/admin";
 
 
 class AdminServices {
-
+    async getAllAdmins() {
+        return await adminRepository.getAllAdmins();
+    }
+    
     async getAdminById(id: string) {
         return await adminRepository.findById(id);
     }

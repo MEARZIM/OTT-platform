@@ -4,6 +4,15 @@ import adminService from "../services/admin.service";
 
 
 class AdminController {
+
+    async getAllAdmins(req: Request, res: Response) {
+        try {
+            const admins = await adminService.getAllAdmins();
+            return res.json(admins);
+        } catch (error: any) {
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
     
 
     async getAdminById(req: Request, res: Response) {
