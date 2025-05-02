@@ -11,7 +11,7 @@ import {
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "../../../../../components/ui/button";
-import { CategoryColumn } from "./columns";
+import { AdminColumn } from "./columns";
 // import axios from "axios";
 import { useState } from "react";
 import { useToast } from "../../../../../hooks/use-toast";
@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 
 
 interface CellActionProps {
-    data: CategoryColumn;
+    data: AdminColumn;
 }
 
 
@@ -40,36 +40,9 @@ export const CellAction = ({ data }: CellActionProps) => {
         });
     }
 
-    const onDelete = async () => {
-        try {
-
-            setLoading(true);
-            // TODO:: DELETE ADMIN
-
-            toast({ title: "Admin Deleted." });
-
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: "Internal Error",
-                variant: "destructive",
-            });
-        } finally {
-            setLoading(false);
-            setOpen(false);
-        }
-    }
-
-
 
     return (
         <>
-            <AlertModal
-                isOpen={open}
-                onClose={() => setOpen(false)}
-                onConfirm={onDelete}
-                loading={loading}
-            />
 
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -96,10 +69,7 @@ export const CellAction = ({ data }: CellActionProps) => {
                             Update
                         </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setOpen(true)}>
-                        <Trash className="mr-2 h-4 w-4" />
-                        Delete
-                    </DropdownMenuItem>
+                    
                 </DropdownMenuContent>
             </DropdownMenu>
 

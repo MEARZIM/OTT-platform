@@ -6,12 +6,12 @@ import Heading from "../../../../../components/ui/heading"
 import { Button } from "../../../../../components/ui/button"
 import { Separator } from "../../../../../components/ui/separator"
 import { AdminTable } from "../../../../../components/ui/admin-table"
-import { CategoryColumn, columns } from "./columns"
+import { AdminColumn, columns } from "./columns"
 import { ApiList } from "../../../../../components/ui/api-list"
 import { Link } from "react-router-dom"
 
 interface CategoryClientProps {
-    data: CategoryColumn[]
+    data: AdminColumn[]
 }
 
 export const AdminClient = ({

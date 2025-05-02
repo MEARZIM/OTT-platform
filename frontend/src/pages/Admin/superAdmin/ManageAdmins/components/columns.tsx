@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { CellAction } from "./cell-action"
 
 
-export type CategoryColumn
+export type AdminColumn
     = {
         id: string
         admin: string
@@ -13,7 +13,7 @@ export type CategoryColumn
         createdAt: string
     }
 
-export const columns: ColumnDef<CategoryColumn>[] = [
+export const columns: ColumnDef<AdminColumn>[] = [
     {
         accessorKey: "admin",
         header: "Admin",

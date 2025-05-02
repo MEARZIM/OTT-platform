@@ -11,7 +11,6 @@ import {
     FormLabel,
     FormMessage,
 } from "../../../../../../components/ui/form"
-import AlertModal from '../../../../../../components/modals/alert-modal'
 import Heading from '../../../../../../components/ui/heading';
 import { Button } from '../../../../../../components/ui/button';
 import { Separator } from '../../../../../../components/ui/separator';
@@ -19,15 +18,23 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from '../../../../../../hooks/use-toast';
 import { Input } from '../../../../../../components/ui/input';
+import axios from 'axios';
+import { BACKEND_URL } from '../../../../../../lib/utils';
+import { useParams } from 'react-router-dom';
 
 interface UpdateAdminFormProps {
     initialData: {
+        name: string;
         email: string;
         password: string;
     } | null
 }
 
 const formSchema = z.object({
+    name: z
+        .string()
+        .min(1, { message: "This field has to be filled." })
+        .max(50, { message: "Name must be less than 50 characters." }),
     email: z
         .string()
         .min(1, { message: "This field has to be filled." })
@@ -40,49 +47,44 @@ const formSchema = z.object({
 type AdminFormValues = z.infer<typeof formSchema>
 
 const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
-    const [open, setOpen] = useState(false);
+    const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(false);
     const action = initialData ? "Save Changes" : "Create";
 
     const title = initialData ? "Edit Admin" : "Create Admin";
     const description = initialData ? "Edit this Admin" : "Add a new Admin";
+    const toastTitle = initialData ? "Admin updated." : "Admin created.";
+    const toastDesc = initialData ? "Admin details updated." : "Admin is now active.";
 
 
     const form = useForm<AdminFormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData || {
-            email: '',
-            password: ''
-        }
+        defaultValues: initialData
+            ? { name: initialData.name ,email: initialData.email, password: "" }
+            : { name:"" ,email: "", password: "" }
     });
 
-
-    const onDelete = async () => {
-        try {
-
-            setLoading(true);
-
-            toast({ title: "Admin Deleted." });
-
-        } catch (error) {
-            toast({
-                title: "Error",
-                description: "Internal Error",
-                variant: "destructive",
-            });
-        } finally {
-            setLoading(false);
-            setOpen(false);
-        }
-    }
 
 
     const onSubmit = async (data: AdminFormValues) => {
         try {
 
             setLoading(true);
+            if (initialData) {
+                await axios.patch(`${BACKEND_URL}/api/admin/update/${id}`, data)
+            } else {
+                await axios.post(`${BACKEND_URL}/api/admin/create`, data)
+            }
             console.log(data);
 
+            toast({
+                title: toastTitle,
+                description: toastDesc,
+                variant: "default",
+            })
+
+            form.reset();
+            setLoading(false);
 
         } catch (error) {
             toast({
@@ -98,27 +100,12 @@ const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
 
     return (
         <>
-            <AlertModal
-                isOpen={open}
-                onClose={() => setOpen(false)}
-                onConfirm={onDelete}
-                loading={loading}
-            />
+           
             <div className="flex justify-between items-center">
                 <Heading
                     title={title}
                     description={description}
                 />
-                {initialData && (
-                    <Button
-                        disabled={loading}
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => { setOpen(true) }}
-                    >
-                        <Trash className="h-4 w-4" />
-                    </Button>
-                )}
             </div>
             <Separator />
 
@@ -126,9 +113,26 @@ const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                     <div className="grid grid-cols-3 gap-8">
+                    <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Name</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder='Name' disabled={loading} {...field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        This is admin{`'`}s Name.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
-                            name="password"
+                            name="email"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
@@ -145,7 +149,7 @@ const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
 
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="password"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
