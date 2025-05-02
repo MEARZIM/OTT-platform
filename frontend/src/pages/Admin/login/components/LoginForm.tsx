@@ -23,6 +23,12 @@ export function LoginForm() {
 
     function onSubmit(values: z.infer<typeof loginSchema>) {
         console.log("Form Data:", values);
+        // Handle login logic here, e.g., API call to authenticate the user
+        // If successful, redirect to the dashboard or another page
+        // If failed, show an error message
+        // Example: redirect to dashboard
+        // ROUTE->http://localhost:5173/admin/dashboard if Role === "admin"
+        // ROUTE->http://localhost:5173/super-admin/dashboard if Role === "super-admin"
     }
 
     return (
