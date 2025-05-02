@@ -11,7 +11,7 @@ class AdminRepository {
                 id,
                 role: AdminRole.ADMIN
             },
-            include:{
+            include: {
                 uploadedVideos: true
             }
         })
@@ -22,7 +22,7 @@ class AdminRepository {
             where: {
                 role: AdminRole.ADMIN
             },
-            include:{
+            include: {
                 uploadedVideos: true
             }
         })
@@ -35,6 +35,17 @@ class AdminRepository {
                 role: AdminRole.ADMIN
             }
         })
+    }
+
+    async updateAdmin(id: string, data: Partial<CreateAdminDTO>) {
+        
+        return await prisma.admin.update({
+            where: { id },
+            data: {
+                ...data,
+                password: data.password ? await bcrypt.hash(data.password, 10) : undefined,
+            },
+        });
     }
 
     async create(data: CreateAdminDTO) {

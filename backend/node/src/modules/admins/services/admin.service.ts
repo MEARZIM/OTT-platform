@@ -14,8 +14,17 @@ class AdminServices {
         return await adminRepository.findById(id);
     }
 
+    async getAdminByEmail(email: string) {
+        return await adminRepository.findByEmail(email);
+    }
+
+
     async createAdmin(data: CreateAdminDTO) {
         return await adminRepository.create(data);
+    }
+
+    async updateAdmin(id: string, data: Partial<CreateAdminDTO>) {
+        return await adminRepository.updateAdmin(id, data);
     }
 
 }

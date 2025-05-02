@@ -13,7 +13,7 @@ class AdminController {
             return res.status(500).json({ message: "Internal Server Error" });
         }
     }
-    
+
 
     async getAdminById(req: Request, res: Response) {
         const { id } = req.params;
@@ -34,6 +34,31 @@ class AdminController {
             return res.status(500).json({ message: error.message });
         }
     }
+
+    async updateAdmin(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const existingAdmin = await adminService.getAdminById(id);
+
+            if (!existingAdmin) {
+                return res.status(401).json({ message: "Admin not found." });
+            }
+
+            if (req.body.email) {
+                const existingEmail = await adminService.getAdminByEmail(req.body.email);
+
+                if (existingEmail && existingEmail.id !== id) {
+                    return res.status(401).json({ message: "Email already in use." });
+                }
+            }
+            const updatedAdmin = await adminService.updateAdmin(id, req.body);
+            return res.status(200).json({ message: "Admin updated successfully" });
+        } catch (error: any) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
 
 }
 
