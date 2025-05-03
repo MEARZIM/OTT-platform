@@ -22,6 +22,14 @@ class VideoCategoryService {
     async deleteVideoCategory(videoId: string, categoryId: string) {
         return await videoCategoryRepository.deleteVideoCategory(videoId, categoryId);
     }
+
+    async deleteVideoCategoryByCategoryId(categoryId: string) {
+        return await videoCategoryRepository.deleteVideoCategoryByCategoryId(categoryId);
+    }
+
+    async deleteVideoCategoryByVideoId(videoId: string) {
+        return await videoCategoryRepository.deleteVideoCategoryByVideoId(videoId);
+    }
 }
 
 

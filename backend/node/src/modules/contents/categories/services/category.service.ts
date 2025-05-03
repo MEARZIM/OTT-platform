@@ -1,4 +1,6 @@
+
 import categoryRepository from "../repositories/category.repository";
+import VideoCategoryService from "../../video/services/videoCategory.service";
 
 class CategoryService {
     async addCategories(names: string[]) {
@@ -32,6 +34,8 @@ class CategoryService {
     async deleteCategory(id: string) {
         const category = await categoryRepository.getCategoryById(id);
         if (!category) throw new Error("Category not found.");
+
+        await VideoCategoryService.deleteVideoCategoryByCategoryId(id);
 
         const res = await categoryRepository.deleteCategory(id);
         return res;

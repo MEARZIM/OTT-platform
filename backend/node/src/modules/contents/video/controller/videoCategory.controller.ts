@@ -22,6 +22,26 @@ class VideoCategoryController {
             res.status(500).json({ error: error.message });
         }
     }
+
+    async deleteVideoCategoryByCategoryId(req: Request, res: Response) {
+        try {
+            const { categoryId } = req.params;
+            await videoCategoryService.deleteVideoCategoryByCategoryId(categoryId);
+            res.status(200).json({ message: "All Category related to this video was deleted successfully" });
+        } catch (error: any) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async deleteVideoCategoryByVideoId(req: Request, res: Response) {
+        try {
+            const { videoId } = req.params;
+            await videoCategoryService.deleteVideoCategoryByVideoId(videoId);
+            res.status(200).json({ message: "Video categories deleted successfully" });
+        } catch (error: any) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 export default new VideoCategoryController();

@@ -37,6 +37,22 @@ class VideoCategoryRepository {
             }
         });
     }
+
+    async deleteVideoCategoryByCategoryId(categoryId: string) {
+        return await prisma.videoCategory.deleteMany({
+            where: {
+                categoryId
+            }
+        });
+    }
+
+    async deleteVideoCategoryByVideoId(videoId: string) {
+        return await prisma.videoCategory.deleteMany({
+            where: {
+                videoId
+            }
+        });
+    }
 }
 
 export default new VideoCategoryRepository;
