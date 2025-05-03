@@ -47,6 +47,45 @@ class AdController {
             return res.status(500).json({ message: "Internal server error" });
         }
     };
+
+    async getAllAdsController(req: Request, res: Response) {
+        try {
+            const ads = await addsService.getAllAds();
+            return res.status(200).json({ ads });
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async getAdByIdController(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const ad = await addsService.getAdById(id);
+            if (!ad) {
+                return res.status(404).json({ message: "Ad not found" });
+            }
+            return res.status(200).json({ ad });
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async updateAdController(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            const ad = await addsService.updateAd(id, data);
+            if (!ad) {
+                return res.status(404).json({ message: "Ad not found" });
+            }
+            return res.status(200).json({ message: "Ad updated successfully", ad });
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
 }
 
 export default new AdController();

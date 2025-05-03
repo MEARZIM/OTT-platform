@@ -34,5 +34,8 @@ const upload = multer({
 });
 
 adRouter.post("/create", verifyAdmin as any, upload.single("file"), AdController.uploadVideoController as any); // Super Admin can only upload Adds
+adRouter.get("/", AdController.getAllAdsController as any); // TODO:Super Admin and admin can only get Adds
+adRouter.get("/:id", AdController.getAdByIdController as any); // TODO:Super Admin and admin can only get Adds by id
+adRouter.patch("/:id", AdController.updateAdController as any); // TODO:Super Admin can only update Adds by id
 
 export default adRouter;

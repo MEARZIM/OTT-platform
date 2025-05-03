@@ -4,6 +4,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import s3 from '../../../libs/s3';
 import video from '../../../libs/mux';
 import addsRepository from '../repositories/adds.repository';
+import { CreateAdDto } from '../dto/ad';
 
 class AdService {
 
@@ -58,6 +59,22 @@ class AdService {
         }
 
         return addsRepository.createAd(data);
+    }
+
+    async getAllAds() {
+        return addsRepository.getAllAds();
+    }
+
+    async getAdById(id: string) {
+        return addsRepository.getAdById(id);
+    }
+
+    async updateAd(id: string, data: Partial<CreateAdDto>) {
+        return addsRepository.updateAd(id, data);
+    }
+
+    async deleteAd(id: string) {
+        return addsRepository.deleteAd(id);
     }
 }
 
