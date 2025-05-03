@@ -1,6 +1,9 @@
 import { z } from 'zod';
+import axios from 'axios';
 import { useState } from 'react'
-import { Trash } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
     Form,
@@ -14,13 +17,9 @@ import {
 import Heading from '../../../../../../components/ui/heading';
 import { Button } from '../../../../../../components/ui/button';
 import { Separator } from '../../../../../../components/ui/separator';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from '../../../../../../hooks/use-toast';
 import { Input } from '../../../../../../components/ui/input';
-import axios from 'axios';
 import { BACKEND_URL } from '../../../../../../lib/utils';
-import { useParams } from 'react-router-dom';
 
 interface UpdateAdminFormProps {
     initialData: {
