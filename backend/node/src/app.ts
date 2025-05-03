@@ -12,6 +12,7 @@ import adminRoutes from "./modules/admins/routes/admin.routes";
 import categoryRouter from "./modules/contents/categories/routes/category.routes";
 import videoRouter from "./modules/contents/video/routes/video.routes";
 import videoCategoryRouter from "./modules/contents/video/routes/videoCategory.routes";
+import adRouter from "./modules/ads/routes/adds.route";
 
 dotenv.config();
 const app = express();
@@ -37,6 +38,7 @@ app.use("../uploads",express.static("uploads"));
 app.use(errorHandler);
 
 // ✅ Routes
+app.use("/api/ads", adRouter);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);

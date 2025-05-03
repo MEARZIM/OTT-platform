@@ -2,15 +2,15 @@ import path from "path";
 import multer from "multer";
 import { Router } from "express";
 
-import videoController from "../controller/video.controller";
-import { verifyAdmin } from "../../../../middleware/admin.middleware";
+import AdController from "../controllers/ads.controller";
+import { verifyAdmin } from "../../../middleware/admin.middleware";
 
-const videoRouter = Router();
+const adRouter = Router();
 
 // Store file in memory (RAM) instead of disk
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname); 
+        const ext = path.extname(file.originalname);
         const timestamp = new Date().toISOString()
             .replace(/:/g, "-") // Replace colons with hyphens
             .replace(/\..+/, "") // Remove milliseconds and 'Z'
@@ -33,7 +33,6 @@ const upload = multer({
     }
 });
 
-videoRouter.post("/", verifyAdmin as any, upload.single("file"), videoController.uploadVideoController as any); // Admin can only upload videos
-videoRouter.post("/:id", verifyAdmin as any, upload.single("file"), videoController.uploadVideoController as any); // Admin can only upload videos
+adRouter.post("/create", verifyAdmin as any, upload.single("file"), AdController.uploadVideoController as any); // Super Admin can only upload Adds
 
-export default videoRouter;
+export default adRouter;

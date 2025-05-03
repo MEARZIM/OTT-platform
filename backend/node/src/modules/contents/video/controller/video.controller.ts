@@ -36,6 +36,20 @@ class VideoController {
             return res.status(500).json({ message: "Internal server error" });
         }
     };
+
+    async getVideoByIdController(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const video = await videoService.getVideoById(id);
+            if (!video) {
+                return res.status(404).json({ message: "Video not found" });
+            }
+            return res.status(200).json(video);
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
 }
 
 export default new VideoController();

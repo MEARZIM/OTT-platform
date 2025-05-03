@@ -43,6 +43,12 @@ enum UserStatus {
   BANNED
 }
 
+enum AdType {
+  PREROLL
+  MIDROLL
+  POSTROLL
+}
+
 enum VideoStatus {
   PUBLISHED
   DRAFT
@@ -86,6 +92,24 @@ model Video {
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
   categories   VideoCategory[]
+
+  ad           Ad?             @relation("AdOnVideos", fields: [adId], references: [id])
+  adId         String?         @db.ObjectId
+}
+
+model Ad {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  muxAssetId    String
+  playbackId    String
+  type          AdType    @default(PREROLL) // enum: PREROLL, MIDROLL, POSTROLL
+  offsetSeconds Int?      // Used only for MIDROLL
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // reverse relation
+  video         Video[] @relation("AdOnVideos")
 }
 
 model VideoRating {

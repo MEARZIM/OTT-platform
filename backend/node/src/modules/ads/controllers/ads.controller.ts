@@ -1,0 +1,52 @@
+import { AdType } from "@prisma/client";
+import { Request, Response } from "express";
+
+import addsService from "../service/adds.service";
+
+
+class AdController {
+    async uploadVideoController(req: Request, res: Response) {
+        try {
+
+            if (!req.file) {
+                return res.status(400).json({ message: "No file uploaded" });
+            }
+
+            if (!req.body) {
+                return res.status(400).json({ message: "No file uploaded because of Empty title and description" });
+            }
+
+            const { title, description, offsetSeconds, type }: {
+                title: string,
+                description: string;
+                offsetSeconds: number;
+                type: AdType;
+            } = req.body;
+
+            const fileName = req.file.filename;
+            const mimeType = req.file.mimetype;
+
+            if(!req.user){
+                return res.status(401).json({ message: "Unauthorized" });
+            }
+
+
+            const Ad = await addsService.AddAd(
+                title, 
+                description, 
+                offsetSeconds, 
+                type, 
+                req.file.buffer, 
+                fileName, 
+                mimeType,
+            );
+
+            return res.status(200).json({ message: "Ad uploaded successfully", Ad });
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+}
+
+export default new AdController();

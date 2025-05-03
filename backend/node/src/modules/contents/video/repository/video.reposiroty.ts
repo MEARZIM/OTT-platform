@@ -10,6 +10,13 @@ class VideoRepository {
         });
     }
 
+    async getVideoById(id: string) {
+        return prisma.video.findUnique({
+            where: {
+                id
+            }
+        });
+    }
 
 }
 

@@ -53,6 +53,10 @@ class VideoService {
         return videoReposiroty.addVideoToDatabase(data)
 
     }
+
+    async getVideoById(id: string) {
+        return videoReposiroty.getVideoById(id);
+    }
 }
 
 export default new VideoService;
