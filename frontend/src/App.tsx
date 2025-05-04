@@ -9,6 +9,7 @@ import DashboardPage from "./pages/User/Dashboard/DashboardPage";
 import MyStuffPage from "./pages/User/Dashboard/pages/MyStuff/MyStuffPage";
 import SettingsPage from "./pages/User/Dashboard/pages/Settings/SettingsPage";
 import WatchHistoryPage from "./pages/User/Dashboard/pages/Settings/pages/WatchHistory";
+import Watch from "./pages/User/Watch/Watch";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='/mystuff' element={<MyStuffPage />} />
         <Route path='/settings' element={<SettingsPage />} />
         <Route path="/settings/watch-history" element={<WatchHistoryPage />} />
+        <Route path="/player/:id" element={<Watch />} />
         
 
         {/* Super Admin Routes */}
