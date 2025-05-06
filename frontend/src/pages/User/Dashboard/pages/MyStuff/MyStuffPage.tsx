@@ -2,10 +2,14 @@
 
 import { useState } from "react"
 import { ArrowLeft, Clock, Heart, } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 
 export default function MyStuffPage() {
-  const [activeTab, setActiveTab] = useState("watchlist")
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const defaultTab = queryParams.get("tab") || "watchlist"
+  const [activeTab, setActiveTab] = useState(defaultTab)
+
 
   const watchlist = [
     {
@@ -80,9 +84,8 @@ export default function MyStuffPage() {
           <div className="flex border-b border-gray-700 mb-6">
             <button
               onClick={() => setActiveTab("watchlist")}
-              className={`px-4 py-2 mr-4 text-m font-medium ${
-                activeTab === "watchlist" ? "text-white border-b-2 border-[#00a8e1]" : "text-gray-400"
-              }`}
+              className={`px-4 py-2 mr-4 text-m font-medium ${activeTab === "watchlist" ? "text-white border-b-2 border-[#00a8e1]" : "text-gray-400"
+                }`}
             >
               <div className="flex items-center">
                 <Heart className="h-4 w-4 mr-2" />
@@ -92,9 +95,8 @@ export default function MyStuffPage() {
 
             <button
               onClick={() => setActiveTab("recently-watched")}
-              className={`px-4 py-2 mr-4 text-m font-medium ${
-                activeTab === "recently-watched" ? "text-white border-b-2 border-[#00a8e1]" : "text-gray-400"
-              }`}
+              className={`px-4 py-2 mr-4 text-m font-medium ${activeTab === "recently-watched" ? "text-white border-b-2 border-[#00a8e1]" : "text-gray-400"
+                }`}
             >
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-2" />
