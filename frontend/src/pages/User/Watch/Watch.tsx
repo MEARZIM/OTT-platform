@@ -8,10 +8,12 @@ import { Link } from "react-router-dom"
 import Player from "./components/Player"
 import videoData from "./data/VideoList"
 import { useParams } from "react-router-dom"
+import ShareModal from "./components/ShareModal"
 
 export default function VideoPlayer() {
     const [isLiked, setIsLiked] = useState(false)
     const [isInWatchlist, setIsInWatchlist] = useState(false)
+    const [open, setOpen] = useState(false);
 
     const { id } = useParams()
     const videoId = parseInt(id || "", 10)
@@ -69,7 +71,15 @@ export default function VideoPlayer() {
                         >
                             <Heart className={`mr-2 size-7 ${isLiked ? "fill-[#b0b0b0]" : ""}`} /> Like
                         </Button>
-                        <Button variant="ghost" className="flex items-center text-xl text-white hover:bg-[#3d3d3d] hover:text-[#d1d1d1]">
+                        <ShareModal
+                            isOpen={open}
+                            onClose={() => setOpen(false)}
+                        />
+                        <Button
+                            variant="ghost"
+                            className="flex items-center text-xl text-white hover:bg-[#3d3d3d] hover:text-[#d1d1d1]"
+                            onClick={() => setOpen(true)}
+                        >
                             <Share2 className="mr-2 size-7" /> Share
                         </Button>
                     </CardContent>
