@@ -3,7 +3,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 import s3 from '../../../libs/s3';
 import video from '../../../libs/mux';
-import addsRepository from '../repositories/adds.repository';
+import addsRepository from '../repositories/ads.repository';
 import { CreateAdDto } from '../dto/ad';
 
 class AdService {

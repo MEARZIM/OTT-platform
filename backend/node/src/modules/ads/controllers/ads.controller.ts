@@ -1,7 +1,7 @@
 import { AdType } from "@prisma/client";
 import { Request, Response } from "express";
 
-import addsService from "../service/adds.service";
+import addsService from "../service/ads.service";
 
 
 class AdController {
