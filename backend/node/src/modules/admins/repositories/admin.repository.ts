@@ -9,7 +9,6 @@ class AdminRepository {
         return await prisma.admin.findUnique({
             where: {
                 id,
-                role: AdminRole.ADMIN
             },
             include: {
                 uploadedVideos: true
@@ -19,9 +18,6 @@ class AdminRepository {
 
     async getAllAdmins() {
         return await prisma.admin.findMany({
-            where: {
-                role: AdminRole.ADMIN
-            },
             include: {
                 uploadedVideos: true
             }
@@ -32,7 +28,6 @@ class AdminRepository {
         return await prisma.admin.findUnique({
             where: {
                 email,
-                role: AdminRole.ADMIN
             }
         })
     }

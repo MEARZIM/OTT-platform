@@ -32,8 +32,8 @@ export default function WatchHistoryPage() {
           <h2 className="text-lg font-semibold">Manage your Watch History</h2>
 
           {/* View Full History */}
-          <Link to="/mystuff" className="block">
-            <button className="w-full flex items-center gap-3 px-4 py-3 bg-[#252e39] rounded hover:bg-[#2e3947] transition">
+          <Link to="/mystuff?tab=recently-watched">
+            <button className="w-full flex items-center gap-3 px-4 py-3 mb-6 bg-[#252e39] rounded-lg hover:bg-[#2e3947] transition">
               <Eye className="h-5 w-5 text-[#00a8e1]" />
               <span>View Full History</span>
             </button>
@@ -42,7 +42,7 @@ export default function WatchHistoryPage() {
           {/* Clear History Dialog */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="w-full flex items-center gap-3 px-4 py-3 bg-[#252e39] rounded hover:bg-[#2e3947] transition">
+              <button className="w-full flex items-center gap-3 px-4 py-3 bg-[#252e39] rounded-lg hover:bg-[#2e3947] transition">
                 <Trash2 className="h-5 w-5 text-[#00a8e1]" />
                 <span>Clear Watch History</span>
               </button>
@@ -68,7 +68,7 @@ export default function WatchHistoryPage() {
           {/* Pause History Dialog */}
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="w-full flex items-center gap-3 px-4 py-3 bg-[#252e39] rounded hover:bg-[#2e3947] transition">
+              <button className="w-full flex items-center gap-3 px-4 py-3 bg-[#252e39] rounded-lg hover:bg-[#2e3947] transition">
                 <Pause className="h-5 w-5 text-[#00a8e1]" />
                 <span>Pause Watch History</span>
               </button>

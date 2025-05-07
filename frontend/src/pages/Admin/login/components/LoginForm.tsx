@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "../../../../components/ui/button";
@@ -6,13 +7,23 @@ import { Card, CardContent } from "../../../../components/ui/card";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "../../../../components/ui/form";
+import { BACKEND_URL } from "../../../../lib/utils";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "../../../../hooks/use-toast";
+import { useState } from "react";
 
 const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
+    password: z.string().min(4, "Password must be at least 4 characters"),
 });
 
 export function LoginForm() {
+    const { toast } = useToast();
+    const navigator = useNavigate();
+    const [loading, setLoading] = useState(false);
+
+
+
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -21,14 +32,55 @@ export function LoginForm() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof loginSchema>) {
-        console.log("Form Data:", values);
-        // Handle login logic here, e.g., API call to authenticate the user
-        // If successful, redirect to the dashboard or another page
-        // If failed, show an error message
-        // Example: redirect to dashboard
-        // ROUTE->http://localhost:5173/admin/dashboard if Role === "admin"
-        // ROUTE->http://localhost:5173/super-admin/dashboard if Role === "super-admin"
+    async function onSubmit(values: z.infer<typeof loginSchema>) {
+       
+        try {
+            
+            setLoading(true);
+            const res = await axios.post(`${BACKEND_URL}/api/admin/auth/login`, values, {
+                withCredentials: true,
+            })
+    
+            const { role } = res.data;
+            if (role === "ADMIN") {
+                navigator("/admin/dashboard");
+                toast({
+                    title: "Login Successful",
+                    description: "Welcome back, Admin!",
+                    variant: "default",
+                    duration: 3000,
+                })
+            } else if (role === "SUPER_ADMIN") {
+                navigator("/super-admin/dashboard");
+                toast({
+                    title: "Login Successful",
+                    description: "Welcome back, Super Admin!",
+                    variant: "default",
+                    duration: 3000,
+                })
+            } else {
+                navigator("/admin/login");
+                toast({
+                    title: "Login Failed",
+                    description: "Invalid credentials",
+                    variant: "destructive",
+                    duration: 3000,
+                })
+    
+            }
+            //console.log(role);
+        } catch (error) {
+            toast({
+                title: "Login Failed",
+                description: "An error occurred during login",
+                variant: "destructive",
+                duration: 3000,
+            });
+            return;
+            
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -70,7 +122,7 @@ export function LoginForm() {
                                 )}
                             />
 
-                            <Button type="submit" className="w-full">Login</Button>
+                            <Button type="submit" className="w-full" disabled={loading}>Login</Button>
                         </form>
                     </Form>
 
