@@ -29,13 +29,13 @@ export const AddsClient = ({
                 <Button >
                     <Link to={"/super-admin/manage-adds/new"} className="flex gap-1 items-center">
                     <Plus className="w-4 h-4 mr-2" />
-                    Add New Video
+                    Add New Ad
                     </Link>
                 </Button>
             </div>
 
             <Separator />
-            <AdminTable columns={columns} data={data} searchKey="status" />
+            <AdminTable columns={columns} data={data} searchKey="type" />
 
 
             <Heading
@@ -43,7 +43,7 @@ export const AddsClient = ({
                 description={"API calls for Admins."}
             />
             <Separator />
-            <ApiList entityName="contents/adds" entityIdName="addId"/>
+            <ApiList entityName="ads" entityIdName="adId"/>
         </>
     )
 }

@@ -2,52 +2,65 @@
 import { useRef, useState, type ChangeEvent } from "react"
 
 import { Button } from "../../../../../../components/ui/button"
-import FilePreview from "./file-preview"
+// import FilePreview from "./file-preview"
 import { Input } from "../../../../../../components/ui/input"
 import { Textarea } from "../../../../../../components/ui/textarea"
 import Heading from "../../../../../../components/ui/heading"
+import { Label } from "../../../../../../components/ui/label"
+import FilePreview from "./file-preview"
+import { BACKEND_URL } from "../../../../../../lib/utils"
+import axios from "axios"
+import { useParams } from "react-router-dom"
+import { toast } from "../../../../../../hooks/use-toast"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../../../../../../components/ui/select"
 
 interface AddProps {
   initialData: {
-      id: string;
-      title: string;
-      description: string;
-      playbackId: string;
+    id: string;
+    title: string;
+    description: string;
+    playbackId: string;
+    offsetSeconds: number;
+    type: string;
   } | null;
 }
 
 
 function UpLoadAdds({ initialData }: AddProps) {
-  
-  // State to hold the admin input data
-  const [file, setFile] = useState<File | null>(null)
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
 
-  const titleTag = initialData ? "Edit Add": "Upload Adds" ;
-  const descriptionTag = initialData ? "Edit your Adds of PrimeView": "Upload your Adds of PrimeView" ;
-  const action = initialData ? "Save" : "Publish" ;
+  const { id } = useParams<{ id: string }>();
+  const [file, setFile] = useState<File | null>(null);
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [type, setType] = useState(initialData?.type || "");
+  const [offsetSeconds, setOffsetSeconds] = useState(initialData?.offsetSeconds?.toString() || "");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-
-  // Loadding State
-  const [_, setLoading] = useState(false)
-
-  // Ref to the file input element
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // State to hold the preview URL
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const titleTag = initialData ? "Edit Add" : "Upload Adds";
+  const descriptionTag = initialData ? "Edit your Adds of PrimeView" : "Upload your Adds of PrimeView";
+  const action = initialData ? "Save" : "Publish";
+  const toastTitle = initialData ? "Ads updated." : "Ads created.";
+  const toastDesc = initialData ? "Ads details updated." : "Ads is now active.";
+
+
+
+
+
+
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null
     setFile(selectedFile)
 
-    // Clear previous preview URL
+
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl)
     }
 
-    // Create a preview URL for the selected file
+
     if (selectedFile && selectedFile.type.startsWith("video/")) {
       const url = URL.createObjectURL(selectedFile)
       setPreviewUrl(url)
@@ -57,18 +70,6 @@ function UpLoadAdds({ initialData }: AddProps) {
 
     console.log("Selected file:", selectedFile)
   }
-  console.log("Preview URL:", previewUrl)
-
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value)
-
-  }
-
-  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value)
-
-  }
-
 
 
   const handleFileInputClick = () => {
@@ -79,16 +80,45 @@ function UpLoadAdds({ initialData }: AddProps) {
 
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(title, description, file)
+    // console.log(title, description, file)
     try {
       setLoading(true)
-      // Api call to upload the Add
-    } catch (error) {
-      console.log("Error uploading Add:", error)
+
+      
+      if (initialData) {
+        await axios.patch(`${BACKEND_URL}/api/ads/${id}`, {
+          title,
+          description,
+          offsetSeconds: Number(offsetSeconds) || 60,
+          type,
+        })
+      } else {
+        await axios.post(`${BACKEND_URL}/api/ads`, {
+          title,
+          description,
+          offsetSeconds: Number(offsetSeconds) || 60,
+          type,
+          file
+        })
+      }
+
+      toast({
+        title: toastTitle,
+        description: toastDesc,
+        variant: "default",
+      })
+
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
       setLoading(false)
+      window.location.reload()
     }
   }
 
@@ -103,49 +133,70 @@ function UpLoadAdds({ initialData }: AddProps) {
           <div className="p-6 rounded-3xl border border-gray-200 bg-white h-auto">
 
 
-            <div className="grid grid-cols-6 grid-rows-6 gap-2">
+            <div className="flex items-start justify-baseline flex-col" >
 
-              <div
+              {!initialData && <div
                 onClick={handleFileInputClick}
-                className="col-span-6 row-span-4 h-full"
+                className="w-full h-[180px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer mb-4"
               >
                 {file ?
                   <FilePreview previewUrl={previewUrl} /> :
                   <>
-                    <div className="flex justify-center items-center h-full border border-gray-300 rounded-lg">
+                    <div className="flex justify-center items-center h-full w-sm border border-gray-300 rounded-lg">
                       <Input ref={fileInputRef} type="file" accept="video/*" onChange={handleFileChange} className="hidden" />
                       <span className="text-gray-500">file input(video)</span>
                     </div>
                   </>
                 }
 
-              </div>
+              </div>}
 
-              <div className="col-span-6 row-start-5 mt-10">
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <Label>Title</Label>
                 <Input
                   type="text"
                   placeholder="Add Title"
                   value={title}
-                  onChange={handleTitleChange}
-
+                  onChange={(e) => setTitle(e.target.value)}
                   required
                 />
               </div>
 
-
-
-              <div
-                className="col-span-6 row-span-2 row-start-6 h-full"
-              >
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <Label>Description</Label>
                 <Textarea
                   placeholder="Adds Description"
                   value={description}
-                  onChange={handleDescriptionChange}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <Label>Ad Type</Label>
+                <Select value={type} onValueChange={setType}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a ad type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Ad Types</SelectLabel>
+                      <SelectItem value="PREROLL">Pre-roll</SelectItem>
+                      <SelectItem value="MIDROLL">Mid-roll</SelectItem>
+                      <SelectItem value="POSTROLL">Post-roll</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
 
-
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <Label>Offset Seconds</Label>
+                <Input
+                  type="number"
+                  placeholder="e.g., 30"
+                  value={offsetSeconds}
+                  onChange={(e) => setOffsetSeconds(e.target.value)}
+                />
+              </div>
 
             </div>
 
@@ -157,7 +208,7 @@ function UpLoadAdds({ initialData }: AddProps) {
               value={"submit"}
               type="submit"
               className="hover:cursor-pointer"
-              disabled={!title || !description || !file}
+              disabled={!title || !description || loading}
             >
               {action}
             </Button>
@@ -169,7 +220,7 @@ function UpLoadAdds({ initialData }: AddProps) {
 
 
 
-        {file && (
+        {(file && !initialData) && (
           <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
             <h2 className="font-semibold mb-2">Selected File:</h2>
             <p>Name: {file.name}</p>

@@ -11,6 +11,8 @@ export type Column
         title: string
         description: string
         status: string
+        type: string
+        video: number
         createdAt: string
     }
 
@@ -26,12 +28,19 @@ export const columns: ColumnDef<Column>[] = [
         cell: ({ row }) => row.original.description
     },
     {
-        accessorKey: "status",
-        header: "Add Status",
+        accessorKey: "type",
+        header: "Add Type",
+        cell: ({ row }) => row.original.type
+    },
+    {
+        accessorKey: "addInUse",
+        header: "Add In Use",
+        cell: ({ row }) => row.original.video
     },
     {
         accessorKey: "createdAt",
         header: "Date",
+        cell: ({ row }) => row.original.createdAt
     },
     {
         id: "actions",

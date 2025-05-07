@@ -1,47 +1,63 @@
+import axios from "axios";
+import { format } from "date-fns";
+import { useEffect, useState } from "react";
+
 import { AddsClient } from "./components/client"
-const dummy = [
-    {
-      "id": "1",
-      "title": "Introduction to AI",
-      "description": "An overview of artificial intelligence and its applications.",
-      "status": "PUBLISHED",
-      "createdAt": "2024-03-29T10:00:00Z"
-    },
-    {
-      "id": "2",
-      "title": "Machine Learning Basics",
-      "description": "Learn the fundamental concepts of machine learning.",
-      "status": "DRAFT",
-      "createdAt": "2024-03-28T14:30:00Z"
-    },
-    {
-      "id": "3",
-      "title": "Deep Learning Explained",
-      "description": "An introduction to deep learning architectures and techniques.",
-      "status": "PRIVATE",
-      "createdAt": "2024-03-27T09:15:00Z"
-    },
-    {
-      "id": "4",
-      "title": "Data Science in Practice",
-      "description": "Real-world applications of data science and analytics.",
-      "status": "BANNED",
-      "createdAt": "2024-03-26T16:45:00Z"
-    },
-    {
-      "id": "5",
-      "title": "Cloud Computing for AI",
-      "description": "How cloud platforms support AI and machine learning workloads.",
-      "status": "PUBLISHED",
-      "createdAt": "2024-03-25T11:20:00Z"
-    }
-  ]
+import { Column } from "./components/columns";
+
+import { BACKEND_URL } from "../../../../lib/utils";
+
 const MangeAdds = () => {
-    return (
-        <>
-            <AddsClient data={dummy}/>
-        </>
-    )
+  const [ads, setAds] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [_, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAds = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${BACKEND_URL}/api/ads`);
+        const data = res.data.ads;
+
+        const formatted: Column[] = data.map((item: {
+          id: string;
+          title: string;
+          description: string;
+          video: any[];
+          type: string;
+          createdAt?: string;
+        }) => ({
+          id: item.id,
+          title: item.title,
+          description: item.description,
+          video: item.video?.length || 0,
+          type: item.type,
+          createdAt: item.createdAt ? format(new Date(item.createdAt), "MMMM do yyyy") : "Unknown"
+        }));
+
+        setAds(formatted);
+        setError(null);
+      } catch (err: any) {
+        console.error("Error fetching admins:", err);
+        setError("Failed to load admins.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAds();
+  }, []);
+
+  if (loading) {
+    return <div className="p-4 text-gray-500">Loading Ads...</div>;
+  }
+
+  console.log(ads);
+  return (
+    <>
+      <AddsClient data={ads} />
+    </>
+  )
 }
 
 export default MangeAdds
