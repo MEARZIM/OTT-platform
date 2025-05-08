@@ -2,8 +2,8 @@ import ReactPlayer from "react-player"
 
 const Player = () => {
     return (
-        <div className="rounded-lg bg-black mb-4 overflow-hidden">
-            <div className="aspect-video w-full bg-black flex items-center justify-center">
+        <div className="rounded-lg dark:bg-black bg-white mb-4 overflow-hidden">
+            <div className="aspect-video w-full dark:bg-black bg-white flex items-center justify-center">
                 <ReactPlayer
                     controls={true}
                     width={"100%"}

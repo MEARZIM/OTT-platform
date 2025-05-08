@@ -9,11 +9,8 @@ const plans = [
     isFree: true,
     features: [
       "Standard definition (SD) streaming",
-      "Watch on one device at a time",
       "Access to limited content library",
       "Ad-supported viewing experience",
-      "New releases with 30-day delay",
-      "Mobile and tablet streaming",
     ],
   },
   {
@@ -22,20 +19,16 @@ const plans = [
     period: "month",
     featured: true,
     features: [
-      "HD and 4K Ultra HD streaming",
-      "Watch on up to 4 devices at the same time",
+      "HD streaming",
       "Access to full content library",
       "Ad-free viewing experience",
-      "New releases on day one",
-      "Download shows to watch offline",
-      "Stream on all devices (TV, mobile, tablet, web)",
     ],
   },
 ]
 
 export default function SubscribePage() {
     return (
-      <div className="min-h-screen bg-black text-white py-20 px-4 relative">
+      <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white py-20 px-4 relative">
         {/* Header*/}
         <div className="absolute top-6 left-6 flex items-center">
           <Link to="/dashboard" className="mr-3 hover:opacity-80 transition">

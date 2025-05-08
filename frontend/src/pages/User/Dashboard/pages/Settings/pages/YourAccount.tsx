@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function YourAccountPage() {
     return (
-        <div className="flex h-screen bg-[#0f171e] text-white">
+        <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white">
             <div className="flex-1 overflow-y-auto px-6 py-8">
                 {/* Header */}
                 <div className="flex items-center mb-10">
@@ -14,7 +14,7 @@ export default function YourAccountPage() {
                 </div>
 
                 {/* Account Info */}
-                <div className="max-w-3xl mx-auto bg-[#1a242f] p-6 rounded-xl shadow-md space-y-6">
+                <div className="max-w-3xl mx-auto bg-zinc-200 dark:bg-zinc-900 p-6 rounded-xl shadow-md space-y-6">
                     <div>
                         <h2 className="text-xl font-semibold mb-2">Account Information</h2>
                         <p className="text-gray-400 text-sm">Update your personal details and preferences.</p>
@@ -26,7 +26,7 @@ export default function YourAccountPage() {
                             <input
                                 type="email"
                                 value="user@example.com"
-                                className="w-full px-3 py-2 rounded bg-[#252e39] border border-gray-700 text-white"
+                                className="w-full px-3 py-2 rounded bg-zinc-100 dark:bg-zinc-800 border border-gray-700 text-black dark:text-white"
                                 disabled
                             />
                         </div>
@@ -36,7 +36,7 @@ export default function YourAccountPage() {
                             <input
                                 type="text"
                                 value="dreamerArmyst07"
-                                className="w-full px-3 py-2 rounded bg-[#252e39] border border-gray-700 text-white"
+                                className="w-full px-3 py-2 rounded bg-zinc-100 dark:bg-zinc-800 border border-gray-700 text-black dark:text-white"
                             />
                         </div>
 
@@ -45,7 +45,7 @@ export default function YourAccountPage() {
                             <input
                                 type="password"
                                 placeholder="Enter new password"
-                                className="w-full px-3 py-2 rounded bg-[#252e39] border border-gray-700 text-white"
+                                className="w-full px-3 py-2 rounded bg-zinc-100 dark:bg-zinc-800 border border-gray-700 text-black dark:text-white"
                             />
                         </div>
 

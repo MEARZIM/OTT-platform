@@ -68,7 +68,7 @@ export default function MyStuffPage() {
   ]
 
   return (
-    <div className="flex h-screen bg-[#0f171e] text-white overflow-hidden">
+    <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white overflow-hidden">
 
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
@@ -77,14 +77,14 @@ export default function MyStuffPage() {
             <Link to="/dashboard" className="mr-4">
               <ArrowLeft className="h-6 w-6" />
             </Link>
-            <h1 className="text-2xl font-bold">My Stuff</h1>
+            <h1 className="text-2xl font-bold text-black dark:text-white">My Stuff</h1>
           </div>
 
           {/* Tabs */}
           <div className="flex border-b border-gray-700 mb-6">
             <button
               onClick={() => setActiveTab("watchlist")}
-              className={`px-4 py-2 mr-4 text-m font-medium ${activeTab === "watchlist" ? "text-white border-b-2 border-[#00a8e1]" : "text-gray-400"
+              className={`px-4 py-2 mr-4 text-m font-medium ${activeTab === "watchlist" ? "text-black dark:text-white border-b-2 border-[#00a8e1]" : "text-zinc-400"
                 }`}
             >
               <div className="flex items-center">
@@ -95,7 +95,7 @@ export default function MyStuffPage() {
 
             <button
               onClick={() => setActiveTab("recently-watched")}
-              className={`px-4 py-2 mr-4 text-m font-medium ${activeTab === "recently-watched" ? "text-white border-b-2 border-[#00a8e1]" : "text-gray-400"
+              className={`px-4 py-2 mr-4 text-m font-medium ${activeTab === "recently-watched" ? "text-black dark:text-white border-b-2 border-[#00a8e1]" : "text-zinc-400"
                 }`}
             >
               <div className="flex items-center">
@@ -108,13 +108,13 @@ export default function MyStuffPage() {
           {/* View Controls */}
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center ml-auto">
-              <select className="bg-[#1a242f] border border-gray-700 rounded px-2 py-1 text-sm">
+              <select className="bg-zinc-100 dark:bg-zinc-900 border border-gray-700 rounded px-2 py-1 text-sm">
                 <option>All</option>
                 <option>Movies</option>
                 <option>TV Shows</option>
               </select>
 
-              <select className="bg-[#1a242f] border border-gray-700 rounded px-2 py-1 text-sm ml-2">
+              <select className="bg-zinc-100 dark:bg-zinc-900 border border-gray-700 rounded px-2 py-1 text-sm ml-2">
                 <option>Recently Added</option>
                 <option>A-Z</option>
                 <option>Z-A</option>
@@ -128,19 +128,19 @@ export default function MyStuffPage() {
               {watchlist.map((item, index) => (
                 <div key={index} className="group relative">
                   <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="bg-black/70 rounded-full p-1">
-                      <Heart className="h-4 w-4 text-white fill-[#00a8e1]" />
+                    <button className="bg-white/70 dark:bg-black/70 rounded-full p-1">
+                      <Heart className="h-4 w-4 text-black dark:text-white fill-[#00a8e1]" />
                     </button>
                   </div>
                   <img
                     src={item.image}
                     alt={item.title}
                     width={150}
-                    height={225}
+                    height={150}
                     className="w-full rounded-sm transition-opacity group-hover:opacity-70"
                   />
                   <h3 className="mt-2 text-lg font-medium truncate">{item.title}</h3>
-                  <p className="text-s text-gray-400">{item.type}</p>
+                  <p className="text-s text-zinc-800 dark:text-zinc-400">{item.type}</p>
                 </div>
               ))}
             </div>
@@ -160,9 +160,9 @@ export default function MyStuffPage() {
                       height={225}
                       className="w-full rounded-sm transition-opacity group-hover:opacity-70"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent h-16">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white/80 dark:from-black/80 to-transparent h-16">
                       <div className="absolute bottom-0 left-0 right-0 px-2 pb-1">
-                        <div className="w-full bg-gray-700 h-1 rounded-full overflow-hidden">
+                        <div className="w-full bg-zinc-200 dark:bg-zinc-700 h-1 rounded-full overflow-hidden">
                           <div className="bg-[#00a8e1] h-1 rounded-full" style={{ width: `${item.progress}%` }}></div>
                         </div>
                       </div>

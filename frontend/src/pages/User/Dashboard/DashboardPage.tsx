@@ -7,10 +7,11 @@ import Sidebar from './components/Sidebar'
 import SuggestedContent from './components/SuggestedContent'
 import WatchNext from './components/WatchNext'
 import Footer from './components/Footer'
+import { ModeToggle } from '../../../components/mode-toggle'
 
 const DashboardPage = () => {
   return (
-    <div className="h-screen bg-black text-white w-full flex overflow-auto">
+    <div className="h-screen bg-white text-black dark:bg-zinc-900 dark:text-white w-full flex overflow-auto">
       <SidebarProvider>
         {/* Sidebar */}
         <Sidebar />
@@ -18,7 +19,7 @@ const DashboardPage = () => {
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
           {/* Navbar: Sidebar Trigger + Search Bar */}
-          <div className="flex items-center p-4 bg-[#0d141b] w-full">
+          <div className="flex items-center p-4 bg-white dark:bg-zinc-900 w-full">
             <SidebarTrigger className="mr-4" /> {/* Sidebar Toggle Button */}
             <div className='flex items-center gap-10 z-50 mr-3'>
               <Link to='/'>
@@ -27,6 +28,9 @@ const DashboardPage = () => {
             </div>
             <div className="w-full ">
               <SearchBar />
+            </div>
+            <div className='flex items-center gap-10 z-50 mr-3'>
+              <ModeToggle />
             </div>
           </div>
 

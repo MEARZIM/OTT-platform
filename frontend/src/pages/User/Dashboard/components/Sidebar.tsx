@@ -27,12 +27,11 @@ import {
   CollapsibleTrigger
 } from "../../../../components/ui/collapsible"
 import { Link } from "react-router-dom"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../../../../components/ui/tooltip"
 
 const SidebarComponent = () => {
   return (
     <Sidebar className="border-none">
-      <SidebarContent className="bg-gray-900 text-white">
+      <SidebarContent className="bg-zinc-50 text-black dark:bg-zinc-900 dark:text-white">
         {/* Profile Section */}
         <div className="p-6 flex flex-col items-center justify-center text-center border-b border-gray-700">
           <img
@@ -41,11 +40,11 @@ const SidebarComponent = () => {
             className="w-16 h-16 rounded-full mb-2"
           />
           <p className="text-lg font-semibold">John Doe</p>
-          <p className="text-sm text-gray-400">Premium Member</p>
+          <p className="text-sm text-zinc-700 dark:text-zinc-400">Premium Member</p>
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="mt-6 px-4 text-gray-400 text-sm uppercase tracking-wider">
+          <SidebarGroupLabel className="mt-6 px-4 text-zinc-700 dark:text-zinc-400 text-sm uppercase tracking-wider">
             Navigation
           </SidebarGroupLabel>
 
@@ -53,7 +52,7 @@ const SidebarComponent = () => {
             <SidebarMenu>
               {/* Home */}
               <SidebarMenuItem>
-                <SidebarMenuButton asChild className="hover:bg-gray-800 text-white text-lg hover:text-white">
+                <SidebarMenuButton asChild className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white text-lg dark:hover:text-white">
                   <Link to="/">
                     <HomeIcon size={22} />
                     <span>Home</span>
@@ -65,7 +64,7 @@ const SidebarComponent = () => {
               <Collapsible defaultOpen>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="cursor-pointer hover:bg-gray-800 text-white text-lg">
+                    <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white text-lg dark:hover:text-white">
                       <LayoutGrid size={22} />
                       <span>Categories</span>
                       <ChevronRight size={24} className="ml-auto group-hover:rotate-90 transition-transform" />
@@ -74,8 +73,8 @@ const SidebarComponent = () => {
                   <CollapsibleContent>
                     {["Romance", "Action", "Horror", "Comedy", "Thriller"].map((genre, index) => (
                       <SidebarMenuSub key={index}>
-                        <SidebarMenuSubButton className="hover:bg-gray-800 text-white">
-                          <span className="text-md text-white">{genre}</span>
+                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
+                          <span className="text-md text-black dark:text-white">{genre}</span>
                         </SidebarMenuSubButton>
                       </SidebarMenuSub>
                     ))}
@@ -85,7 +84,7 @@ const SidebarComponent = () => {
 
               {/* My Stuff */}
               <SidebarMenuItem>
-                <SidebarMenuButton asChild className="hover:bg-gray-800 text-white text-lg hover:text-white">
+                <SidebarMenuButton asChild className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                   <Link to="/mystuff">
                     <User size={22} />
                     <span>My Stuff</span>
@@ -97,7 +96,7 @@ const SidebarComponent = () => {
               <Collapsible>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="cursor-pointer hover:bg-gray-800 text-white text-lg hover:text-white">
+                    <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                       <CircleHelp size={22} />
                       <span>Help</span>
                       <ChevronRight size={24} className="ml-auto transition-transform" />
@@ -106,8 +105,8 @@ const SidebarComponent = () => {
                   <CollapsibleContent>
                     {["Support", "Feedback"].map((item, index) => (
                       <SidebarMenuSub key={index}>
-                        <SidebarMenuSubButton className="hover:bg-gray-800 text-white">
-                          <span className="text-md text-white">{item}</span>
+                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
+                          <span className="text-md text-black dark:text-white">{item}</span>
                         </SidebarMenuSubButton>
                       </SidebarMenuSub>
                     ))}
@@ -119,7 +118,7 @@ const SidebarComponent = () => {
               <Collapsible>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="cursor-pointer hover:bg-gray-800 text-white text-lg hover:text-white">
+                    <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                       <SquareTerminal size={22} />
                       <span>Playground</span>
                       <ChevronRight size={24} className="ml-auto transition-transform" />
@@ -128,15 +127,15 @@ const SidebarComponent = () => {
                   <CollapsibleContent>
                     {["History", "Starred"].map((item, index) => (
                       <SidebarMenuSub key={index}>
-                        <SidebarMenuSubButton className="hover:bg-gray-800 text-white">
-                          <span className="text-md text-white">{item}</span>
+                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
+                          <span className="text-md text-black dark:text-white">{item}</span>
                         </SidebarMenuSubButton>
                       </SidebarMenuSub>
                     ))}
                     <SidebarMenuSub>
-                      <SidebarMenuSubButton className="hover:bg-gray-800 text-white">
+                      <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                         <Link to="/settings">
-                          <span className="text-md text-white">Settings</span>
+                          <span className="text-md text-black dark:text-white">Settings</span>
                         </Link>
                       </SidebarMenuSubButton>
                     </SidebarMenuSub>
@@ -149,23 +148,14 @@ const SidebarComponent = () => {
       </SidebarContent>
 
       {/* Upgrade to Plus Button */}
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link to="/subscription" className="block px-4 py-4 bg-gray-900">
-              <button className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:opacity-90 text-white font-semibold py-2 rounded-lg shadow-md transition-all duration-300">
-                🚀 Upgrade to Premium
-              </button>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="top" className="text-sm bg-gray-800 text-white border border-gray-700">
-            Upgrade to Premium to watch with no ads
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Link to="/subscription" className="block px-4 py-4 bg-zinc-50 dark:bg-zinc-900">
+        <button className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:opacity-90 text-white font-semibold py-2 rounded-lg shadow-md transition-all duration-300 cursor-pointer">
+          🚀 Upgrade to Premium
+        </button>
+      </Link>
 
       {/* Footer */}
-      <SidebarFooter className="bg-gray-900 text-white border-t border-gray-700 px-4 py-3">
+      <SidebarFooter className="bg-zinc-50 dark:bg-zinc-900 text-black dark:text-white border-t border-gray-700 px-4 py-3">
         <div className="flex items-center justify-between w-full">
           <Link
             to="#"
