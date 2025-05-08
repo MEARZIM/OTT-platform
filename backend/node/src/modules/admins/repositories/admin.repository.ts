@@ -18,8 +18,11 @@ class AdminRepository {
 
     async getAllAdmins() {
         return await prisma.admin.findMany({
+            where: {
+                role: AdminRole.ADMIN
+            },
             include: {
-                uploadedVideos: true
+                uploadedVideos: true,
             }
         })
     }

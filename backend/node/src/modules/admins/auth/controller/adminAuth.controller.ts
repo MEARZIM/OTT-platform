@@ -12,10 +12,9 @@ class AdminAuthController {
                 return res.status(401).json({ message: "Invalid credentials" });
             }
 
-            // Set the token in an HTTP-only cookie
+            
             res.cookie("token", response.token, {
-                httpOnly: true,
-                //secure: process.env.NODE_ENV === "production",
+                
                 sameSite: "strict",
                 maxAge: 24 * 60 * 60 * 1000,
             });

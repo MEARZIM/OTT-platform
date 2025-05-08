@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Toaster } from './components/ui/toaster';
 import Loading from "./components/Loading";
+import PrivateRoute from "./components/routes/PrivateRoute";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./pages/home/Home"));
 const Login = lazy(() => import("./pages/login/Login"));
+const AdminLogin = lazy(() => import("./pages/Admin/login/AdminLogin"));
 const Register = lazy(() => import("./pages/register/Register"));
 const SuperAdmin = lazy(() => import("./pages/Admin/superAdmin/SuperAdmin"));
 const AdminPannel = lazy(() => import("./pages/Admin/Admin"));
@@ -30,6 +32,7 @@ const App = () => {
           {/* User Routes */}
           <Route path="/" element={<Home />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/admin-login' element={<AdminLogin/>}/>
           <Route path='/signup' element={<Register />} />
           <Route path='/dashboard' element={<DashboardPage />} />
           <Route path='/mystuff' element={<MyStuffPage />} />
@@ -39,10 +42,25 @@ const App = () => {
           <Route path="/subscription" element={<SubscriptionPage />} />
 
           {/* Super Admin Routes */}
-          <Route path='/super-admin/*' element={<SuperAdmin />} />
+          <Route
+            path="/super-admin/*"
+            element={
+              <PrivateRoute requiredRole="SUPER_ADMIN">
+                <SuperAdmin />
+              </PrivateRoute>
+            }
+          />
 
           {/* Admin Routes */}
-          <Route path='/admin/*' element={<AdminPannel />} />
+          {/* Admin Routes (Protected) */}
+          <Route
+            path="/admin/*"
+            element={
+              <PrivateRoute requiredRole="ADMIN">
+                <AdminPannel />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Suspense>
       <Toaster />
