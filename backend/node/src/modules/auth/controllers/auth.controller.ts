@@ -13,7 +13,7 @@ class AuthController {
         const token = AuthService.generateToken(user);
         res.cookie("token", token, { httpOnly: true });
 
-        res.redirect(`${process.env.FRONTEND_URL}/dashboard/${user.email}`); // Redirect to the dashboard
+        res.redirect(`${process.env.FRONTEND_URL}/dashboard`); // Redirect to the dashboard
     }
 
     async logout(req: Request, res: Response) {
