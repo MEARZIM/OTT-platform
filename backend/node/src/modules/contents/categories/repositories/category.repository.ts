@@ -1,4 +1,5 @@
 import { prisma } from "../../../../libs/prisma";
+import VideoCategoryService from "../../video/services/videoCategory.service";
 
 class CategoryRepository {
 
@@ -14,9 +15,16 @@ class CategoryRepository {
 
     // Delete a category
     async deleteCategory(id: string) {
-        return await prisma.category.delete({
-            where: { id }
-        });
+        return await prisma.$transaction([
+            prisma.videoCategory.deleteMany({
+                where: {
+                    categoryId: id
+                }
+            }),
+            prisma.category.delete({
+                where: { id }
+            }),
+        ]);
     }
 
     // Update a category
