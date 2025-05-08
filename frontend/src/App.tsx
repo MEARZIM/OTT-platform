@@ -18,6 +18,7 @@ const SettingsPage = lazy(() => import("./pages/User/Dashboard/pages/Settings/Se
 const WatchHistoryPage = lazy(() => import("./pages/User/Dashboard/pages/Settings/pages/WatchHistory"));
 const Watch = lazy(() => import("./pages/User/Watch/Watch"));
 const SubscriptionPage = lazy(() => import("./pages/User/Subscription/subscribe/SubscribePage"));
+const YourAccountPage = lazy(() => import("./pages/User/Dashboard/pages/Settings/pages/YourAccount"))
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/settings/watch-history" element={<WatchHistoryPage />} />
           <Route path="/player/:id" element={<Watch />} />
           <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/settings/account" element={<YourAccountPage />} />
 
           {/* Super Admin Routes */}
           <Route

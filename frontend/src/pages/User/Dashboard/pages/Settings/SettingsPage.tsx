@@ -25,16 +25,18 @@ export default function SettingsPage() {
 
               <div className="divide-y divide-gray-700">
                 {/* Your Account */}
-                <div className="flex items-center justify-between px-6 py-4 hover:bg-[#2a3440] transition rounded-t-md cursor-pointer">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 font-medium">
-                      <User className="h-4 w-4 text-[#00a8e1]" />
-                      <span>Your Account</span>
+                <Link to="/settings/account">
+                  <div className="flex items-center justify-between px-6 py-4 hover:bg-[#2a3440] transition rounded-t-md cursor-pointer">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 font-medium">
+                        <User className="h-4 w-4 text-[#00a8e1]" />
+                        <span>Your Account</span>
+                      </div>
+                      <p className="text-sm text-gray-400">Manage your Prime View account</p>
                     </div>
-                    <p className="text-sm text-gray-400">Manage your Prime View membership</p>
+                    <ArrowLeft className="h-5 w-5 transform rotate-180 text-gray-400" />
                   </div>
-                  <ArrowLeft className="h-5 w-5 transform rotate-180 text-gray-400" />
-                </div>
+                </Link>
 
                 {/* Watch History */}
                 <Link to="/settings/watch-history">
