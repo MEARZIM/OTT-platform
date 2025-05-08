@@ -13,6 +13,8 @@ import categoryRouter from "./modules/contents/categories/routes/category.routes
 import videoRouter from "./modules/contents/video/routes/video.routes";
 import videoCategoryRouter from "./modules/contents/video/routes/videoCategory.routes";
 import adRouter from "./modules/ads/routes/ads.route";
+import historyRouter from "./modules/contents/history/routes/history.routes";
+import likedRouter from "./modules/contents/liked/routes/liked.routes";
 
 dotenv.config();
 const app = express();
@@ -39,11 +41,13 @@ app.use(errorHandler);
 
 // ✅ Routes
 app.use("/api/ads", adRouter);
-app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/category", categoryRouter);
+app.use("/api/content/like", likedRouter);
 app.use("/api/content/video", videoRouter);
+app.use("/api/content/history", historyRouter);
 app.use("/api/content/video-category", videoCategoryRouter);
 
 
