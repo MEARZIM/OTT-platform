@@ -23,7 +23,7 @@ const DashboardPage = () => {
             <SidebarTrigger className="mr-4" /> {/* Sidebar Toggle Button */}
             <div className='flex items-center gap-10 z-50 mr-3'>
               <Link to='/'>
-                <img src='/assets/PrimeViewLogo.png' alt='Logo' className='size-12' />
+                <img src='/assets/PrimeViewLogo.png' alt='Logo' className='h-12 w-20' />
               </Link>
             </div>
             <div className="w-full ">
