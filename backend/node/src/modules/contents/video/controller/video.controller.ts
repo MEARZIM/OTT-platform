@@ -7,8 +7,8 @@ class VideoController {
     async uploadVideoController(req: Request, res: Response) {
         try {
 
-            if (!req.file) {
-                return res.status(400).json({ message: "No file uploaded" });
+            if (!req.files || !("video" in req.files) || !("thumbnail" in req.files)) {
+                return res.status(400).json({ message: "Both video and thumbnail are required" });
             }
 
             if (!req.body) {
@@ -20,14 +20,23 @@ class VideoController {
                 description: string;
             } = req.body;
 
-            const fileName = req.file.filename;
-            const mimeType = req.file.mimetype;
+            const videoFile = (req.files as any)["video"][0];
+            const thumbnailFile = (req.files as any)["thumbnail"][0];
+        
 
-            if(!req.user){
+            if (!req.user) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
 
-            const video = await videoService.addVideoToDataBase(req.user as User,title, description, req.file.buffer, fileName, mimeType);
+            const video = await videoService.addVideoToDataBase(
+                req.user as User, 
+                title, 
+                description, 
+                videoFile.buffer,
+                videoFile.originalname,
+                thumbnailFile.buffer,
+                thumbnailFile.originalname,
+            );
 
             return res.status(200).json({ message: "Video uploaded successfully", video });
             // res.status(200).json({ message: "Video uploaded successfully", user: req.user });

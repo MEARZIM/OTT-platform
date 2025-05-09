@@ -4,25 +4,31 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import video from "../../../../libs/mux";
 import s3 from "../../../../libs/s3";
 import videoReposiroty from "../repository/video.reposiroty";
+import { generateTimestampedFilename } from "../../../../utils/generateFilename";
+
+enum fileType {
+    VIDEO = "videos",
+    THUMBNAIL = "thumbnails",
+}
 
 class VideoService {
-    private static async uploadToS3(file: Buffer, fileName: string, mimetype: string): Promise<string> {
+    private static async uploadToS3(type: fileType, file: Buffer, fileName: string): Promise<string> {
 
         const command = new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME!,
-            Key: `videos/${fileName}`,
+            Key: `${type}/${fileName}`,
             Body: file,
         });
 
         await s3.send(command);
 
-        return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/videos/${fileName}`;
+        return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${type}/${fileName}`;
 
         // return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
     }
 
-    private static async uploadVideo(file: Buffer, fileName: string, mimetype: string) {
-        const s3Url = await VideoService.uploadToS3(file, fileName, mimetype) as string;
+    private static async uploadVideo(file: Buffer, fileName: string) {
+        const s3Url = await VideoService.uploadToS3(fileType.VIDEO, file, fileName) as string;
 
         const asset = await video.assets.create({
             input: [{ url: s3Url }],
@@ -34,15 +40,30 @@ class VideoService {
         return asset;
     }
 
-    async addVideoToDataBase(user: User,title: string, description: string, file: Buffer, fileName: string, mimetype: string){
-        const s3Url = await VideoService.uploadToS3(file, fileName, mimetype) as string;
-        const asset = await VideoService.uploadVideo(file, fileName, mimetype);
+    async addVideoToDataBase(
+        user: User,
+        title: string,
+        description: string,
+        videoBuffer: Buffer,
+        videoFileName: string,
+        thumbnailBuffer: Buffer,
+        thumbnailFileName: string,
+    ) {
+        const videoFileNameWithTimestamp = generateTimestampedFilename(videoFileName);
+        const thumbnailFileNameWithTimestamp = generateTimestampedFilename(thumbnailFileName);
+
+        const [asset, VideoS3Url, thumbnailUrl] = await Promise.all([
+            VideoService.uploadVideo(videoBuffer, videoFileNameWithTimestamp),
+            VideoService.uploadToS3(fileType.VIDEO, videoBuffer, videoFileNameWithTimestamp),
+            VideoService.uploadToS3(fileType.THUMBNAIL, thumbnailBuffer, thumbnailFileNameWithTimestamp),
+        ]);
 
         const data = {
             title,
             description,
-            url: s3Url,
+            url: VideoS3Url,
             rating: 0,
+            thumbnail: thumbnailUrl,
             uploadedById: user.id,
             muxAssetId: asset.id,
             playbackId: asset?.playback_ids?.[0]?.id ?? "",
