@@ -51,7 +51,7 @@ export function AdminTable<TData, TValue>({
     })
 
     return (
-        <div>
+        <div className="bg-white text-black rounded-md shadow-md p-4 my-1.5">
             <div className="flex items-center py-4">
                 <Input
                     placeholder="Search..."

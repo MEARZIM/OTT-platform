@@ -8,7 +8,8 @@ import {
 } from "./ui/dropdown-menu"
 
 import { Button } from "./ui/button"
-import { useTheme } from "./Theme-Provider"
+import { useTheme } from "next-themes"
+
 
 export function ModeToggle() {
   const { setTheme } = useTheme()

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from './components/ui/toaster';
 import Loading from "./components/Loading";
 import PrivateRoute from "./components/routes/PrivateRoute";
-import { ThemeProvider } from "./components/Theme-Provider";
+import { ThemeProvider } from "./providers/Theme-Provider";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./pages/home/Home"));
@@ -23,7 +23,12 @@ const YourAccountPage = lazy(() => import("./pages/User/Dashboard/pages/Settings
 
 const App = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
       <Router>
         <Suspense fallback={
           <div className="flex justify-center items-center h-screen">
