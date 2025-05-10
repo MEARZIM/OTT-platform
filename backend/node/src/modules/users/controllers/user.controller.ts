@@ -1,14 +1,15 @@
 import { Request, Response } from "express";
 import userService from "../services/user.service";
+import { User } from "@prisma/client";
 
 class UserController {
     // ✅ Get user by email
-    async getUserByEmail(req: Request, res: Response) {
+    async getUserInfo(req: Request, res: Response) {
         try {
-            const email = req.params.email;
-            if (!email) return res.status(400).json({ message: "Email is required" });
+            console.log("User info request", req.user);
+            if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+            const user = req.user as User;
 
-            const user = await userService.getUserByEmail(email);
             if (!user) return res.status(404).json({ message: "User not found" });
 
             return res.json(user);
