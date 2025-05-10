@@ -99,7 +99,7 @@ const SidebarComponent = () => {
                 <SidebarMenuButton asChild className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                   <Link to="/mystuff">
                     <User size={22} />
-                    <span>My Stuff</span>
+                    <span className="text-lg">My Stuff</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -110,7 +110,7 @@ const SidebarComponent = () => {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                       <CircleHelp size={22} />
-                      <span>Help</span>
+                      <span className="text-lg">Help</span>
                       <ChevronRight size={24} className="ml-auto transition-transform" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -132,7 +132,7 @@ const SidebarComponent = () => {
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                       <SquareTerminal size={22} />
-                      <span>Playground</span>
+                      <span className="text-lg">Playground</span>
                       <ChevronRight size={24} className="ml-auto transition-transform" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>

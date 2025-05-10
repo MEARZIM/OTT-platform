@@ -8,7 +8,7 @@ import {
 } from "../../../../components/ui/carousel";
 import videoData from "../../Watch/data/VideoList";
 
-const suggested = videoData.slice(0,8)
+const suggested = videoData.slice(0, 8)
 
 const SuggestedContent = () => {
     return (
@@ -37,8 +37,8 @@ const SuggestedContent = () => {
                 </CarouselContent>
 
                 {/* Navigation Buttons */}
-                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-blue-200/50 p-2 rounded-full text-blue-950 hover:bg-gray-800 hover:text-blue-700 border-none size-10 cursor-pointer" />
-                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-200/50 p-2 rounded-full text-blue-950 hover:bg-gray-800 hover:text-blue-700 border-none size-10 cursor-pointer" />
+                <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 size-10 bg-blue-200/50 dark:bg-blue-200/50 border-none p-2 rounded-full text-blue-700 dark:text-blue-700 hover:bg-gray-800 dark:hover:bg-gray-800 cursor-pointer" />
+                <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 size-10 bg-blue-200/50 dark:bg-blue-200/50 border-none p-2 rounded-full text-blue-700 dark:text-blue-700 hover:bg-gray-800 dark:hover:bg-gray-800 cursor-pointer" />
             </Carousel>
         </div>
     );
