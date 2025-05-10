@@ -4,6 +4,7 @@ export interface VideoData {
     url: string;
     thumbnail: string;
     rating: number;
+    status?: VideoStatus;
     uploadedById: string;
     muxAssetId: string;
     playbackId: string;

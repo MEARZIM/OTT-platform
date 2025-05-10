@@ -1,10 +1,11 @@
-import { User } from "@prisma/client";
+import { User, VideoStatus } from "@prisma/client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
 import video from "../../../../libs/mux";
 import s3 from "../../../../libs/s3";
 import videoReposiroty from "../repository/video.reposiroty";
 import { generateTimestampedFilename } from "../../../../utils/generateFilename";
+import { VideoData } from "../dto/video";
 
 enum fileType {
     VIDEO = "videos",
@@ -40,6 +41,8 @@ class VideoService {
         return asset;
     }
 
+
+    // for admins
     async addVideoToDataBase(
         user: User,
         title: string,
@@ -75,9 +78,61 @@ class VideoService {
 
     }
 
+    async updateVideo(
+        videoId: string,
+        title: string,
+        description: string,
+        status: VideoStatus,
+        thumbnailBuffer: Buffer,
+        thumbnailFileName: string,
+    ) {
+
+        const thumbnailFileNameWithTimestamp = generateTimestampedFilename(thumbnailFileName);
+        const thumbnailUrl = await VideoService.uploadToS3(fileType.THUMBNAIL, thumbnailBuffer, thumbnailFileNameWithTimestamp);
+
+        const data = {
+            title,
+            description,
+            thumbnail: thumbnailUrl,
+            status,
+            updatedAt: new Date(),
+        }
+
+        return videoReposiroty.updateVideo(videoId, data);
+    }
+
+    async deleteVideo(id: string) {
+        return videoReposiroty.deleteVideo(id);
+    }
+
+    async getVideosByUploadedById(uploadedById: string) {
+        return videoReposiroty.getVideosByUploadedById(uploadedById);
+    }
+
+
+
+    // for users
     async getVideoById(id: string) {
         return videoReposiroty.getVideoById(id);
     }
+
+
+    async getAllVideos() {
+        return videoReposiroty.getAllVideos();
+    }
+
+    async getVideoByCategoryId(categoryId: string) {
+        return videoReposiroty.getVideoByCategoryId(categoryId);
+    }
+
+    async getMostLikedVideos() {
+        return videoReposiroty.getMostLikedVideos();
+    }
+
+    async getTopRatedVideos() {
+        return videoReposiroty.getTopRatedVideos();
+    }
+
 }
 
 export default new VideoService;

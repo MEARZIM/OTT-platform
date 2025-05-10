@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { User } from "@prisma/client";
+import { Admin, AdminRole, User, Video, VideoStatus } from "@prisma/client";
 
 import videoService from "../services/video.service";
 
 class VideoController {
+    // for admins
     async uploadVideoController(req: Request, res: Response) {
         try {
-
             if (!req.files || !("video" in req.files) || !("thumbnail" in req.files)) {
                 return res.status(400).json({ message: "Both video and thumbnail are required" });
             }
@@ -22,16 +22,16 @@ class VideoController {
 
             const videoFile = (req.files as any)["video"][0];
             const thumbnailFile = (req.files as any)["thumbnail"][0];
-        
+
 
             if (!req.user) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
 
             const video = await videoService.addVideoToDataBase(
-                req.user as User, 
-                title, 
-                description, 
+                req.user as User,
+                title,
+                description,
                 videoFile.buffer,
                 videoFile.originalname,
                 thumbnailFile.buffer,
@@ -46,6 +46,120 @@ class VideoController {
         }
     };
 
+    async updateVideoController(req: Request, res: Response) {
+        try {
+            const { videoId } = req.params; // video id
+            if (!req.user) {
+                return res.status(401).json({ message: "Unauthorized" });
+            }
+
+            const admin = req.user as Admin;
+
+            if (!admin.role || admin.role !== AdminRole.ADMIN) {
+                return res.status(403).json({ message: "Forbidden! You dont have access to this request." });
+            }
+
+            if (!videoId) {
+                return res.status(400).json({ message: "Video id is required" });
+            }
+
+            const isVideoExist  = await videoService.getVideoById(videoId);
+            if (!isVideoExist) {
+                return res.status(404).json({ message: "Video not found" });
+            }
+
+            const thumbnailFile = (req.files as any)["thumbnail"][0];
+            
+            const {
+                title,
+                description,
+                status     
+            }: {
+                title: string;
+                description: string;
+                status: VideoStatus;
+            } = req.body; 
+
+
+            const video = await videoService.updateVideo(
+                videoId,
+                title,
+                description,
+                status as VideoStatus,
+                thumbnailFile.buffer,
+                thumbnailFile.originalname,
+            );
+
+            if (!video) {
+                return res.status(404).json({ message: "Video not found" });
+            }
+            return res.status(200).json({ message: "Video updated successfully", video });
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async deleteVideoController(req: Request, res: Response) {
+        try {
+            const { videoId } = req.params; // video id
+            if (!req.user) {
+                return res.status(401).json({ message: "Unauthorized" });
+            }
+
+            const admin = req.user as Admin;
+
+            if (!admin.role || admin.role !== AdminRole.ADMIN) {
+                return res.status(403).json({ message: "Forbidden! You dont have access to this request." });
+            }
+
+            if (!videoId) {
+                return res.status(400).json({ message: "Video id is required" });
+            }
+
+            const isVideoExist  = await videoService.getVideoById(videoId);
+            if (!isVideoExist) {
+                return res.status(404).json({ message: "Video not found" });
+            }
+
+            await videoService.deleteVideo(videoId);
+            return res.status(200).json({ message: "Video deleted successfully" });
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async getVideosByUploadedByIdController(req: Request, res: Response) {
+        try {
+            if (!req.user) {
+                return res.status(401).json({ message: "Unauthorized" });
+            }
+
+            const admin = req.user as Admin;
+
+            if (!admin.role || admin.role !== AdminRole.ADMIN) {
+                return res.status(403).json({ message: "Forbidden! You dont have access to this request." });
+            }
+
+
+            const videos = await videoService.getVideosByUploadedById(admin.id);
+            return res.status(200).json(videos);
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+
+
+
+
+
+
+
+
+    // for users
     async getVideoByIdController(req: Request, res: Response) {
         try {
             const { id } = req.params;
@@ -54,6 +168,47 @@ class VideoController {
                 return res.status(404).json({ message: "Video not found" });
             }
             return res.status(200).json(video);
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async getAllVideosController(req: Request, res: Response) {
+        try {
+            const videos = await videoService.getAllVideos();
+            return res.status(200).json(videos);
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async getVideoByCategoryIdController(req: Request, res: Response) {
+        try {
+            const { categoryId } = req.params;
+            const videos = await videoService.getVideoByCategoryId(categoryId);
+            return res.status(200).json(videos);
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async getMostLikedVideosController(req: Request, res: Response) {
+        try {
+            const videos = await videoService.getMostLikedVideos();
+            return res.status(200).json(videos);
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
+
+    async getTopRatedVideosController(req: Request, res: Response) {
+        try {
+            const videos = await videoService.getTopRatedVideos();
+            return res.status(200).json(videos);
         } catch (error: any) {
             console.error(error);
             return res.status(500).json({ message: "Internal server error" });
