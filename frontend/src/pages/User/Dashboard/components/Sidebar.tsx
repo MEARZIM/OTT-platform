@@ -27,19 +27,31 @@ import {
   CollapsibleTrigger
 } from "../../../../components/ui/collapsible"
 import { Link } from "react-router-dom"
+import { useUser } from "../../../../session/auth-context"
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar"
+import { useState } from "react"
 
 const SidebarComponent = () => {
+  const { user, loading } = useUser();
+  const [imgError, setImgError] = useState(false);
+  if (loading) return <div>Loading...</div>;
+  console.log("Avatar Image:", user?.profileImage);
   return (
     <Sidebar className="border-none">
       <SidebarContent className="bg-zinc-50 text-black dark:bg-zinc-900 dark:text-white">
         {/* Profile Section */}
         <div className="p-6 flex flex-col items-center justify-center text-center border-b border-gray-700">
-          <img
-            src="/assets/avatar.png"
-            alt="Profile"
-            className="w-16 h-16 rounded-full mb-2"
-          />
-          <p className="text-lg font-semibold">John Doe</p>
+          <Avatar>
+            <AvatarImage
+              src={!imgError ? user?.profileImage ?? undefined : "/assets/avatar.png"}
+              onError={() => setImgError(true)}
+              alt={user?.name ?? "User"}
+            />
+            <AvatarFallback>
+              {user?.name?.split(" ").map(n => n[0]).join("") ?? "NA"}
+            </AvatarFallback>
+          </Avatar>
+          <p className="text-lg font-semibold">{user?.name}</p>
           <p className="text-sm text-zinc-700 dark:text-zinc-400">Premium Member</p>
         </div>
 
