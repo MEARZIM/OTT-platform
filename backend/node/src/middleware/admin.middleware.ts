@@ -6,16 +6,21 @@ import { prisma } from "../libs/prisma";
 
 export const verifyAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1];
+        const token = req.cookies.token;
+        
         if (!token) return res.status(403).json({ message: "Access denied. No token provided." });
 
         // Verify JWT Token
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
 
+        // console.log(decoded)
+
         // Find admin in database
         const admin = await prisma.admin.findUnique({
             where: { id: decoded.id },
         });
+
+        // console.log(admin)
 
         if (!admin || admin.role !== AdminRole.ADMIN) {
             return res.status(403).json({ message: "Access denied. Only admins are allowed." });
