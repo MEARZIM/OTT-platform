@@ -68,7 +68,7 @@ function UpLoadAdds({ initialData }: AddProps) {
       setPreviewUrl("")
     }
 
-    console.log("Selected file:", selectedFile)
+    // console.log("Selected file:", selectedFile)
   }
 
 
@@ -79,28 +79,37 @@ function UpLoadAdds({ initialData }: AddProps) {
   }
 
 
-
+  console.log(file);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // console.log(title, description, file)
     try {
       setLoading(true)
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("offsetSeconds", offsetSeconds);
+      if (file) {
+        formData.append("file", file);
+      }
+      formData.append("type", type);
 
-      
       if (initialData) {
         await axios.patch(`${BACKEND_URL}/api/ads/${id}`, {
           title,
           description,
           offsetSeconds: Number(offsetSeconds) || 60,
           type,
+        }, {
+          withCredentials: true
         })
       } else {
-        await axios.post(`${BACKEND_URL}/api/ads`, {
-          title,
-          description,
-          offsetSeconds: Number(offsetSeconds) || 60,
-          type,
-          file
+
+        await axios.post(`${BACKEND_URL}/api/ads/`, formData, {
+          withCredentials: true,
+          headers:{
+            "Content-Type": "multipart/form-data",
+          }
         })
       }
 
@@ -118,7 +127,11 @@ function UpLoadAdds({ initialData }: AddProps) {
       });
     } finally {
       setLoading(false)
-      window.location.reload()
+      setDescription("")
+      setTitle("")
+      setType("")
+      setFile(null);
+      setOffsetSeconds("");
     }
   }
 
@@ -137,13 +150,13 @@ function UpLoadAdds({ initialData }: AddProps) {
 
               {!initialData && <div
                 onClick={handleFileInputClick}
-                className="w-full h-[180px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer mb-4"
+                className="w-full h-[400px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer mb-4"
               >
                 {file ?
                   <FilePreview previewUrl={previewUrl} /> :
                   <>
                     <div className="flex justify-center items-center h-full w-sm border border-gray-300 rounded-lg">
-                      <Input ref={fileInputRef} type="file" accept="video/*" onChange={handleFileChange} className="hidden" />
+                      <Input ref={fileInputRef} type="file" accept="video/*" onChange={handleFileChange} disabled={loading} className="hidden" />
                       <span className="text-gray-500">file input(video)</span>
                     </div>
                   </>
@@ -158,6 +171,7 @@ function UpLoadAdds({ initialData }: AddProps) {
                   placeholder="Add Title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  disabled={loading}
                   required
                 />
               </div>
@@ -167,13 +181,14 @@ function UpLoadAdds({ initialData }: AddProps) {
                 <Textarea
                   placeholder="Adds Description"
                   value={description}
+                  disabled={loading}
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
               <div className="flex flex-col gap-2 my-4 w-full">
                 <Label>Ad Type</Label>
-                <Select value={type} onValueChange={setType}>
+                <Select value={type} onValueChange={setType} disabled={loading}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a ad type" />
                   </SelectTrigger>
@@ -194,6 +209,7 @@ function UpLoadAdds({ initialData }: AddProps) {
                   type="number"
                   placeholder="e.g., 30"
                   value={offsetSeconds}
+                  disabled={loading}
                   onChange={(e) => setOffsetSeconds(e.target.value)}
                 />
               </div>
