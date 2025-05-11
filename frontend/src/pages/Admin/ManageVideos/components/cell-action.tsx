@@ -1,8 +1,6 @@
-"use client"
-
-// import axios from "axios";
+import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import {
@@ -17,6 +15,7 @@ import { Button } from "../../../../components/ui/button";
 import { Column } from "./columns";
 import { useToast } from "../../../../hooks/use-toast";
 import AlertModal from "../../../../components/modals/alert-modal";
+import { BACKEND_URL } from "../../../../lib/utils";
 
 
 interface CellActionProps {
@@ -25,8 +24,6 @@ interface CellActionProps {
 
 
 export const CellAction = ({ data }: CellActionProps) => {
-
-
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const { toast } = useToast()
@@ -43,9 +40,16 @@ export const CellAction = ({ data }: CellActionProps) => {
         try {
 
             setLoading(true);
-            // TODO:: DELETE ADMIN
+            await axios.delete(
+                `${BACKEND_URL}/api/content/video/${data.id}`, {
+                withCredentials: true
+            })
 
-            toast({ title: "Admin Deleted." });
+            toast({
+                title: "Admin Deleted."
+            });
+
+            window.location.reload();
 
         } catch (error) {
             toast({

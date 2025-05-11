@@ -1,208 +1,331 @@
+import axios from "axios";
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useParams } from "react-router-dom";
 
-import { useRef, useState, type ChangeEvent } from "react"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "../../../../../components/ui/select";
+import { BACKEND_URL } from "../../../../../lib/utils";
+import { toast } from "../../../../../hooks/use-toast";
+import { Label } from "../../../../../components/ui/label";
+import { Input } from "../../../../../components/ui/input";
+import Heading from "../../../../../components/ui/heading";
+import { Button } from "../../../../../components/ui/button";
+import { Textarea } from "../../../../../components/ui/textarea";
 
-import { Button } from "../../../../../components/ui/button"
-import FilePreview from "./file-preview"
-import { Input } from "../../../../../components/ui/input"
-import { Textarea } from "../../../../../components/ui/textarea"
-import { Select, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from "../../../../../components/ui/select"
-import { Popover, PopoverContent, PopoverTrigger } from "../../../../../components/ui/popover"
-import { Checkbox } from "../../../../../components/ui/checkbox"
+import SelectAd from "./select-ad";
+import FilePreview from "./file-preview";
+import SelectCategory from "./select-categories";
 
-const categories = [
-  { label: 'Apple', value: 'apple' },
-  { label: 'Banana', value: 'banana' },
-  { label: 'Blueberry', value: 'blueberry' },
-  { label: 'Grapes', value: 'grapes' },
-  { label: 'Pineapple', value: 'pineapple' },
-];
+interface Categories {
+  id: string;
+  videoId: string;
+  categoryId: string
+  category: {
+    id: string;
+    name: string;
+  }
+}
 
+interface VideoProps {
+  initialData: {
+    id: string;
+    title: string;
+    description: string;
+    muxAssetId: string;
+    playbackId: string;
+    thumbnail: string;
+    status: string;
+    adId: string;
+    ad: {
+      id: string;
+      title: string;
+      description: string;
+      muxAssetId: string;
+      playbackId: string;
+      type: string;
+    }
+    categories: Categories[]
+  } | null;
+}
 
-function UpLoadVideo() {
-  // State to hold the admin input data
-  const [file, setFile] = useState<File | null>(null)
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+function UploadVideo({ initialData }: VideoProps) {
+  const { id } = useParams<{ id: string }>();
+  const [file, setFile] = useState<File | null>(null);
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [description, setDescription] = useState(initialData?.description || "");
+  const [status, setStatus] = useState(initialData?.status || "");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(initialData?.categories.map((c) => c.categoryId) || []);
+  const [loading, setLoading] = useState(false);
+  const [ads, setAds] = useState([]);
+  const [selectedAd, setSelectedAd] = useState(initialData?.adId || "");
 
-  // Loadding State
-  const [loading, setLoading] = useState(false)
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(initialData?.thumbnail || null);
 
-  const toggleCategory = (value: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
-    );
-  };
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const thumbnailInputRef = useRef<HTMLInputElement>(null);
 
-  // Ref to the file input element
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const titleTag = initialData ? "Edit Video" : "Upload Video";
+  const descriptionTag = initialData ? "Edit your video details" : "Upload your video";
+  const action = initialData ? "Save" : "Publish";
+  const toastTitle = initialData ? "Video updated." : "Video created.";
+  const toastDesc = initialData ? "Video details updated." : "Video is now active.";
 
-  // State to hold the preview URL
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${BACKEND_URL}/api/category/all-categories`);
+        setCategories(response.data);
+
+        const res = await axios.get(`${BACKEND_URL}/api/ads`);
+        setAds(res.data.ads);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getData();
+  }, []);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0] || null
-    setFile(selectedFile)
+    const selectedFile = e.target.files?.[0] || null;
+    setFile(selectedFile);
 
-    // Clear previous preview URL
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl)
-    }
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
 
-    // Create a preview URL for the selected file
     if (selectedFile && selectedFile.type.startsWith("video/")) {
-      const url = URL.createObjectURL(selectedFile)
-      setPreviewUrl(url)
+      setPreviewUrl(URL.createObjectURL(selectedFile));
     } else {
-      setPreviewUrl("")
+      setPreviewUrl(null);
     }
+  };
 
-    console.log("Selected file:", selectedFile)
-  }
-  console.log("Preview URL:", previewUrl)
+  const handleThumbnailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files?.[0] || null;
+    setThumbnail(selectedImage);
 
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value)
+    if (thumbnailPreview) URL.revokeObjectURL(thumbnailPreview);
 
-  }
-
-  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value)
-
-  }
-
-
-
-  const handleFileInputClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click()
+    if (selectedImage && selectedImage.type.startsWith("image/")) {
+      setThumbnailPreview(URL.createObjectURL(selectedImage));
+    } else {
+      setThumbnailPreview(null);
     }
-  }
+  };
 
+  const handleFileInputClick = () => fileInputRef.current?.click();
+  const handleThumbnailInputClick = () => thumbnailInputRef.current?.click();
 
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log(title, description, file, categories)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      setLoading(true)
-      // Api call to upload the video
-    } catch (error) {
-      console.log("Error uploading video:", error)
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("title", title)
+      formData.append("description", description)
+      formData.append("status", status)
+      if (thumbnail) {
+        formData.append("thumbnail", thumbnail)
+      }
+      formData.append("adId", selectedAd)
+      formData.append("categoryIds", JSON.stringify(selectedCategories))
+
+      if (initialData) {
+        await axios.patch(
+          `${BACKEND_URL}/api/content/video/${id}`,
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            }
+          }
+        );
+      } else {
+        if (file) {
+          formData.append("video", file)
+        }
+        await axios.post(`${BACKEND_URL}/api/content/video`,
+          formData,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            }
+          }
+        );
+      }
+
+      toast({
+        title: toastTitle,
+        description: toastDesc,
+        variant: "default",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
+      setTitle("");
+      setDescription("");
+      setThumbnail(null);
+      setFile(null);
+      setCategories([]);
+      setPreviewUrl(null);
+      setStatus("");
+      setSelectedCategories([])
+      setAds([]);
+      // window.location.reload();
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+      <Heading title={titleTag} description={descriptionTag} />
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Upload Video</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="text-black">
           <div className="p-6 rounded-3xl border border-gray-200 bg-white h-auto">
+            <div className="flex items-start justify-baseline flex-col">
 
+              {!initialData && (
+                <div
+                  onClick={handleFileInputClick}
+                  className="w-full h-[500px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer mb-4"
+                >
+                  {file ? (
+                    <FilePreview previewUrl={previewUrl} />
+                  ) : (
+                    <>
+                      <Input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="video/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                        disabled={loading}
+                      />
+                      <span className="text-gray-500">Click to upload video file</span>
+                    </>
+                  )}
+                </div>
+              )}
 
-            <div className="grid grid-cols-3 grid-rows-7 gap-2">
 
               <div
-                onClick={handleFileInputClick}
-                className="col-span-3 row-span-3 h-full"
+                onClick={handleThumbnailInputClick}
+                className="w-full h-[180px] border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer mb-4"
               >
-                {file ?
-                  <FilePreview previewUrl={previewUrl} /> :
-                  <>
-                    <div className="flex justify-center items-center h-full border border-gray-300 rounded-lg">
-                      <Input ref={fileInputRef} type="file" accept="video/*" onChange={handleFileChange} className="hidden" />
-                      <span className="text-gray-500">file input(video)</span>
-                    </div>
-                  </>
-                }
-
-              </div>
-
-              <Input
-                type="text"
-                placeholder="title input"
-                value={title}
-                onChange={handleTitleChange}
-                className="col-span-2 row-start-4 h-full"
-                required
-              />
-
-              <div className="row-start-4 col-start-3">
-                <Select>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder={selectedCategories.length > 0 ? selectedCategories.join(', ') : "Select Categories"} />
-                      </SelectTrigger>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-64">
-                      <SelectGroup>
-                        <SelectLabel>Category</SelectLabel>
-                        {categories.map((category) => (
-                          <div key={category.value} className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-md">
-                            <Checkbox
-                              id={category.value}
-                              checked={selectedCategories.includes(category.value)}
-                              onCheckedChange={() => toggleCategory(category.value)}
-                            />
-                            <label htmlFor={category.value} className="text-sm">
-                              {category.label}
-                            </label>
-                          </div>
-                        ))}
-                      </SelectGroup>
-                    </PopoverContent>
-                  </Popover>
-                </Select>
-              </div>
-
-              <div className="col-span-3 row-start-5 border border-gray-300 rounded-lg p-4 min-h-[100px]">
-                <h2 className="font-semibold mb-2">Selected Categories:</h2>
-                {selectedCategories.length > 0 ? (
-                  <ul className="list-disc list-inside">
-                    {selectedCategories.map((cat) => (
-                      <li key={cat}>{cat}</li>
-                    ))}
-                  </ul>
+                {thumbnailPreview ? (
+                  <img
+                    src={thumbnailPreview}
+                    alt="Thumbnail Preview"
+                    className="max-h-full max-w-full object-contain"
+                  />
                 ) : (
-                  <p className="text-gray-500">No categories selected.</p>
+                  <>
+                    <Input
+                      ref={thumbnailInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleThumbnailChange}
+                      className="hidden"
+                      disabled={loading}
+                    />
+                    <span className="text-gray-500">Click to upload thumbnail image</span>
+                  </>
                 )}
               </div>
 
-              <Textarea
-                placeholder="description input"
-                value={description}
-                onChange={handleDescriptionChange}
-                className="col-span-3 row-span-2 row-start-6 h-full"
-              />
 
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <Label>Title</Label>
+                <Input
+                  type="text"
+                  placeholder="Video Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  disabled={loading}
+                  required
+                />
+              </div>
 
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <Label>Description</Label>
+                <Textarea
+                  placeholder="Video Description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <Label>Video Status</Label>
+                <Select value={status} onValueChange={setStatus} disabled={loading}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Video Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Video Status</SelectLabel>
+                      <SelectItem value="PUBLISHED">Published</SelectItem>
+                      <SelectItem value="DRAFT">Draft</SelectItem>
+                      <SelectItem value="PRIVATE">Private</SelectItem>
+                      <SelectItem value="BANNED">Banned</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <SelectAd
+                  ads={ads}
+                  selectedAd={selectedAd}
+                  setSelectedAd={setSelectedAd}
+                  loading={loading}
+                />
+              </div>
+
+              <div className="flex flex-col gap-2 my-4 w-full">
+                <SelectCategory
+                  categories={categories}
+                  selectedCategories={selectedCategories}
+                  setSelectedCategories={setSelectedCategories}
+                  loading={loading}
+                />
+              </div>
 
             </div>
-
           </div>
+
           <div className="flex my-3 justify-end">
             <Button
               size={"lg"}
               variant={"destructive"}
-              value={"submit"}
               type="submit"
               className="hover:cursor-pointer"
-              disabled={!title || !description || !file}
+              disabled={!title || !description || loading}
             >
-              Publish
+              {action}
             </Button>
           </div>
-
         </form>
 
-
-
-
-
-        {file && (
+        {file && !initialData && (
           <div className="mt-4 p-4 bg-white rounded-lg border border-gray-200">
             <h2 className="font-semibold mb-2">Selected File:</h2>
             <p>Name: {file.name}</p>
@@ -212,8 +335,7 @@ function UpLoadVideo() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default UpLoadVideo
-
+export default UploadVideo;

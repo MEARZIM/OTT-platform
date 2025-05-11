@@ -27,8 +27,8 @@ export const columns: ColumnDef<Column>[] = [
         cell: ({ row }) => row.original.description
     },
     {
-        accessorKey: "videos",
-        header: "Videos",
+        accessorKey: "rating",
+        header: "Rating",
         cell: ({ row }) => row.original.rating
     },
     {
@@ -38,6 +38,7 @@ export const columns: ColumnDef<Column>[] = [
     {
         accessorKey: "createdAt",
         header: "Date",
+        cell: ({ row }) => row.original.createdAt
     },
     {
         id: "actions",
