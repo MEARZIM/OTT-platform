@@ -11,7 +11,10 @@ interface PricingCardProps {
 }
 
 export function PricingCard({ name, price, period, features, featured, isFree = false }: PricingCardProps) {
-  //const [showPaymentModal, setShowPaymentModal] = useState(false)
+
+  const handleClick = () => {
+    console.log("Subscribe to Premium");
+};
 
   return (
     <>
@@ -45,20 +48,19 @@ export function PricingCard({ name, price, period, features, featured, isFree = 
           </ul>
         </div>
         <Button
-          className={`w-full mt-8 ${isFree ? "bg-zinc-700 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-500" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
-          //onClick={() => (isFree ? (window.location.href = "/register") : setShowPaymentModal(true))}
+          className={`w-full mt-8 ${isFree
+              ? "bg-zinc-700 dark:bg-zinc-400"
+              : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+            }`}
+          onClick={() => {
+            if (!isFree) {
+              handleClick();
+            }
+          }}
         >
           {isFree ? "Stay Basic" : "Subscribe Now"}
         </Button>
       </div>
-
-      {/* {!isFree && (
-        <PaymentModal
-          isOpen={showPaymentModal}
-          onClose={() => setShowPaymentModal(false)}
-          plan={{ name, price, period: period || "" }}
-        />
-      )} */}
     </>
   )
 }
