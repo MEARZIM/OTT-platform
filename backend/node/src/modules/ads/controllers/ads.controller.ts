@@ -2,6 +2,7 @@ import { AdType } from "@prisma/client";
 import { Request, Response } from "express";
 
 import addsService from "../service/ads.service";
+import { generateTimestampedFilename } from "../../../utils/generateFilename";
 
 
 class AdController {
@@ -22,8 +23,8 @@ class AdController {
                 offsetSeconds: number;
                 type: AdType;
             } = req.body;
-
-            const fileName = req.file.filename;
+            
+            const fileName = generateTimestampedFilename(req.file.originalname as string);
             const mimeType = req.file.mimetype;
 
             if(!req.user){
@@ -42,6 +43,7 @@ class AdController {
             );
 
             return res.status(200).json({ message: "Ad uploaded successfully", Ad });
+            
         } catch (error: any) {
             console.error(error);
             return res.status(500).json({ message: "Internal server error" });
