@@ -1,4 +1,3 @@
-import path from "path";
 import multer from "multer";
 import { Router } from "express";
 
@@ -15,7 +14,6 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         const isVideo = file.mimetype.startsWith("video/");
         const isImage = file.mimetype.startsWith("image/");
-
         if (isVideo || isImage) {
             cb(null, true);
         } else {

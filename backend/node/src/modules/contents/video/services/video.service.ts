@@ -5,7 +5,7 @@ import video from "../../../../libs/mux";
 import s3 from "../../../../libs/s3";
 import videoReposiroty from "../repository/video.reposiroty";
 import { generateTimestampedFilename } from "../../../../utils/generateFilename";
-import { VideoData } from "../dto/video";
+import { VideoData } from "../dto/video.d";
 
 enum fileType {
     VIDEO = "videos",
@@ -51,6 +51,9 @@ class VideoService {
         videoFileName: string,
         thumbnailBuffer: Buffer,
         thumbnailFileName: string,
+        categoryIds: string[],
+        adId: string,
+        status: VideoStatus,
     ) {
         const videoFileNameWithTimestamp = generateTimestampedFilename(videoFileName);
         const thumbnailFileNameWithTimestamp = generateTimestampedFilename(thumbnailFileName);
@@ -66,12 +69,15 @@ class VideoService {
             description,
             url: VideoS3Url,
             rating: 0,
-            thumbnail: thumbnailUrl,
+            thumbnail: thumbnailUrl || null, // Ensure thumbnail is nullable
             uploadedById: user.id,
             muxAssetId: asset.id,
             playbackId: asset?.playback_ids?.[0]?.id ?? "",
-            createdAt: new Date(),
+            adId: adId || null, // Ensure adId is nullable
+            status,
+            categoryIds,
             updatedAt: new Date(),
+            createdAt: new Date(),
         }
 
         return videoReposiroty.addVideoToDatabase(data)
@@ -82,21 +88,39 @@ class VideoService {
         videoId: string,
         title: string,
         description: string,
+        categoryIds: string[],
+        adId: string,
         status: VideoStatus,
-        thumbnailBuffer: Buffer,
-        thumbnailFileName: string,
+        thumbnailBuffer?: Buffer,
+        thumbnailFileName?: string,
     ) {
 
-        const thumbnailFileNameWithTimestamp = generateTimestampedFilename(thumbnailFileName);
-        const thumbnailUrl = await VideoService.uploadToS3(fileType.THUMBNAIL, thumbnailBuffer, thumbnailFileNameWithTimestamp);
+        let data: Partial<VideoData>;
 
-        const data = {
-            title,
-            description,
-            thumbnail: thumbnailUrl,
-            status,
-            updatedAt: new Date(),
+        if (thumbnailBuffer && thumbnailFileName) {
+            const thumbnailFileNameWithTimestamp = generateTimestampedFilename(thumbnailFileName);
+            const thumbnailUrl = await VideoService.uploadToS3(fileType.THUMBNAIL, thumbnailBuffer, thumbnailFileNameWithTimestamp);
+            data = {
+                title,
+                description,
+                thumbnail: thumbnailUrl,
+                status,
+                categoryIds,
+                adId,
+                updatedAt: new Date(),
+            }    
+        } else {
+            data = {
+                title,
+                description,
+                status,
+                categoryIds,
+                adId,
+                updatedAt: new Date(),
+            }
         }
+
+
 
         return videoReposiroty.updateVideo(videoId, data);
     }

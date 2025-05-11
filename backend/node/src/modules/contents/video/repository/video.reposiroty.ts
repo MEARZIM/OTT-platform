@@ -1,4 +1,4 @@
-import { VideoData } from "../dto/video";
+import { VideoData } from "../dto/video.d";
 import { prisma } from "../../../../libs/prisma";
 
 class VideoRepository {
@@ -6,18 +6,65 @@ class VideoRepository {
     // for admins
     async addVideoToDatabase(data: VideoData) {
         return prisma.video.create({
-            data
+            data: {
+                title: data.title,
+                description: data.description,
+                url: data.url,
+                thumbnail: data.thumbnail,
+                uploadedById: data.uploadedById,
+                muxAssetId: data.muxAssetId,
+                playbackId: data.playbackId,
+                status: data.status,
+                adId: data.adId,
+                categories: {
+                    create: data.categoryIds.map((categoryId: string) => ({
+                        category: {
+                            connect: {
+                                id: categoryId
+                            },
+                        },
+                    })),
+                },
+            },
         });
     }
 
     async updateVideo(videoId: string, data: Partial<VideoData>) {
         return prisma.video.update({
             where: {
-                id: videoId
+                id: videoId,
             },
-            data
+            data: {
+                title: data.title,
+                description: data.description,
+                url: data.url,
+                status: data.status,
+                thumbnail: data.thumbnail,
+                uploadedById: data.uploadedById,
+                muxAssetId: data.muxAssetId,
+                playbackId: data.playbackId,
+                adId: data.adId,
+                categories: {
+                    connectOrCreate: data.categoryIds?.map((categoryId) => ({
+                        where: {
+                            videoId_categoryId: {
+                                videoId: videoId,
+                                categoryId: categoryId
+                            }
+                        },
+                        create: {
+                            category: {
+                                connect: {
+                                    id: categoryId
+                                }
+                            }
+                        }
+                    }))
+                }
+            },
         });
     }
+
 
     async deleteVideo(id: string) {
 

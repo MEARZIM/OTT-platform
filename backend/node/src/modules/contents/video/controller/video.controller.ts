@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Admin, AdminRole, User, Video, VideoStatus } from "@prisma/client";
+import { Admin, AdminRole, User, VideoStatus } from "@prisma/client";
 
 import videoService from "../services/video.service";
 
@@ -7,6 +7,7 @@ class VideoController {
     // for admins
     async uploadVideoController(req: Request, res: Response) {
         try {
+            
             if (!req.files || !("video" in req.files) || !("thumbnail" in req.files)) {
                 return res.status(400).json({ message: "Both video and thumbnail are required" });
             }
@@ -15,14 +16,22 @@ class VideoController {
                 return res.status(400).json({ message: "No file uploaded because of Empty title and description" });
             }
 
-            const { title, description }: {
+            const { 
+                title, 
+                description,
+                status,
+                adId,
+                categoryIds
+            }: {
                 title: string,
                 description: string;
+                categoryIds: string;
+                adId: string;
+                status: VideoStatus
             } = req.body;
 
             const videoFile = (req.files as any)["video"][0];
             const thumbnailFile = (req.files as any)["thumbnail"][0];
-
 
             if (!req.user) {
                 return res.status(401).json({ message: "Unauthorized" });
@@ -36,10 +45,14 @@ class VideoController {
                 videoFile.originalname,
                 thumbnailFile.buffer,
                 thumbnailFile.originalname,
+                JSON.parse(categoryIds),
+                adId,
+                status,
             );
 
             return res.status(200).json({ message: "Video uploaded successfully", video });
-            // res.status(200).json({ message: "Video uploaded successfully", user: req.user });
+            // return res.status(200).json({ message: "Video uploaded successfully" });
+            
         } catch (error: any) {
             console.error(error);
             return res.status(500).json({ message: "Internal server error" });
@@ -67,33 +80,53 @@ class VideoController {
             if (!isVideoExist) {
                 return res.status(404).json({ message: "Video not found" });
             }
-
-            const thumbnailFile = (req.files as any)["thumbnail"][0];
+            
             
             const {
                 title,
                 description,
-                status     
+                status,
+                adId,
+                categoryIds  
             }: {
-                title: string;
+                title: string,
                 description: string;
-                status: VideoStatus;
+                categoryIds: string;
+                adId: string;
+                status: VideoStatus
             } = req.body; 
+           
+            let video;
+            if (req.files && ("thumbnail" in req.files)) {
+                const thumbnailFile = (req.files as any)["thumbnail"][0];
+                video = await videoService.updateVideo(
+                    videoId,
+                    title,
+                    description,
+                    JSON.parse(categoryIds),
+                    adId,
+                    status,
+                    thumbnailFile.buffer,
+                    thumbnailFile.originalname,
+                );
+            } else{
+                video = await videoService.updateVideo(
+                    videoId,
+                    title,
+                    description,
+                    JSON.parse(categoryIds),
+                    adId,
+                    status,
+                );
+            }
 
-
-            const video = await videoService.updateVideo(
-                videoId,
-                title,
-                description,
-                status as VideoStatus,
-                thumbnailFile.buffer,
-                thumbnailFile.originalname,
-            );
 
             if (!video) {
                 return res.status(404).json({ message: "Video not found" });
             }
             return res.status(200).json({ message: "Video updated successfully", video });
+            // return res.status(200).json({ message: "Video updated successfully" });
+            
         } catch (error: any) {
             console.error(error);
             return res.status(500).json({ message: "Internal server error" });

@@ -8,7 +8,7 @@ dotenv.config();
 
 export async function authenticateJWT(req: Request, res: Response, next: NextFunction) {
   const token = req.cookies?.token || req.headers.authorization?.split(" ")[1]; // ✅ Check cookie first
-  console.log("JWT Token:", token);
+  // console.log("JWT Token:", token);
 
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -16,7 +16,7 @@ export async function authenticateJWT(req: Request, res: Response, next: NextFun
 
   try {
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    console.log("Decoded JWT:", decoded);
+    // console.log("Decoded JWT:", decoded);
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.id },
