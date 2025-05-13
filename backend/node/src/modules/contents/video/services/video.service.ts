@@ -69,8 +69,9 @@ class VideoService {
         const videoFileNameWithTimestamp = generateTimestampedFilename(videoFileName);
         const thumbnailFileNameWithTimestamp = generateTimestampedFilename(thumbnailFileName);
 
-        const [asset, thumbnailUrl] = await Promise.all([
-            VideoService.uploadVideo(videoBuffer, videoFileNameWithTimestamp),
+        const [videoUrl ,thumbnailUrl] = await Promise.all([
+            // VideoService.uploadVideo(videoBuffer, videoFileNameWithTimestamp),
+            VideoService.uploadToS3(fileType.VIDEO, videoBuffer, videoFileNameWithTimestamp),
             VideoService.uploadToS3(fileType.THUMBNAIL, thumbnailBuffer, thumbnailFileNameWithTimestamp),
         ]);
 
@@ -78,10 +79,11 @@ class VideoService {
             title,
             description,
             rating: 0,
+            url: videoUrl,
             thumbnail: thumbnailUrl || null, // Ensure thumbnail is nullable
             uploadedById: user.id,
-            muxAssetId: asset.id,
-            playbackId: asset?.playback_ids?.[0]?.id ?? "",
+            // muxAssetId: asset.id,
+            // playbackId: asset?.playback_ids?.[0]?.id ?? "",
             adId: adId || null, // Ensure adId is nullable
             status,
             categoryIds,

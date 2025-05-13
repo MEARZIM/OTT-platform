@@ -9,10 +9,11 @@ class VideoRepository {
             data: {
                 title: data.title,
                 description: data.description,
+                url: data.url,
                 thumbnail: data.thumbnail,
                 uploadedById: data.uploadedById,
-                muxAssetId: data.muxAssetId,
-                playbackId: data.playbackId,
+                // muxAssetId: data.muxAssetId,
+                // playbackId: data.playbackId,
                 status: data.status,
                 adId: data.adId,
                 categories: {
@@ -39,8 +40,8 @@ class VideoRepository {
                 status: data.status,
                 thumbnail: data.thumbnail,
                 uploadedById: data.uploadedById,
-                muxAssetId: data.muxAssetId,
-                playbackId: data.playbackId,
+                // muxAssetId: data.muxAssetId,
+                // playbackId: data.playbackId,
                 adId: data.adId,
                 categories: {
                     connectOrCreate: data.categoryIds?.map((categoryId) => ({
