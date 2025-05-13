@@ -6,6 +6,7 @@ import ManageVideos from "./ManageVideos/ManageVideos"
 import AdminDashboard from "./dashboard/AdminDashboard"
 
 import Default from "./default"
+import SettingsPage from "./settings/Settings"
 
 
 
@@ -16,6 +17,7 @@ const AdminRoutes = () => {
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="manage-videos" element={<ManageVideos />} />
                 <Route path="manage-videos/:id" element={<VideoId />} />
+                <Route path="settings" element={<SettingsPage />} />
                 <Route path="*" element={
                     <Default />
                 } />

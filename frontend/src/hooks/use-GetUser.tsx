@@ -1,6 +1,7 @@
 // src/hooks/use-GetUser.tsx
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../lib/utils";
 
 export type User = {
   id: string;
@@ -15,7 +16,7 @@ export function useGetUser() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/users", {
+      .get(`${BACKEND_URL}/api/users`, {
         withCredentials: true, // ✅ Important: sends cookies
       })
       .then((res) => {
