@@ -1,3 +1,5 @@
+import axios from "axios"
+
 import { Check } from "lucide-react"
 import { Button } from "../../../../components/ui/button"
 
@@ -12,9 +14,26 @@ interface PricingCardProps {
 
 export function PricingCard({ name, price, period, features, featured, isFree = false }: PricingCardProps) {
 
-  const handleClick = () => {
-    console.log("Subscribe to Premium");
-  };
+  const handleClick = async () => {
+    // Handle the click event for the "Subscribe Now" button
+    console.log("Subscribe Now clicked");
+    try{
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/stripe/create-checkout-session`, {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+        }
+      )
+
+      window.location.href = res.data.url;
+
+    }catch(e){
+      console.error("Error subscribing:", e);
+    }
+  }
 
   return (
     <>

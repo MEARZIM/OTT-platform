@@ -15,6 +15,8 @@ import videoCategoryRouter from "./modules/contents/video/routes/videoCategory.r
 import adRouter from "./modules/ads/routes/ads.route";
 import historyRouter from "./modules/contents/history/routes/history.routes";
 import likedRouter from "./modules/contents/liked/routes/liked.routes";
+import subscriptionRouter from "./modules/subscriptions/routes/subscription.routes";
+import webhookRouter from "./modules/webhook/routes/webhook.routes";
 
 dotenv.config();
 const app = express();
@@ -26,6 +28,8 @@ app.use(
         credentials: true,
     })
 );
+
+app.use("/api/webhook", webhookRouter);
 
 // ✅ Middlewares
 app.use(express.json());
@@ -49,6 +53,9 @@ app.use("/api/content/like", likedRouter);
 app.use("/api/content/video", videoRouter);
 app.use("/api/content/history", historyRouter);
 app.use("/api/content/video-category", videoCategoryRouter);
+app.use("/api/subscription/stripe", subscriptionRouter);
+//app.use("/api/webhook", webhookRouter);
+
 
 
 export default app;

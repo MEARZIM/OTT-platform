@@ -19,8 +19,8 @@ class SubscriptionServices {
         }
 
         const stripeSession = await stripe.checkout.sessions.create({
-            success_url: process.env.STRIPE_SUCCESS_URL,
-            cancel_url: process.env.STRIPE_CANCEL_URL,
+            success_url: `${process.env.FRONTEND_URL}/subscription-success`,
+            cancel_url: `${process.env.FRONTEND_URL}/subscription-cancel`,
 
             payment_method_types: ['card'],
             mode: 'subscription',
@@ -32,7 +32,7 @@ class SubscriptionServices {
                         name: 'Primeview',
                         description: 'Enjoy the best streaming experience with Primeview',
                     },
-                    unit_amount: 10,
+                    unit_amount: 9.99,
                     recurring: {
                         interval: 'month',
                     },

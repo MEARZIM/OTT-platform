@@ -21,6 +21,8 @@ const SettingsPage = lazy(() => import("./pages/User/Dashboard/pages/Settings/Se
 const WatchHistoryPage = lazy(() => import("./pages/User/Dashboard/pages/Settings/pages/WatchHistory"));
 const Watch = lazy(() => import("./pages/User/Watch/Watch"));
 const SubscriptionPage = lazy(() => import("./pages/User/Subscription/subscribe/SubscribePage"));
+const SuccessPage = lazy(() => import("./pages/User/Subscription/pages/Success"));
+const CancelPage = lazy(() => import("./pages/User/Subscription/pages/Cancel"));
 const YourAccountPage = lazy(() => import("./pages/User/Dashboard/pages/Settings/pages/YourAccount"))
 
 const App = () => {
@@ -46,6 +48,10 @@ const App = () => {
               <Route path='/admin-login' element={<AdminLogin />} />
               <Route path='/signup' element={<Register />} />
               <Route path="/subscription" element={<SubscriptionPage />} />
+              <Route path="/subscription-success" element={<SuccessPage />} />
+              <Route path="/subscription-cancel" element={<CancelPage />} />
+
+              {/* Public Routes */}
               
               {/* Protected User Routes */}
               <Route element={<ProtectedRoute />}>
