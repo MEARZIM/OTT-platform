@@ -73,7 +73,7 @@ const SidebarComponent = () => {
               </SidebarMenuItem>
 
               {/* Categories */}
-              <Collapsible defaultOpen>
+              {/* <Collapsible defaultOpen>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white text-lg dark:hover:text-white">
@@ -92,7 +92,7 @@ const SidebarComponent = () => {
                     ))}
                   </CollapsibleContent>
                 </SidebarMenuItem>
-              </Collapsible>
+              </Collapsible> */}
 
               {/* My Stuff */}
               <SidebarMenuItem>
@@ -105,7 +105,7 @@ const SidebarComponent = () => {
               </SidebarMenuItem>
 
               {/* Help */}
-              <Collapsible>
+              {/* <Collapsible>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
@@ -124,10 +124,10 @@ const SidebarComponent = () => {
                     ))}
                   </CollapsibleContent>
                 </SidebarMenuItem>
-              </Collapsible>
+              </Collapsible> */}
 
               {/* Playground */}
-              <Collapsible>
+              <Collapsible defaultOpen>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
@@ -137,13 +137,20 @@ const SidebarComponent = () => {
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    {["History", "Starred"].map((item, index) => (
-                      <SidebarMenuSub key={index}>
+                      <SidebarMenuSub>
                         <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
-                          <span className="text-md text-black dark:text-white">{item}</span>
+                          <Link to="/mystuff?tab=recently-watched">
+                            <span className="text-md text-black dark:text-white">History</span>
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSub>
-                    ))}
+                      <SidebarMenuSub>
+                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
+                          <Link to="/mystuff">
+                            <span className="text-md text-black dark:text-white">Watchlist</span>
+                          </Link>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSub>
                     <SidebarMenuSub>
                       <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                         <Link to="/settings">
