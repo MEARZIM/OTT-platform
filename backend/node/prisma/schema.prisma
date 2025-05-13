@@ -85,7 +85,6 @@ model Video {
   id           String          @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   description  String
-  url          String
   rating       Float           @default(0) // Average rating
   thumbnail    String?
   uploadedById String          @db.ObjectId

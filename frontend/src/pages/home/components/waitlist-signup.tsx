@@ -20,17 +20,13 @@ export function WaitlistSignup() {
       <div className="flex-1 flex flex-col justify-center items-center text-center">
         <div>
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-br from-gray-200 to-gray-600">
-            Join Our Product Launch Waitlist
+            Join PrimeView
           </h2>
         </div>
         <div>
           <p className="text-lg sm:text-xl mb-8 text-gray-300">
-            Be part of something truly extraordinary. Join thousands of others already gaining early access to our
-            revolutionary new product.
+            Your ultimate destination for premium entertainment. Join thousands of others already enjoying prime content.
           </p>
-        </div>
-        <div className="w-full">
-          <WaitlistForm onSuccess={handleSuccess} />
         </div>
         
       </div>

@@ -9,7 +9,6 @@ class VideoRepository {
             data: {
                 title: data.title,
                 description: data.description,
-                url: data.url,
                 thumbnail: data.thumbnail,
                 uploadedById: data.uploadedById,
                 muxAssetId: data.muxAssetId,
@@ -37,7 +36,6 @@ class VideoRepository {
             data: {
                 title: data.title,
                 description: data.description,
-                url: data.url,
                 status: data.status,
                 thumbnail: data.thumbnail,
                 uploadedById: data.uploadedById,
