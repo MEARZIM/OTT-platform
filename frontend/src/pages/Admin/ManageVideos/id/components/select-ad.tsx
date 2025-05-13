@@ -13,7 +13,7 @@ interface Ad {
     id: string;
     title: string;
     description: string;
-    // videoUrl: string;
+    url: string;
 }
 
 interface SelectAdProps {
@@ -35,21 +35,16 @@ const SelectAd = ({ ads, selectedAd, setSelectedAd, loading }: SelectAdProps) =>
                 <SelectContent>
                     <SelectGroup>
                         <SelectLabel>Select Ad</SelectLabel>
-                        {ads?.map((ad: {
-                            id: string
-                            title: string,
-                            description: string
-                        }) => (
+                        {ads?.map((ad: Ad) => (
 
                             <SelectItem key={ad.id} value={ad.id} >
                                 {!userSelectedAd ? (
                                     <div className="flex items-center gap-4">
                                         <video
-                                            // src={ad.videoUrl}
-                                            src={"https://www.youtube.com/watch?v=ilNt2bikxDI&list=RDPUAp6xd8D1g&index=2"}
+                                            src={ad.url}
                                             className="w-20 h-12 object-cover rounded-md border"
                                             muted
-                                            playsInline
+                                            autoPlay
                                         />
                                         <div className="flex flex-col">
                                             <span className="font-medium text-sm">{ad.title}</span>

@@ -17,6 +17,8 @@ import { Button } from "../../../../../components/ui/button";
 import { Column } from "./columns";
 import { useToast } from "../../../../../hooks/use-toast";
 import AlertModal from "../../../../../components/modals/alert-modal";
+import axios from "axios";
+import { BACKEND_URL } from "../../../../../lib/utils";
 
 
 interface CellActionProps {
@@ -43,7 +45,8 @@ export const CellAction = ({ data }: CellActionProps) => {
         try {
 
             setLoading(true);
-            // TODO:: DELETE ADMIN
+            await axios.delete(`${BACKEND_URL}/api/ads/${data.id}`);
+            window.location.reload();
 
             toast({ title: "Add Deleted." });
 

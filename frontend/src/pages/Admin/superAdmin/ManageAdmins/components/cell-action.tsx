@@ -1,5 +1,3 @@
-"use client"
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -8,16 +6,13 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../../../../../components/ui/dropdown-menu"
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal } from "lucide-react";
 
 import { Button } from "../../../../../components/ui/button";
 import { AdminColumn } from "./columns";
-// import axios from "axios";
-import { useState } from "react";
+
 import { useToast } from "../../../../../hooks/use-toast";
-import AlertModal from "../../../../../components/modals/alert-modal";
 import { Link } from "react-router-dom";
-// import AlertModal from "../../../../../components/modals/alert-modal";
 
 
 interface CellActionProps {
@@ -27,9 +22,6 @@ interface CellActionProps {
 
 export const CellAction = ({ data }: CellActionProps) => {
 
-
-    const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
     const { toast } = useToast()
 
     const onCopy = (id: string) => {
