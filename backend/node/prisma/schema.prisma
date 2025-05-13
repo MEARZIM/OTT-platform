@@ -108,8 +108,9 @@ model Ad {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String
-  muxAssetId    String
-  playbackId    String
+  url           String
+  // muxAssetId    String
+  // playbackId    String
   type          AdType   @default(PREROLL) // enum: PREROLL, MIDROLL, POSTROLL
   offsetSeconds Int? // Used only for MIDROLL
   createdAt     DateTime @default(now())

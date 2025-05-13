@@ -88,6 +88,21 @@ class AdController {
             return res.status(500).json({ message: "Internal server error" });
         }
     };
+
+     async deleteAdController(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+    
+            const ad = await addsService.deleteAd(id);
+            if (!ad) {
+                return res.status(404).json({ message: "Ad not found" });
+            }
+            return res.status(200).json({ message: "Ad updated successfully", ad });
+        } catch (error: any) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    };
 }
 
 export default new AdController();

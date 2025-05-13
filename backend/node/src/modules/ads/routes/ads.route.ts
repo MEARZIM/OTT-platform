@@ -35,4 +35,6 @@ adRouter.get("/:id", AdController.getAdByIdController as any); // TODO:Super Adm
 // update ad by id
 adRouter.patch("/:id", AdController.updateAdController as any); // TODO:Super Admin can only update Adds by id
 
+adRouter.delete("/:id", AdController.deleteAdController as any);
+
 export default adRouter;

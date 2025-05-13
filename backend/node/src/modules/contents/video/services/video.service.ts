@@ -1,7 +1,7 @@
 import { User, VideoStatus } from "@prisma/client";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
-import video from "../../../../libs/mux";
+// import video from "../../../../libs/mux";
 import s3 from "../../../../libs/s3";
 import videoReposiroty from "../repository/video.reposiroty";
 import { generateTimestampedFilename } from "../../../../utils/generateFilename";
@@ -37,20 +37,20 @@ class VideoService {
         // return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
     }
 
-    private static async uploadVideo(file: Buffer, fileName: string) {
-        const s3Url = await VideoService.uploadToS3(fileType.VIDEO, file, fileName) as string;
+    // private static async uploadVideo(file: Buffer, fileName: string) {
+    //     const s3Url = await VideoService.uploadToS3(fileType.VIDEO, file, fileName) as string;
 
-        const asset = await video.assets.create({
-            input: [{ url: s3Url }],
-            playback_policy: ["public"],
-            test: false,
-            video_quality: "plus"
-        })
+    //     const asset = await video.assets.create({
+    //         input: [{ url: s3Url }],
+    //         playback_policy: ["public"],
+    //         test: false,
+    //         video_quality: "plus"
+    //     })
         
-        await VideoService.deleteFromS3(fileType.VIDEO, fileName);
+    //     await VideoService.deleteFromS3(fileType.VIDEO, fileName);
 
-        return asset;
-    }
+    //     return asset;
+    // }
 
 
     // for admins

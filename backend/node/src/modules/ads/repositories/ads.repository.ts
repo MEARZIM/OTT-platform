@@ -7,10 +7,10 @@ class AdRepository {
             data
         });
     }
-    
+
     async getAllAds() {
         return prisma.ad.findMany({
-            include:{
+            include: {
                 video: true
             }
         });
@@ -19,7 +19,7 @@ class AdRepository {
     async getAdById(id: string) {
         return prisma.ad.findUnique({
             where: { id },
-            include:{
+            include: {
                 video: true
             }
         });
@@ -33,9 +33,22 @@ class AdRepository {
     }
 
     async deleteAd(id: string) {
-        return prisma.ad.delete({
-            where: { id }
-        });
+        return prisma.$transaction([
+            prisma.video.updateMany({
+                where: {
+                    adId: id,
+                },
+                data: {
+                    adId: null,
+                },
+            }),
+
+            prisma.ad.delete({
+                where: {
+                    id: id
+                }
+            })
+        ])
     }
 }
 

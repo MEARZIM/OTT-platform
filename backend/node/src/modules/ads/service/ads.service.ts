@@ -2,7 +2,7 @@ import { AdType } from '@prisma/client';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 import s3 from '../../../libs/s3';
-import video from '../../../libs/mux';
+// import video from '../../../libs/mux';
 import addsRepository from '../repositories/ads.repository';
 import { CreateAdDto } from '../dto/ad';
 
@@ -23,18 +23,18 @@ class AdService {
         // return `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
     }
 
-    private static async uploadVideo(file: Buffer, fileName: string, mimetype: string) {
-        const s3Url = await AdService.uploadToS3(file, fileName, mimetype) as string;
+    // private static async uploadVideo(file: Buffer, fileName: string, mimetype: string) {
+    //     const s3Url = await AdService.uploadToS3(file, fileName, mimetype) as string;
 
-        const asset = await video.assets.create({
-            input: [{ url: s3Url }],
-            playback_policy: ["public"],
-            test: false,
-            video_quality: "plus"
-        })
-        // console.log(asset);
-        return asset;
-    }
+    //     const asset = await video.assets.create({
+    //         input: [{ url: s3Url }],
+    //         playback_policy: ["public"],
+    //         test: false,
+    //         video_quality: "plus"
+    //     })
+    //     // console.log(asset);
+    //     return asset;
+    // }
     async AddAd(
         title: string,
         description: string,
@@ -44,14 +44,15 @@ class AdService {
         fileName: string,
         mimetype: string,
     ) {
-        // const s3Url = await AdService.uploadToS3(file, fileName, mimetype);
-        const asset = await AdService.uploadVideo(file, fileName, mimetype);
+        const s3Url = await AdService.uploadToS3(file, fileName, mimetype);
+        // const asset = await AdService.uploadVideo(file, fileName, mimetype);
 
         const data = {
             title,
             description,
-            muxAssetId: asset.id,
-            playbackId: asset?.playback_ids?.[0]?.id ?? "",
+            url: s3Url,
+            // muxAssetId: asset.id,
+            // playbackId: asset?.playback_ids?.[0]?.id ?? "",
             offsetSeconds: Number(offsetSeconds) ?? 60,
             type: type,
             createdAt: new Date(),
