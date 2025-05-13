@@ -7,7 +7,5 @@ dotenv.config();
 const PORT = process.env.PORT || 5174;
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(process.env.FRONTEND_URL);
-  
+  console.log(`Server running on port ${PORT}`); 
 });

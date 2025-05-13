@@ -29,7 +29,6 @@ app.use(
     })
 );
 
-app.use("/api/webhook", express.raw({ type: 'application/json' }), webhookRouter);
 
 // ✅ Middlewares
 app.use(express.json());
@@ -54,8 +53,7 @@ app.use("/api/content/video", videoRouter);
 app.use("/api/content/history", historyRouter);
 app.use("/api/content/video-category", videoCategoryRouter);
 app.use("/api/subscription/stripe", subscriptionRouter);
-//app.use("/api/webhook", webhookRouter);
-
+app.use("/api/webhook", express.raw({ type: 'application/json' }), webhookRouter);
 
 
 export default app;

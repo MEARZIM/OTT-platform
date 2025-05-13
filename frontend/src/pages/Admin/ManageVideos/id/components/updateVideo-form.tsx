@@ -22,6 +22,8 @@ import { Textarea } from "../../../../../components/ui/textarea";
 import SelectAd from "./select-ad";
 import FilePreview from "./file-preview";
 import SelectCategory from "./select-categories";
+import { MultiStepLoader } from "../../../../../components/multi-step-loader";
+import { loadingStates } from "./VideoUploadStates";
 
 interface Categories {
   id: string;
@@ -65,6 +67,7 @@ function UploadVideo({ initialData }: VideoProps) {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(initialData?.categories.map((c) => c.categoryId) || []);
   const [loading, setLoading] = useState(false);
+  const [videoloading, setVideoLoading] = useState(false);
   const [ads, setAds] = useState([]);
   const [selectedAd, setSelectedAd] = useState(initialData?.adId || "");
 
@@ -130,7 +133,7 @@ function UploadVideo({ initialData }: VideoProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      setVideoLoading(true);
       const formData = new FormData();
       formData.append("title", title)
       formData.append("description", description)
@@ -179,7 +182,7 @@ function UploadVideo({ initialData }: VideoProps) {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setVideoLoading(false);
       setTitle("");
       setDescription("");
       setThumbnail(null);
@@ -189,9 +192,26 @@ function UploadVideo({ initialData }: VideoProps) {
       setStatus("");
       setSelectedCategories([])
       setAds([]);
+      setThumbnail(null);
+      setThumbnailPreview(null)
+      
       // window.location.reload();
     }
   };
+
+  if (videoloading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <MultiStepLoader
+          loadingStates={loadingStates}
+          loading={videoloading}
+          duration={3000}
+          loop={false}
+        />
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8">
