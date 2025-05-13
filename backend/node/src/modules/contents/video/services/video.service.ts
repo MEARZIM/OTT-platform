@@ -1,5 +1,5 @@
 import { User, VideoStatus } from "@prisma/client";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 
 import video from "../../../../libs/mux";
 import s3 from "../../../../libs/s3";
@@ -13,6 +13,15 @@ enum fileType {
 }
 
 class VideoService {
+    private static async deleteFromS3(type: fileType, fileName: string) {
+        const command = new DeleteObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME!,
+            Key: `${type}/${fileName}`,
+        });
+    
+        await s3.send(command);
+    }
+
     private static async uploadToS3(type: fileType, file: Buffer, fileName: string): Promise<string> {
 
         const command = new PutObjectCommand({
@@ -37,7 +46,9 @@ class VideoService {
             test: false,
             video_quality: "plus"
         })
-        // console.log(asset);
+        
+        await VideoService.deleteFromS3(fileType.VIDEO, fileName);
+
         return asset;
     }
 
@@ -58,16 +69,14 @@ class VideoService {
         const videoFileNameWithTimestamp = generateTimestampedFilename(videoFileName);
         const thumbnailFileNameWithTimestamp = generateTimestampedFilename(thumbnailFileName);
 
-        const [asset, VideoS3Url, thumbnailUrl] = await Promise.all([
+        const [asset, thumbnailUrl] = await Promise.all([
             VideoService.uploadVideo(videoBuffer, videoFileNameWithTimestamp),
-            VideoService.uploadToS3(fileType.VIDEO, videoBuffer, videoFileNameWithTimestamp),
             VideoService.uploadToS3(fileType.THUMBNAIL, thumbnailBuffer, thumbnailFileNameWithTimestamp),
         ]);
 
         const data = {
             title,
             description,
-            url: VideoS3Url,
             rating: 0,
             thumbnail: thumbnailUrl || null, // Ensure thumbnail is nullable
             uploadedById: user.id,
