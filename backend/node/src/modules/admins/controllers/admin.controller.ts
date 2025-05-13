@@ -14,6 +14,21 @@ class AdminController {
         }
     }
 
+    getCurrentLogedInAdmin(req: Request, res: Response) {
+        try {
+
+            const admin = req.user;
+
+            if (!admin) {
+                return res.status(401).json({ message: "Unauthorized" })
+            }
+
+            return res.json(admin);
+
+        } catch (error: any) {
+            return res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
 
     async getAdminById(req: Request, res: Response) {
         const { id } = req.params;
@@ -59,7 +74,15 @@ class AdminController {
         }
     }
 
-
+    async logout(req: Request, res: Response) {
+        req.logout((err: any) => {
+            if (err) {
+                return res.status(500).json({ status: 500, message: 'Logout failed', error: err });
+            }
+            res.clearCookie("token");
+            return res.status(200).json({ message: 'Successfully logged out' })
+        });
+    }
 }
 
 export default new AdminController();
