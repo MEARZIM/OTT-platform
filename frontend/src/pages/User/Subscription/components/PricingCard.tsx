@@ -14,7 +14,7 @@ export function PricingCard({ name, price, period, features, featured, isFree = 
 
   const handleClick = () => {
     console.log("Subscribe to Premium");
-};
+  };
 
   return (
     <>
@@ -49,8 +49,8 @@ export function PricingCard({ name, price, period, features, featured, isFree = 
         </div>
         <Button
           className={`w-full mt-8 ${isFree
-              ? "bg-zinc-700 dark:bg-zinc-400"
-              : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+            ? "bg-zinc-700 dark:bg-zinc-400"
+            : "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
             }`}
           onClick={() => {
             if (!isFree) {

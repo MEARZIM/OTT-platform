@@ -45,6 +45,7 @@ const App = () => {
               <Route path='/login' element={<Login />} />
               <Route path='/admin-login' element={<AdminLogin />} />
               <Route path='/signup' element={<Register />} />
+              <Route path="/subscription" element={<SubscriptionPage />} />
               
               {/* Protected User Routes */}
               <Route element={<ProtectedRoute />}>
@@ -53,7 +54,6 @@ const App = () => {
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/settings/watch-history" element={<WatchHistoryPage />} />
                 <Route path="/player/:id" element={<Watch />} />
-                <Route path="/subscription" element={<SubscriptionPage />} />
                 <Route path="/settings/account" element={<YourAccountPage />} />
               </Route>
 

@@ -77,6 +77,8 @@ model User {
   watchHistory WatchHistory[]
   likedVideos  LikedVideo[]
   createdAt    DateTime       @default(now())
+
+  
 }
 
 model Video {
@@ -170,3 +172,16 @@ model LikedVideo {
 
   @@unique([userId, videoId])
 }
+
+
+model UserSubScription {
+  id String @id @default(uuid()) @map("_id")
+  userId String @db.ObjectId @unique
+  stripeCustomerId String? @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId String? @unique @map(name: "stripe_subscription_id")
+  stripePriceId String? @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
