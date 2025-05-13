@@ -7,10 +7,19 @@ import {
     CarouselPrevious
 } from "../../../../components/ui/carousel";
 import videoData from "../../Watch/data/VideoList";
+import { useVideos } from "../../../../hooks/use-videos";
 
 const popular = videoData.slice(0, 8);
 
 const PopularContent = () => {
+    const { videos, loading } = useVideos();
+
+    if (loading) {
+        return (<>
+            loading...
+        </>)
+    }
+    console.log(videos)
     return (
         <div className="relative w-full px-4 overflow-hidden mb-6">
             <div className="flex items-center mb-4">
@@ -18,7 +27,7 @@ const PopularContent = () => {
             </div>
             <Carousel className="relative w-full">
                 <CarouselContent className="flex gap-4 flex-nowrap">
-                    {popular.map((video) => (
+                    {videos.map((video) => (
                         <CarouselItem
                             key={video.id}
                             className="flex-none w-[calc(100%/2)] sm:w-[calc(100%/1)] md:w-[calc(100%/3)] lg:w-[calc(100%/5)] xl:w-[calc(100%/7)]"

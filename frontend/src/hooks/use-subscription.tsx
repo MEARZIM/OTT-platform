@@ -1,18 +1,17 @@
-// src/hooks/use-GetSubscription.tsx
-import { useEffect, useState } from "react";
 import axios from "axios";
-import { BACKEND_URL } from "../lib/utils";
+import { useEffect, useState } from "react";
 
-export type Subscription = {
-  id: string;  // Unique identifier for the subscription
-  userId: string;  // User ID associated with the subscription
-  stripeCustomerId: string;  // Stripe customer ID
-  stripeSubscriptionId: string;  // Stripe subscription ID
-  stripePriceId: string;  // Stripe price ID
-  stripeCurrentPeriodEnd: string;  // End date of the current billing period
-  createdAt: string;  // Timestamp of when the subscription was created
-  updatedAt: string;  // Timestamp of when the subscription was last updated
-};
+import { BACKEND_URL } from "../lib/utils";
+import { Subscription } from "../types/Subscription";
+
+/**
+ * useSubscription
+ * 
+ * @description
+ * Custom React hook to fetch user subscription from the backend.
+ * 
+ * ✅ Used to get current user subscription categories.
+ */
 
 export function useSubscription() {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
@@ -20,18 +19,18 @@ export function useSubscription() {
 
   useEffect(() => {
     axios
-      .get(`${BACKEND_URL}/api/subscription/subscribed-user`, {  // Updated the endpoint to fetch subscription data
-        withCredentials: true,  // ✅ Important: sends cookies
+      .get(`${BACKEND_URL}/api/subscription/subscribed-user`, {
+        withCredentials: true,
       })
       .then((res) => {
-        setSubscription(res.data);  // Set the subscription data
+        setSubscription(res.data);
       })
       .catch((err) => {
         console.error("Error fetching subscription:", err);
-        setSubscription(null);  // Set subscription to null if error occurs
+        setSubscription(null);
       })
       .finally(() => setLoading(false));
   }, []);
 
-  return { subscription, loading };  // Return subscription data and loading state
+  return { subscription, loading };
 }

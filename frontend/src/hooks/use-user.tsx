@@ -1,14 +1,17 @@
-// src/hooks/use-GetUser.tsx
-import { useEffect, useState } from "react";
 import axios from "axios";
-import { BACKEND_URL } from "../lib/utils";
+import { useEffect, useState } from "react";
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  profileImage: string;
-};
+import { BACKEND_URL } from "../lib/utils";
+import { User } from "../types/User";
+
+/**
+ * useUser
+ * 
+ * @description
+ * Custom React hook to fetch user from the backend.
+ * 
+ * ✅ Used to get current user.
+ */
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
@@ -17,7 +20,7 @@ export function useUser() {
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/api/users`, {
-        withCredentials: true, // ✅ Important: sends cookies
+        withCredentials: true,
       })
       .then((res) => {
         setUser(res.data);

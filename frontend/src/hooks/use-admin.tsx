@@ -2,12 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { BACKEND_URL } from "../lib/utils";
+import { Admin } from "../types/Admin";
 
-export type Admin = {
-    id: string;
-    name: string | null;
-    email: string;
-};
+
+
+/**
+ * useAdmin
+ * 
+ * @description
+ * Custom React hook to fetch admin from the backend.
+ * 
+ * ✅ Used to get current admin.
+ */
 
 export function useAdmin() {
     const [admin, setAdmin] = useState<Admin | null>(null);
