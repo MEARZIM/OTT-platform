@@ -1,25 +1,25 @@
-// src/context/UserContext.tsx
-import { createContext, useContext } from "react";
-import { useGetUser, User } from "../hooks/use-GetUser";
+// // src/context/UserContext.tsx
+// import { createContext, useContext } from "react";
+// import { useGetUser, User } from "../hooks/use-user";
 
-interface UserContextType {
-  user: User | null;
-  loading: boolean;
-}
+// interface UserContextType {
+//   user: User | null;
+//   loading: boolean;
+// }
 
-const UserContext = createContext<UserContextType>({
-  user: null,
-  loading: true,
-});
+// const UserContext = createContext<UserContextType>({
+//   user: null,
+//   loading: true,
+// });
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useGetUser();
+// export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+//   const { user, loading } = useGetUser();
 
-  return (
-    <UserContext.Provider value={{ user, loading }}>
-      {children}
-    </UserContext.Provider>
-  );
-};
+//   return (
+//     <UserContext.Provider value={{ user, loading }}>
+//       {children}
+//     </UserContext.Provider>
+//   );
+// };
 
-export const useUser = () => useContext(UserContext);
+// export const useUser = () => useContext(UserContext);

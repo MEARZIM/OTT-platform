@@ -1,8 +1,10 @@
+import { useState } from "react"
+import axios from "axios"
+
+
 import {
   ChevronRight,
-  CircleHelp,
   HomeIcon,
-  LayoutGrid,
   LogOut,
   Settings,
   SquareTerminal,
@@ -26,30 +28,63 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from "../../../../components/ui/collapsible"
-import { Link } from "react-router-dom"
-import { useUser } from "../../../../session/auth-context"
-import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar"
-import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 
-const SidebarComponent = () => {
-  const { user, loading } = useUser();
-  const [imgError, setImgError] = useState(false);
-  if (loading) return <div>Loading...</div>;
-  console.log("Avatar Image:", user?.profileImage);
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar"
+import { User as UserType } from "../../../../hooks/use-user"
+import { Button } from "../../../../components/ui/button"
+import { BACKEND_URL } from "../../../../lib/utils"
+
+interface SidebarProps {
+  user: UserType | null;
+}
+
+
+
+const SidebarComponent = ({ user }: SidebarProps) => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleLogout = async () => {
+    setIsLoading(true)
+    try {
+      await axios.get(`${BACKEND_URL}/api/auth/logout`, {
+        withCredentials: true,
+      })
+
+      navigate("/");
+    } catch (error) {
+      console.error("Error during sign out:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <Sidebar className="border-none">
       <SidebarContent className="bg-zinc-50 text-black dark:bg-zinc-900 dark:text-white">
         {/* Profile Section */}
         <div className="p-6 flex flex-col items-center justify-center text-center border-b border-gray-700">
           <Avatar>
-            <AvatarImage
-              src={!imgError ? user?.profileImage ?? undefined : "/assets/avatar.png"}
-              onError={() => setImgError(true)}
-              alt={user?.name ?? "User"}
-            />
-            <AvatarFallback>
-              {user?.name?.split(" ").map(n => n[0]).join("") ?? "NA"}
-            </AvatarFallback>
+            {user === null ? (
+              <AvatarImage
+                src={"/assets/avater.png"}
+                alt={"User"}
+              />
+            ) :
+              <Avatar>
+                {user?.profileImage && (
+                  <AvatarImage
+                    src={user.profileImage}
+                    alt={user.name ?? "User"}
+                  />
+                )}
+                <AvatarFallback>
+                  {user?.name?.split(" ").map(n => n[0]).join("") ?? "NA"}
+                </AvatarFallback>
+              </Avatar>
+            }
+
           </Avatar>
           <p className="text-lg font-semibold">{user?.name}</p>
           <p className="text-sm text-zinc-700 dark:text-zinc-400">Premium Member</p>
@@ -137,20 +172,20 @@ const SidebarComponent = () => {
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                      <SidebarMenuSub>
-                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
-                          <Link to="/mystuff?tab=recently-watched">
-                            <span className="text-md text-black dark:text-white">History</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSub>
-                      <SidebarMenuSub>
-                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
-                          <Link to="/mystuff">
-                            <span className="text-md text-black dark:text-white">Watchlist</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSub>
+                    <SidebarMenuSub>
+                      <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
+                        <Link to="/mystuff?tab=recently-watched">
+                          <span className="text-md text-black dark:text-white">History</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSub>
+                    <SidebarMenuSub>
+                      <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
+                        <Link to="/mystuff">
+                          <span className="text-md text-black dark:text-white">Watchlist</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSub>
                     <SidebarMenuSub>
                       <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                         <Link to="/settings">
@@ -176,13 +211,15 @@ const SidebarComponent = () => {
       {/* Footer */}
       <SidebarFooter className="bg-zinc-50 dark:bg-zinc-900 text-black dark:text-white border-t border-gray-700 px-4 py-3">
         <div className="flex items-center justify-between w-full">
-          <Link
-            to="#"
-            className="flex items-center gap-2 hover:text-red-400 transition-colors"
+          <Button
+            className="flex items-center gap-2 hover:text-red-400 transition-colors hover:cursor-pointer"
+            onClick={handleLogout}
+            disabled={isLoading}
+            variant={"outline"}
           >
             <LogOut size={20} />
             <span className="text-md">Sign Out</span>
-          </Link>
+          </Button>
           <Link
             to="/settings"
             className="hover:text-blue-400 transition-colors"

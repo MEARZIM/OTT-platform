@@ -5,7 +5,7 @@ import { Toaster } from './components/ui/toaster';
 import Loading from "./components/Loading";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import { ThemeProvider } from "./providers/Theme-Provider";
-import { UserProvider } from "./session/auth-context";
+// import { UserProvider } from "./session/auth-context";
 import ProtectedRoute from "./components/routes/ProtectedUserRoutes";
 
 // Lazy-loaded components

@@ -5,12 +5,12 @@ import { BACKEND_URL } from "../lib/utils";
 
 export type User = {
   id: string;
-  name: string | null;
+  name: string;
   email: string;
-  profileImage: string | null;
+  profileImage: string;
 };
 
-export function useGetUser() {
+export function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

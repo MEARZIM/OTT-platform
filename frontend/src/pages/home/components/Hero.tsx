@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { WaitlistSignup } from "./waitlist-signup";
 import { Toaster } from "../../../components/ui/toaster";
-import { useUser } from "../../../session/auth-context";
+import { useUser } from "../../../hooks/use-user";
 
 
 const Logo = "/assets/PrimeViewLogo.png";

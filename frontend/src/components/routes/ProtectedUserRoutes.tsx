@@ -1,6 +1,7 @@
 // components/ProtectedRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
-import { useUser } from "../../session/auth-context";
+import { useUser } from "../../hooks/use-user";
+
 
 
 export default function ProtectedRoute() {

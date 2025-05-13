@@ -8,13 +8,20 @@ import SuggestedContent from './components/SuggestedContent'
 import WatchNext from './components/WatchNext'
 import Footer from './components/Footer'
 import { ModeToggle } from '../../../components/mode-toggle'
+import { useUser } from '../../../hooks/use-user'
 
 const DashboardPage = () => {
+  const { user } = useUser();
   return (
+
     <div className="h-screen bg-white text-black dark:bg-zinc-900 dark:text-white w-full flex overflow-auto">
       <SidebarProvider>
         {/* Sidebar */}
-        <Sidebar />
+        {user &&
+          <Sidebar
+            user={user}
+          />
+        }
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
