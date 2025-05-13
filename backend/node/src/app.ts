@@ -29,7 +29,7 @@ app.use(
     })
 );
 
-app.use("/api/webhook", webhookRouter);
+app.use("/api/webhook", express.raw({ type: 'application/json' }), webhookRouter);
 
 // ✅ Middlewares
 app.use(express.json());
