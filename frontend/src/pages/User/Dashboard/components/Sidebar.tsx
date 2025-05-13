@@ -1,5 +1,8 @@
 import { useState } from "react"
 import axios from "axios"
+import { useSubscription } from '../../../../hooks/use-subscription';
+
+
 
 
 import {
@@ -43,6 +46,7 @@ interface SidebarProps {
 
 const SidebarComponent = ({ user }: SidebarProps) => {
   const navigate = useNavigate();
+  const { subscription } = useSubscription();
   const [isLoading, setIsLoading] = useState(false)
 
   const handleLogout = async () => {
@@ -202,11 +206,20 @@ const SidebarComponent = ({ user }: SidebarProps) => {
       </SidebarContent>
 
       {/* Upgrade to Plus Button */}
-      <Link to="/subscription" className="block px-4 py-4 bg-zinc-50 dark:bg-zinc-900">
-        <button className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:opacity-90 text-white font-semibold py-2 rounded-lg shadow-md transition-all duration-300 cursor-pointer">
-          🚀 Upgrade to Premium
-        </button>
-      </Link>
+      <div className="block px-4 py-4 bg-zinc-50 dark:bg-zinc-900 text-center">
+        {subscription ? (
+          <p className="text-green-600 font-semibold">
+            ✅ You are a subscribed user
+          </p>
+        ) : (
+          <Link
+            to="/subscription"
+            className="w-full inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:opacity-90 text-white font-semibold py-2 rounded-lg shadow-md transition-all duration-300 cursor-pointer"
+          >
+            🚀 Upgrade to Premium
+          </Link>
+        )}
+      </div>
 
       {/* Footer */}
       <SidebarFooter className="bg-zinc-50 dark:bg-zinc-900 text-black dark:text-white border-t border-gray-700 px-4 py-3">

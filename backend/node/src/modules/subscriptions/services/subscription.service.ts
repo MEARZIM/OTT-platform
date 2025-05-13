@@ -50,6 +50,10 @@ class SubscriptionServices {
         return stripeSession.url;
         
     }
+
+    async getSubscribedUserByUserId(userId: string): Promise<UserSubScription | null> {
+        return await subscriptionRepository.getSubscriptionByUserId(userId);
+    }
 }
 
 export default new SubscriptionServices();

@@ -15,7 +15,7 @@ export default function Success() {
         </p>
         <Link to="/settings">
           <Button className="w-full bg-white text-black hover:bg-zinc-200">
-            Go to DSettings
+            Go to Settings
           </Button>
         </Link>
       </div>

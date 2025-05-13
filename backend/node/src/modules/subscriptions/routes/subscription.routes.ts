@@ -5,9 +5,14 @@ import subscriptionController from '../controllers/subscription.controller';
 const subscriptionRouter = Router();
 
 subscriptionRouter.get(
-    '/create-checkout-session', 
+    '/stripe/create-checkout-session', 
     authenticateJWT as any, 
     subscriptionController.subscriptionCheckOutController as any
+);
+subscriptionRouter.get(
+    '/subscribed-user', 
+    authenticateJWT as any, 
+    subscriptionController.getSubscribedUserByUserIdController as any
 );
 
 
