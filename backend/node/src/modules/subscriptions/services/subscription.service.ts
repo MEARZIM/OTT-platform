@@ -32,7 +32,7 @@ class SubscriptionServices {
                         name: 'Primeview',
                         description: 'Enjoy the best streaming experience with Primeview',
                     },
-                    unit_amount: 9.99,
+                    unit_amount: 999,
                     recurring: {
                         interval: 'month',
                     },

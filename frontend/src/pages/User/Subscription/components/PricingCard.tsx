@@ -21,10 +21,6 @@ export function PricingCard({ name, price, period, features, featured, isFree = 
       const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/stripe/create-checkout-session`,
         {
           withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-          },
         }
       )
 
