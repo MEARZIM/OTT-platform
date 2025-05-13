@@ -18,7 +18,7 @@ export function PricingCard({ name, price, period, features, featured, isFree = 
     // Handle the click event for the "Subscribe Now" button
     console.log("Subscribe Now clicked");
     try{
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/stripe/create-checkout-session`, {},
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/subscription/stripe/create-checkout-session`,
         {
           withCredentials: true,
           headers: {
