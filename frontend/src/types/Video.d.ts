@@ -13,6 +13,6 @@ export type Video = {
     createdAt: string;
     updatedAt: string;
     adId: string | null;
-    Ad: Ad | null
+    ad: Ad | null
     categories?: VideoCategory[];
 };
