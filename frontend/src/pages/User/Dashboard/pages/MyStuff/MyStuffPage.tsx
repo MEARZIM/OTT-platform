@@ -1,75 +1,61 @@
-"use client"
-
-import { useState } from "react"
-import { ArrowLeft, Clock, Heart, } from "lucide-react"
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { ArrowLeft, Clock, Heart } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
+
+import { useUser } from "../../../../../hooks/use-user"
+import { BACKEND_URL } from "../../../../../lib/utils"
+import { WatchVideo } from "../../../../../types/Watchvideo"
 
 export default function MyStuffPage() {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const defaultTab = queryParams.get("tab") || "watchlist"
   const [activeTab, setActiveTab] = useState(defaultTab)
+  const [watchlist, setWatchList] = useState<WatchVideo[]>([])
+  const [watched, setWatched] = useState<WatchVideo[]>([])
+  const [loadingWatchlist, setLoadingWatchlist] = useState(true)
+  const [loadingWatched, setLoadingWatched] = useState(true)
+  const { user } = useUser();
 
+  useEffect(() => {
+    if (!user) return;
+    const fetchWatchList = async () => {
+      setLoadingWatchlist(true);
+      try {
+        const res = await axios.get(`${BACKEND_URL}/api/content/watchlist/`, {
+          withCredentials: true
+        });
+        setWatchList(res.data.data);
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoadingWatchlist(false);
+      }
+    }
+    fetchWatchList();
+  }, [user])
 
-  const watchlist = [
-    {
-      title: "Lovely Runner",
-      type: "TV Show",
-      image: "/assets/lovely-runner.jpg"
-    },
-    {
-      title: "When The Phone Rings",
-      type: "TV Show",
-      image: "/assets/when-the-phone-rings.jpg"
-    },
-    {
-      title: "Train to Busan",
-      type: "Movie",
-      image: "/assets/train-to-busan.jpg"
-    },
-    {
-      title: "Parasite",
-      type: "Movie",
-      image: "/assets/parasite.jpg"
-    },
-    {
-      title: "Marry My Husband",
-      type: "TV Show",
-      image: "/assets/marry-my-husband.jpg"
-    },
-    {
-      title: "Peninsula",
-      type: "Movie",
-      image: "/assets/peninsula.jpg"
-    },
-    {
-      title: "Minari",
-      type: "Movie",
-      image: "/assets/minari.jpg"
-    },
-  ]
-
-  const watched = [
-    {
-      title: "When The Phone Rings",
-      progress: 70,
-      image: "/assets/when-the-phone-rings.jpg"
-    },
-    {
-      title: "Parasite",
-      progress: 45,
-      image: "/assets/parasite.jpg"
-    },
-    {
-      title: "Peninsula",
-      progress: 90,
-      image: "/assets/peninsula.jpg"
-    },
-  ]
+  useEffect(() => {
+    if (!user) return;
+    const fetchHistory = async () => {
+      setLoadingWatched(true);
+      try {
+        const res = await axios.get(`${BACKEND_URL}/api/content/history/`, {
+          withCredentials: true
+        });
+        setWatched(res.data);
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setLoadingWatched(false);
+      }
+    }
+    fetchHistory();
+  }, [user])
 
   return (
     <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white overflow-hidden">
-
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-6">
@@ -111,67 +97,83 @@ export default function MyStuffPage() {
               <select className="bg-zinc-100 dark:bg-zinc-900 border border-gray-700 rounded px-2 py-1 text-sm">
                 <option>All</option>
                 <option>Movies</option>
-                <option>TV Shows</option>
-              </select>
-
-              <select className="bg-zinc-100 dark:bg-zinc-900 border border-gray-700 rounded px-2 py-1 text-sm ml-2">
-                <option>Recently Added</option>
-                <option>A-Z</option>
-                <option>Z-A</option>
               </select>
             </div>
           </div>
 
-          {/* Content */}
+          {/* Watchlist Content */}
           {activeTab === "watchlist" && (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {watchlist.map((item, index) => (
-                <div key={index} className="group relative">
-                  <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="bg-white/70 dark:bg-black/70 rounded-full p-1">
-                      <Heart className="h-4 w-4 text-black dark:text-white fill-[#00a8e1]" />
-                    </button>
-                  </div>
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    width={150}
-                    height={150}
-                    className="w-full rounded-sm transition-opacity group-hover:opacity-70"
-                  />
-                  <h3 className="mt-2 text-lg font-medium truncate">{item.title}</h3>
-                  <p className="text-s text-zinc-800 dark:text-zinc-400">{item.type}</p>
+            <>
+              {loadingWatchlist ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {Array(10).fill(0).map((_, i) => (
+                    <div key={i} className="animate-pulse space-y-2">
+                      <div className="bg-zinc-300 dark:bg-zinc-800 h-[225px] w-full rounded" />
+                      <div className="h-4 bg-zinc-300 dark:bg-zinc-800 rounded w-3/4" />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {watchlist.map((item, index) => (
+                    <div key={index} className="group relative">
+                      <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button className="bg-white/70 dark:bg-black/70 rounded-full p-1">
+                          <Heart className="h-4 w-4 text-black dark:text-white fill-[#00a8e1]" />
+                        </button>
+                      </div>
+                      <img
+                        src={item.video.thumbnail}
+                        alt={item.video.title}
+                        width={150}
+                        height={150}
+                        className="w-full rounded-sm transition-opacity group-hover:opacity-70"
+                      />
+                      <h3 className="mt-2 text-lg font-medium truncate">{item.video.title}</h3>
+                      <p className="text-s text-zinc-800 dark:text-zinc-400">{"Movie"}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           )}
 
-
+          {/* Recently Watched Content */}
           {activeTab === "recently-watched" && (
             <div className="space-y-6">
               <h2 className="text-lg font-medium">Continue Watching</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {watched.map((item, index) => (
-                  <div key={index} className="group relative">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      width={150}
-                      height={225}
-                      className="w-full rounded-sm transition-opacity group-hover:opacity-70"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white/80 dark:from-black/80 to-transparent h-16">
-                      <div className="absolute bottom-0 left-0 right-0 px-2 pb-1">
-                        <div className="w-full bg-zinc-200 dark:bg-zinc-700 h-1 rounded-full overflow-hidden">
-                          <div className="bg-[#00a8e1] h-1 rounded-full" style={{ width: `${item.progress}%` }}></div>
+              {loadingWatched ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {Array(10).fill(0).map((_, i) => (
+                    <div key={i} className="animate-pulse space-y-2">
+                      <div className="bg-zinc-300 dark:bg-zinc-800 h-[225px] w-full rounded" />
+                      <div className="h-4 bg-zinc-300 dark:bg-zinc-800 rounded w-3/4" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                  {watched.map((item, index) => (
+                    <div key={index} className="group relative">
+                      <img
+                        src={item.video.thumbnail}
+                        alt={item.video.title}
+                        width={150}
+                        height={225}
+                        className="w-full rounded-sm transition-opacity group-hover:opacity-70"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white/80 dark:from-black/80 to-transparent h-16">
+                        <div className="absolute bottom-0 left-0 right-0 px-2 pb-1">
+                          <div className="w-full bg-zinc-200 dark:bg-zinc-700 h-1 rounded-full overflow-hidden">
+                            <div className="bg-[#00a8e1] h-1 rounded-full" style={{ width: `90%` }}></div>
+                          </div>
                         </div>
                       </div>
+                      <h3 className="mt-5 text-m font-medium truncate mb-4">{item.video.title}</h3>
                     </div>
-                    <h3 className="mt-5 text-m font-medium truncate mb-4">{item.title}</h3>
-
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -179,4 +181,3 @@ export default function MyStuffPage() {
     </div>
   )
 }
-
