@@ -31,7 +31,7 @@ const Player = () => {
                 setSkipCountdown(10);
             } else {
                 setShowAd(false);
-                setAdPlayed(true); 
+                setAdPlayed(true);
             }
         }
     }, [video, subscription]);
@@ -56,6 +56,7 @@ const Player = () => {
     const handleSkipAd = () => {
         setShowAd(false);
         setAdPlayed(true);
+        setAdUrl('');
     };
 
     const handleAdEnded = () => {
