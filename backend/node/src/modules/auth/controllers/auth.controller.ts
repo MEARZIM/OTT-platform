@@ -34,7 +34,7 @@ class AuthController {
             const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string); // Only get the Id
             const user  = await AuthService.findById(decoded.id);
             if (!user) return res.status(401).json({ message: "Invalid token" });
-            console.log(user);
+            // console.log(user);
             return res.json({ user: user }); // Send the user data
         } catch (error) {
             return res.status(401).json({ message: "Invalid token" });

@@ -6,16 +6,18 @@ import likedService from "../services/liked.service";
 class LikedController {
     async getLikedContents(req: Request, res: Response) {
         const user = req.user as User;
+        console.log(user)
         if (!user) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
 
         const videos = await likedService.getLikedContents(user.id);
-        res.status(200).json({ success: true, data: videos });
+        return res.status(200).json({ success: true, data: videos });
     }
 
     async likeContent(req: Request, res: Response) {
         const user = req.user as User;
+        console.log("user->",user)
         if (!user) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
@@ -31,7 +33,7 @@ class LikedController {
         }
 
         const likedContent = await likedService.likeContent(user.id, videoId);
-        res.status(200).json({ success: true, data: likedContent });
+        return res.status(200).json({ success: true, data: likedContent });
     }
 
     async unlikeContent(req: Request, res: Response) {
@@ -51,7 +53,7 @@ class LikedController {
         }
 
         const likedContent = await likedService.unlikeContent(user.id, videoId);
-        res.status(200).json({ success: true, data: likedContent });
+        return res.status(200).json({ success: true, data: likedContent });
     }
 
     async isVideoLiked(req: Request, res: Response) {
@@ -61,12 +63,15 @@ class LikedController {
         }
         const { videoId } = req.params;
 
-        if (videoId) {
+        if (!videoId) {
             return res.status(404).json({ success: false, message: "No Video found" });
         }
 
-        const videos = await likedService.isContentLiked(user.id, videoId);
-        res.status(200).json({ success: true, data: videos });
+        const video = await likedService.isContentLiked(user.id, videoId);
+        if (!video) {
+            return res.status(200).json({ success: false, data: video });
+        }
+        return res.status(200).json({ success: true, data: video });
     }
 }
 
