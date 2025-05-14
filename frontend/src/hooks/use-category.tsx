@@ -20,7 +20,7 @@ export function useCategories() {
 
     useEffect(() => {
         axios
-            .get(`${BACKEND_URL}/api/categories`, {
+            .get(`${BACKEND_URL}/api/category/all-categories`, {
                 withCredentials: true,
             })
             .then((res) => {

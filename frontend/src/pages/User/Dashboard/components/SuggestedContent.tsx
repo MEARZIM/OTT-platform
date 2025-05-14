@@ -6,7 +6,8 @@ import {
     CarouselNext,
     CarouselPrevious
 } from "../../../../components/ui/carousel";
-import videoData from "../../Watch/data/VideoList";
+import videoData from "../../../../lib/data";
+
 
 const suggested = videoData.slice(0, 8)
 

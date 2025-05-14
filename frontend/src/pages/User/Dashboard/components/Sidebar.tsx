@@ -8,7 +8,8 @@ import {
   Settings,
   SquareTerminal,
   User,
-  Crown
+  Crown,
+  LayoutGrid
 } from "lucide-react"
 import {
   Sidebar,
@@ -33,6 +34,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/a
 import { User as UserType } from "../../../../types/User"
 import { Button } from "../../../../components/ui/button"
 import { BACKEND_URL } from "../../../../lib/utils"
+import { useCategories } from "../../../../hooks/use-category";
+
 
 interface SidebarProps {
   user: UserType | null;
@@ -40,7 +43,9 @@ interface SidebarProps {
 
 
 const SidebarComponent = ({ user }: SidebarProps) => {
-  
+
+  const { categories, loading, error } = useCategories();
+
   const { subscription } = useSubscription();
 
   const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,6 +53,8 @@ const SidebarComponent = ({ user }: SidebarProps) => {
 
     window.location.href = `${BACKEND_URL}/api/auth/logout`
   }
+
+  console.log(categories);
 
   return (
     <Sidebar className="border-none">
@@ -102,7 +109,7 @@ const SidebarComponent = ({ user }: SidebarProps) => {
               </SidebarMenuItem>
 
               {/* Categories */}
-              {/* <Collapsible defaultOpen>
+              <Collapsible defaultOpen>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white text-lg dark:hover:text-white">
@@ -111,17 +118,39 @@ const SidebarComponent = ({ user }: SidebarProps) => {
                       <ChevronRight size={24} className="ml-auto group-hover:rotate-90 transition-transform" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
+
                   <CollapsibleContent>
-                    {["Romance", "Action", "Horror", "Comedy", "Thriller"].map((genre, index) => (
-                      <SidebarMenuSub key={index}>
-                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
-                          <span className="text-md text-black dark:text-white">{genre}</span>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSub>
-                    ))}
+                    {
+
+                      loading ?
+                        <SidebarMenuSub>
+                          <SidebarMenuSubButton>
+                            <span className="text-sm text-zinc-500">Loading...</span>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSub>
+                        : error ?
+                          <SidebarMenuSub>
+                            <SidebarMenuSubButton>
+                              <span className="text-sm text-red-500">{error}</span>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSub>
+                          :
+
+
+                          categories.map((category) => (
+                            <SidebarMenuSub key={category.id}>
+                              <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
+                                <Link to={`/categories/${category.id}`}>
+                                  <span className="text-md text-black dark:text-white">{category.name}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSub>
+                          ))}
+
                   </CollapsibleContent>
                 </SidebarMenuItem>
-              </Collapsible> */}
+              </Collapsible>
+
 
               {/* My Stuff */}
               <SidebarMenuItem>
