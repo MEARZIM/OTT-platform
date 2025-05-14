@@ -13,6 +13,8 @@ import Loading from "../../../components/Loading"
 import { useMultipleCategoryVideos } from "../../../hooks/use-multipleCategoryVideos"
 import { useLikeStatus } from "../../../hooks/use-likeStatus"
 import { useToast } from "../../../hooks/use-toast"
+import { useUser } from "../../../hooks/use-user"
+import { useVideosCategory } from "../../../hooks/use-videosCategory"
 
 export default function VideoPlayer() {
     const { id } = useParams<{ id: string }>();
@@ -21,11 +23,11 @@ export default function VideoPlayer() {
     const [open, setOpen] = useState(false);
     const [isInWatchlist, setIsInWatchlist] = useState(false)
     const { video, loading } = useVideo(id);
+    const { user } = useUser();
 
+    const categoryId = video?.categories?.map((cat) => cat.categoryId) || [];
+    const { videos, videoCategoryLoading } = useVideosCategory(categoryId[0]);
 
-    const categoryId = video?.categories?.map((cat) => cat.id) || [];
-
-    const { videos, isLoading } = useMultipleCategoryVideos(categoryId);
 
     const {
         isLiked,
@@ -57,7 +59,7 @@ export default function VideoPlayer() {
 
 
 
-    if (loading) {
+    if (loading || videoCategoryLoading) {
         return (
             <>
                 <div className="min-h-screen flex items-center justify-center">
@@ -81,9 +83,6 @@ export default function VideoPlayer() {
             </>
         )
     }
-
-
-    console.log(videos)
 
 
 
@@ -122,21 +121,25 @@ export default function VideoPlayer() {
                 {/* Action Buttons */}
                 <Card className="mb-4 bg-white dark:bg-black border-none shadow-none">
                     <CardContent className="p-4 flex flex-wrap justify-around gap-2">
-                        <Button
-                            variant="ghost"
-                            className={`flex items-center text-xl ${isInWatchlist ? "text-black dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-zinc-400`}
-                            onClick={() => setIsInWatchlist(!isInWatchlist)}
-                        >
-                            <PlusCircle className="mr-2 size-7" /> Watchlist
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            className={`flex items-center hover:cursor-pointer text-xl ${isLiked ? "text-red-500 dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-red-600`}
-                            onClick={toggleLike}
-                            disabled={likeLoading}
-                        >
-                            <Heart className={`mr-2 size-7 ${isLiked ? "fill-[#fa0707]" : ""}`} /> Like
-                        </Button>
+                        {user && (
+                            <>
+                                <Button
+                                    variant="ghost"
+                                    className={`flex items-center text-xl ${isInWatchlist ? "text-black dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-zinc-400`}
+                                    onClick={() => setIsInWatchlist(!isInWatchlist)}
+                                >
+                                    <PlusCircle className="mr-2 size-7" /> Watchlist
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    className={`flex items-center hover:cursor-pointer text-xl ${isLiked ? "text-red-500 dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-red-600`}
+                                    onClick={toggleLike}
+                                    disabled={likeLoading}
+                                >
+                                    <Heart className={`mr-2 size-7 ${isLiked ? "fill-[#fa0707]" : ""}`} /> Like
+                                </Button>
+                            </>
+                        )}
                         <ShareModal
                             isOpen={open}
                             onClose={() => setOpen(false)}
@@ -152,34 +155,35 @@ export default function VideoPlayer() {
                 </Card>
 
                 {/* Suggested Content */}
-                {isLoading ? (
-                    <Loading />
-                ) : (
-                    <Card className="bg-white dark:bg-black border-none shadow-none">
-                        <CardContent className="p-4">
-                            <h2 className="text-lg md:text-xl font-bold dark:text-zinc-200 mb-6">Suggested Content</h2>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
-                                {videos.map((video) => (
-                                    <Link to={`/player/${video.id}`} key={video.id}>
-                                        <div className="relative aspect-[2/3] rounded-lg hover:bg-[#0d519b] cursor-pointer transition-colors">
-                                            <img
-                                                src={video.thumbnail}
-                                                alt={video.title}
-                                                className="w-full h-full object-cover rounded-lg"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
-                                            <div className="absolute bottom-4 right-4 z-10">
-                                                <CircleArrowRight className="w-6 h-6 text-[#b0b0b0]" />
+                {videos &&
+                    (
+                        <Card className="bg-white dark:bg-black border-none shadow-none">
+                            <CardContent className="p-4">
+                                <h2 className="text-lg md:text-xl font-bold dark:text-zinc-200 mb-6">
+                                    Suggested Content
+                                </h2>
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
+                                    {videos.map((v) => (
+                                        <Link to={`/player/${v.id}`} key={v.id}>
+                                            <div className="relative aspect-[2/3] rounded-lg hover:bg-[#0d519b] cursor-pointer transition-colors">
+                                                <img
+                                                    src={v.thumbnail}
+                                                    alt={v.title}
+                                                    className="w-full h-full object-cover rounded-lg"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90 rounded-lg"></div>
+                                                <div className="absolute bottom-4 right-4 z-10">
+                                                    <CircleArrowRight className="w-6 h-6 text-[#b0b0b0]" />
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Link>
-                                ))}
+                                        </Link>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
 
-                            </div>
-                        </CardContent>
-                    </Card >
 
-                )}
             </div >
         </div >
 

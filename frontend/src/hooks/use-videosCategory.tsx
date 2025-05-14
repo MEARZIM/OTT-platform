@@ -16,15 +16,16 @@ import { Video } from "../types/Video";
  */
 
 export function useVideosCategory(categoryId: string) {
+    console.log(categoryId)
     const [videos, setVideos] = useState<Video[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [videoCategoryLoading, setLoading] = useState(true);
 
     useEffect(() => {
         axios
-            .get(`${BACKEND_URL}/api/content/videos/category/:${categoryId}`, {
-                withCredentials: true,
+            .get(`${BACKEND_URL}/api/content/video/category/${categoryId}`)
+            .then((res) => {
+                setVideos(res.data)
             })
-            .then((res) => setVideos(res.data.videos))
             .catch((err) => {
                 console.error("Error fetching videos:", err);
                 setVideos([]);
@@ -32,6 +33,6 @@ export function useVideosCategory(categoryId: string) {
             .finally(() => setLoading(false));
     }, [categoryId]);
 
-    return { videos, loading };
+    return { videos, videoCategoryLoading };
 }
 

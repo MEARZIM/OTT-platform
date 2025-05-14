@@ -1,38 +1,22 @@
-// hooks/useMultipleCategoryVideos.ts
 import { useEffect, useState } from "react";
-import { useVideosCategory } from "./use-videosCategory";
 import { Video } from "../types/Video";
-
+import { fetchVideosByCategory } from "../lib/fetchVideosByCategory";
 
 /**
  * useMultipleCategoryVideos
- * 
- * @description
- * Custom React hook to fetch and combine videos from multiple category IDs.
- * 
- * ✅ Used to get all videos that belong to a set of categories (e.g., categories of a specific video).
- * ✅ Automatically deduplicates videos by ID.
- * ✅ Handles loading and error state for combined fetches.
- * 
- * @param categoryIds - An array of category IDs to fetch videos for.
- * 
- * @returns An object containing:
- *  - `videos`: Array of unique videos from all categories.
- *  - `isLoading`: Boolean indicating loading state.
- *  - `error`: Error message string if any fetch fails, otherwise `null`.
- * 
- * @example
- * const { videos, isLoading, error } = useMultipleCategoryVideos(['cat1', 'cat2']);
+ * Fetches and merges videos from multiple categories.
  */
-
-
 export function useMultipleCategoryVideos(categoryIds: string[]) {
     const [videos, setVideos] = useState<Video[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<null | string>(null);
 
     useEffect(() => {
-        if (categoryIds.length === 0) return;
+        if (categoryIds.length === 0) {
+            setVideos([]);
+            setIsLoading(false);
+            return;
+        }
 
         const fetchAll = async () => {
             setIsLoading(true);
@@ -40,16 +24,17 @@ export function useMultipleCategoryVideos(categoryIds: string[]) {
 
             try {
                 const results = await Promise.all(
-                    categoryIds.map((id) => useVideosCategory(id))
+                    categoryIds.map(async (id) => await fetchVideosByCategory(id))
                 );
 
-                const allVideos = results.flatMap((res) => res.videos || []);
+                const allVideos = results.flat();
                 const uniqueVideos = Array.from(
                     new Map(allVideos.map((v) => [v.id, v])).values()
                 );
 
                 setVideos(uniqueVideos);
             } catch (err) {
+                console.error(err);
                 setError("Failed to fetch videos");
             } finally {
                 setIsLoading(false);
