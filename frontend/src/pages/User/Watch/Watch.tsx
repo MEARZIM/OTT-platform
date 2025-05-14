@@ -1,31 +1,99 @@
-"use client"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Play, PlusCircle, Heart, Share2, CircleArrowRight } from "lucide-react"
+import { Link, useParams } from "react-router-dom"
+
 import { Button } from "../../../components/ui/button"
 import { Card, CardContent } from "../../../components/ui/card"
-import { Link } from "react-router-dom"
 import Player from "./components/Player"
-import videoData from "./data/VideoList"
-import { useParams } from "react-router-dom"
 import ShareModal from "./components/ShareModal"
+import { useVideo } from "../../../hooks/use-video"
+import UnauthorizedPage from "../../../components/Unauthorized"
+import Error from "../../../components/Error"
+import Loading from "../../../components/Loading"
+import { useMultipleCategoryVideos } from "../../../hooks/use-multipleCategoryVideos"
+import { useLikeStatus } from "../../../hooks/use-likeStatus"
+import { useToast } from "../../../hooks/use-toast"
 
 export default function VideoPlayer() {
-    const [isLiked, setIsLiked] = useState(false)
-    const [isInWatchlist, setIsInWatchlist] = useState(false)
-    const [open, setOpen] = useState(false);
+    const { id } = useParams<{ id: string }>();
+    const { toast } = useToast();
 
-    const { id } = useParams()
-    const videoId = parseInt(id || "", 10)
-    const currentVideo = videoData.find(video => video.id === videoId)
-    const suggestedVideos = videoData.filter(video => video.id !== videoId).slice(0, 6)
+    const [open, setOpen] = useState(false);
+    const [isInWatchlist, setIsInWatchlist] = useState(false)
+    const { video, loading } = useVideo(id);
+
+
+    const categoryId = video?.categories?.map((cat) => cat.id) || [];
+
+    const { videos, isLoading } = useMultipleCategoryVideos(categoryId);
+
+    const {
+        isLiked,
+        toggleLike,
+        likeLoading,
+        lastAction
+    } = useLikeStatus(video?.id)
+
+    useEffect(() => {
+        if (lastAction === "liked") {
+            toast({
+                title: "Liked! 😍",
+                description: "Video added to your liked content.🥳",
+                variant: "success",
+            })
+        } else if (lastAction === "unliked") {
+            toast({
+                title: "Unliked🤕",
+                description: "Video removed from your liked content. 🤒",
+                variant: "destructive",
+            })
+        }
+    }, [lastAction])
+
+
+    if (!id) {
+        return <UnauthorizedPage />
+    }
+
+
+
+    if (loading) {
+        return (
+            <>
+                <div className="min-h-screen flex items-center justify-center">
+                    <Loading />
+                </div>
+            </>
+        )
+    }
+
+    if (video === null || !video) {
+        return (
+            <>
+                <Error
+                    statusCode={404}
+                    title="Not Found"
+                    description="Content not found"
+                    message="Content not found"
+                    showLogin={true}
+                />
+
+            </>
+        )
+    }
+
+
+    console.log(videos)
+
+
+
 
     return (
         <div className="dark:bg-black bg-white min-h-screen">
             <header className='max-w-6xl mx-auto flex flex-wrap items-center justify-between p-4 h-20'>
                 <div className='flex items-center gap-10 z-50'>
                     <Link to='/'>
-                        <img src='/assets/PrimeViewLogo.png' alt='Logo' className='h-12 w-20' />
+                        <img src={video.thumbnail} alt='thumbnail' className='h-12 w-20' />
                     </Link>
                 </div>
             </header>
@@ -37,10 +105,10 @@ export default function VideoPlayer() {
                 <Card className="mb-4 bg-white dark:bg-black border-none shadow-none">
                     <CardContent className="p-4 md:p-6">
                         <h1 className="text-xl md:text-2xl font-bold text-black dark:text-white mb-2">
-                            {currentVideo?.title || "Video Not Found"}
+                            {video.title || "Video Not Found"}
                         </h1>
                         <p className="text-zinc-500 mb-4">
-                            {currentVideo?.description || "No description available for this video."}
+                            {video?.description || "No description available for this video."}
                         </p>
 
                         <div className="flex flex-wrap gap-3">
@@ -63,8 +131,9 @@ export default function VideoPlayer() {
                         </Button>
                         <Button
                             variant="ghost"
-                            className={`flex items-center text-xl ${isLiked ? "text-black dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-zinc-400`}
-                            onClick={() => setIsLiked(!isLiked)}
+                            className={`flex items-center hover:cursor-pointer text-xl ${isLiked ? "text-red-500 dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-red-600`}
+                            onClick={toggleLike}
+                            disabled={likeLoading}
                         >
                             <Heart className={`mr-2 size-7 ${isLiked ? "fill-[#fa0707]" : ""}`} /> Like
                         </Button>
@@ -83,31 +152,36 @@ export default function VideoPlayer() {
                 </Card>
 
                 {/* Suggested Content */}
-                <Card className="bg-white dark:bg-black border-none shadow-none">
-                    <CardContent className="p-4">
-                        <h2 className="text-lg md:text-xl font-bold dark:text-zinc-200 mb-6">Suggested Content</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
-                            {suggestedVideos.map((video) => (
-                                <Link to={`/player/${video.id}`} key={video.id}>
-                                    <div className="relative aspect-[2/3] rounded-lg hover:bg-[#0d519b] cursor-pointer transition-colors">
-                                        <img
-                                            src={video.thumbnail}
-                                            alt={video.title}
-                                            className="w-full h-full object-cover rounded-lg"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
-                                        <div className="absolute bottom-4 right-4 z-10">
-                                            <CircleArrowRight className="w-6 h-6 text-[#b0b0b0]" />
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <Card className="bg-white dark:bg-black border-none shadow-none">
+                        <CardContent className="p-4">
+                            <h2 className="text-lg md:text-xl font-bold dark:text-zinc-200 mb-6">Suggested Content</h2>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
+                                {videos.map((video) => (
+                                    <Link to={`/player/${video.id}`} key={video.id}>
+                                        <div className="relative aspect-[2/3] rounded-lg hover:bg-[#0d519b] cursor-pointer transition-colors">
+                                            <img
+                                                src={video.thumbnail}
+                                                alt={video.title}
+                                                className="w-full h-full object-cover rounded-lg"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
+                                            <div className="absolute bottom-4 right-4 z-10">
+                                                <CircleArrowRight className="w-6 h-6 text-[#b0b0b0]" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                ))}
 
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
+                            </div>
+                        </CardContent>
+                    </Card >
+
+                )}
+            </div >
+        </div >
 
     )
 }
