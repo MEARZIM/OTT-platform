@@ -7,6 +7,9 @@ import UnauthorizedPage from "../../../../components/Unauthorized";
 import { useVideo } from "../../../../hooks/use-video";
 import Loading from "../../../../components/Loading";
 import { useSubscription } from "../../../../hooks/use-subscription";
+import { useUser } from "../../../../hooks/use-user";
+import axios from "axios";
+import { BACKEND_URL } from "../../../../lib/utils";
 
 const Player = () => {
     const { id } = useParams<{ id: string }>();
@@ -21,6 +24,7 @@ const Player = () => {
 
     const { video, loading } = useVideo(id);
     const { subscription } = useSubscription();
+    const { user } = useUser();
 
     // Set initial state based on subscription and ad presence
     useEffect(() => {
@@ -46,12 +50,27 @@ const Player = () => {
         }
     }, [showAd, adPlayed, skipCountdown]);
 
+    // Set Video url and Ad url
     useEffect(() => {
         if (video && video.ad) {
             setVideoUrl(video.url);
             setAdUrl(video.ad.url);
         }
     }, [video]);
+
+    useEffect(() => {
+        if (!video) return;
+
+        const setWatchHistory = async () => {
+            await axios.post(`${BACKEND_URL}/api/content/history/${video.id}`, {}, {
+                withCredentials: true
+            })
+        }
+
+        if (video && user) {
+            setWatchHistory()
+        }
+    }, [video, user])
 
     const handleSkipAd = () => {
         setShowAd(false);
