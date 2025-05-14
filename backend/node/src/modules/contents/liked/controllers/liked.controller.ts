@@ -5,7 +5,7 @@ import likedService from "../services/liked.service";
 
 class LikedController {
     async getLikedContents(req: Request, res: Response) {
-        const user = req.user as User; 
+        const user = req.user as User;
         if (!user) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
@@ -15,7 +15,7 @@ class LikedController {
     }
 
     async likeContent(req: Request, res: Response) {
-        const user = req.user as User; 
+        const user = req.user as User;
         if (!user) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
@@ -35,7 +35,7 @@ class LikedController {
     }
 
     async unlikeContent(req: Request, res: Response) {
-        const user = req.user as User; 
+        const user = req.user as User;
         if (!user) {
             return res.status(401).json({ success: false, message: "Unauthorized" });
         }
@@ -52,6 +52,21 @@ class LikedController {
 
         const likedContent = await likedService.unlikeContent(user.id, videoId);
         res.status(200).json({ success: true, data: likedContent });
+    }
+
+    async isVideoLiked(req: Request, res: Response) {
+        const user = req.user as User;
+        if (!user) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+        const { videoId } = req.params;
+
+        if (videoId) {
+            return res.status(404).json({ success: false, message: "No Video found" });
+        }
+
+        const videos = await likedService.isContentLiked(user.id, videoId);
+        res.status(200).json({ success: true, data: videos });
     }
 }
 
