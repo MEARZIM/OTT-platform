@@ -115,7 +115,7 @@ export default function VideoPlayer() {
             <header className='max-w-6xl mx-auto flex flex-wrap items-center justify-between p-4 h-20'>
                 <div className='flex items-center gap-10 z-50'>
                     <Link to='/'>
-                        <img src={video.thumbnail} alt='thumbnail' className='h-12 w-20' />
+                        <img src="/assets/PrimeViewLogo.png" alt='Logo' className='h-12 w-20' />
                     </Link>
                 </div>
             </header>
