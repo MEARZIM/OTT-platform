@@ -24,7 +24,7 @@ export const columns: ColumnDef<Column>[] = [
     {
         accessorKey: "description",
         header: "Description",
-        cell: ({ row }) => row.original.description
+        cell: ({ row }) => row.original.description.slice(0,20)+"..."
     },
     {
         accessorKey: "rating",
