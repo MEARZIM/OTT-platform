@@ -23,8 +23,11 @@ export default function YourAccountPage() {
                     <div className="flex justify-center mb-6">
                         <div className="relative">
                             <img
-                                src={user?.profileImage}
+                                src={user?.profileImage || "/assets/avatar.png"}
                                 alt="Profile"
+                                onError={(e) => {
+                                    e.currentTarget.src = "/assets/avatar.png";
+                                }}
                                 className="w-28 h-28 rounded-full object-cover border-4 border-blue-500"
                             />
                             {subscription && (
