@@ -4,8 +4,8 @@ import Banner from './components/Banner'
 import PopularContent from './components/PopularContent'
 import SearchBar from './components/SearchBar'
 import Sidebar from './components/Sidebar'
-import SuggestedContent from './components/SuggestedContent'
-import WatchNext from './components/WatchNext'
+// import SuggestedContent from './components/SuggestedContent'
+// import WatchNext from './components/WatchNext'
 import Footer from './components/Footer'
 import { ModeToggle } from '../../../components/mode-toggle'
 import { useUser } from '../../../hooks/use-user'
@@ -47,14 +47,14 @@ const DashboardPage = () => {
           </div>
 
           {/* Watch Next Section */}
-          <div className="flex-1">
+          {/* <div className="flex-1">
             <WatchNext />
-          </div>
+          </div> */}
 
           {/* Suggested Content */}
-          <div className="flex-1">
+          {/* <div className="flex-1">
             <SuggestedContent />
-          </div>
+          </div> */}
 
           {/* Popular Content */}
           <div className="flex-1">

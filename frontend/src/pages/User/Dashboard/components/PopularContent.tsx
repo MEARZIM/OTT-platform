@@ -6,10 +6,8 @@ import {
     CarouselNext,
     CarouselPrevious
 } from "../../../../components/ui/carousel";
-import videoData from "../../Watch/data/VideoList";
 import { useVideos } from "../../../../hooks/use-videos";
 
-const popular = videoData.slice(0, 8);
 
 const PopularContent = () => {
     const { videos, loading } = useVideos();
@@ -19,7 +17,7 @@ const PopularContent = () => {
             loading...
         </>)
     }
-    console.log(videos)
+    
     return (
         <div className="relative w-full px-4 overflow-hidden mb-6">
             <div className="flex items-center mb-4">

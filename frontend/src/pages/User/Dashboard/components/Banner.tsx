@@ -7,9 +7,10 @@ import {
   CarouselPrevious,
 } from "../../../../components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import videoData from "../../Watch/data/VideoList";
+
 
 import { Link } from "react-router-dom";
+import videoData from "../../../../lib/data";
 
 const Banner = () => {
   const bannerContent = videoData.slice(8, 15);

@@ -1,4 +1,4 @@
-const videoData = [
+export const videoData = [
     {
         id: 1,
         title: "Lovely Runner",

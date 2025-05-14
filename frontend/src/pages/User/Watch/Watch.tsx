@@ -10,18 +10,17 @@ import { useVideo } from "../../../hooks/use-video"
 import UnauthorizedPage from "../../../components/Unauthorized"
 import Error from "../../../components/Error"
 import Loading from "../../../components/Loading"
-import { useMultipleCategoryVideos } from "../../../hooks/use-multipleCategoryVideos"
 import { useLikeStatus } from "../../../hooks/use-likeStatus"
 import { useToast } from "../../../hooks/use-toast"
 import { useUser } from "../../../hooks/use-user"
 import { useVideosCategory } from "../../../hooks/use-videosCategory"
+import { useWatchlistStatus } from "../../../hooks/use-watchlistStatus"
 
 export default function VideoPlayer() {
     const { id } = useParams<{ id: string }>();
     const { toast } = useToast();
 
     const [open, setOpen] = useState(false);
-    const [isInWatchlist, setIsInWatchlist] = useState(false)
     const { video, loading } = useVideo(id);
     const { user } = useUser();
 
@@ -35,6 +34,14 @@ export default function VideoPlayer() {
         likeLoading,
         lastAction
     } = useLikeStatus(video?.id)
+
+    const {
+        isInWatchlist,
+        toggleWatchlist,
+        watchlistLoading,
+        watchlistError,
+        watchlistLastAction,
+    } = useWatchlistStatus(video?.id);
 
     useEffect(() => {
         if (lastAction === "liked") {
@@ -51,6 +58,25 @@ export default function VideoPlayer() {
             })
         }
     }, [lastAction])
+
+    useEffect(() => {
+        if (!watchlistLastAction) return;
+
+        if (watchlistLastAction === "added") {
+            toast({
+                title: "Added to Watchlist 🎬",
+                description: "Video saved for later viewing. 🍿",
+                variant: "success",
+            });
+        } else if (watchlistLastAction === "removed") {
+            toast({
+                title: "Removed from Watchlist 😢",
+                description: "Video removed from your saved list.",
+                variant: "destructive",
+            });
+        }
+    }, [watchlistLastAction]);
+
 
 
     if (!id) {
@@ -125,10 +151,11 @@ export default function VideoPlayer() {
                             <>
                                 <Button
                                     variant="ghost"
-                                    className={`flex items-center text-xl ${isInWatchlist ? "text-black dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-zinc-400`}
-                                    onClick={() => setIsInWatchlist(!isInWatchlist)}
+                                    className={`flex items-center hover:cursor-pointer text-xl ${isInWatchlist ? "text-black dark:text-white" : "text-black dark:text-white"} hover:bg-white dark:hover:bg-black hover:text-zinc-400`}
+                                    onClick={toggleWatchlist}
+                                    disabled={watchlistLoading}
                                 >
-                                    <PlusCircle className="mr-2 size-7" /> Watchlist
+                                    <PlusCircle className={`mr-2 size-7 ${isInWatchlist ? "fill-[#07fa27] border-[#07fa27]" : ""}`} /> Watchlist
                                 </Button>
                                 <Button
                                     variant="ghost"
