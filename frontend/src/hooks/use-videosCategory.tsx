@@ -16,11 +16,12 @@ import { Video } from "../types/Video";
  */
 
 export function useVideosCategory(categoryId: string) {
-    console.log(categoryId)
+    // console.log(categoryId)
     const [videos, setVideos] = useState<Video[]>([]);
     const [videoCategoryLoading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!categoryId || !BACKEND_URL) return;
         axios
             .get(`${BACKEND_URL}/api/content/video/category/${categoryId}`)
             .then((res) => {

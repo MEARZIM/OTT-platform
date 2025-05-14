@@ -17,13 +17,14 @@ export function useWatchlistStatus(videoId: string | undefined): UseWatchlistSta
   const [watchlistLastAction, setLastAction] = useState<"added" | "removed" | null>(null);
 
   useEffect(() => {
-    if (!videoId) return;
+    if (!videoId || !BACKEND_URL) return;
 
     const fetchWatchlistStatus = async () => {
+      setWatchlistLoading(true)
       try {
-        const { data } = await axios.get(`${BACKEND_URL}api/content/watchlist/${videoId}`, {
-          withCredentials: true,
-        });
+        const url = `${BACKEND_URL}/api/content/watchlist/${videoId}`;
+        // console.log("Requesting:", url);
+        const { data } = await axios.get(url, { withCredentials: true });
         setIsInWatchlist(data.success);
       } catch (err) {
         console.error("Error fetching watchlist status", err);
@@ -35,6 +36,7 @@ export function useWatchlistStatus(videoId: string | undefined): UseWatchlistSta
 
     fetchWatchlistStatus();
   }, [videoId]);
+
 
   const toggleWatchlist = async () => {
     if (!videoId) return;

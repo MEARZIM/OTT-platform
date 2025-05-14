@@ -39,7 +39,6 @@ export default function VideoPlayer() {
         isInWatchlist,
         toggleWatchlist,
         watchlistLoading,
-        watchlistError,
         watchlistLastAction,
     } = useWatchlistStatus(video?.id);
 
@@ -60,8 +59,6 @@ export default function VideoPlayer() {
     }, [lastAction])
 
     useEffect(() => {
-        if (!watchlistLastAction) return;
-
         if (watchlistLastAction === "added") {
             toast({
                 title: "Added to Watchlist 🎬",
