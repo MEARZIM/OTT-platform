@@ -64,6 +64,11 @@ videoRouter.get(
 );
 
 videoRouter.get(
+    "/search",
+    videoController.getSearchedVideosController as any
+);
+
+videoRouter.get(
     "/:id",
     videoController.getVideoByIdController as any
 );

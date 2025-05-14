@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Search } from "lucide-react";
-import { Link } from "react-router-dom";
-import videoData from "../../../../lib/data";
-
+import axios from "axios";
+import { BACKEND_URL } from "../../../../lib/utils";
 
 type Video = {
   id: number;
@@ -16,7 +15,24 @@ const SearchBar = () => {
   const [results, setResults] = useState<Video[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  // Handle outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Cleanup debounce timer
   useEffect(() => {
     return () => {
       if (debounceRef.current) {
@@ -33,27 +49,31 @@ const SearchBar = () => {
       clearTimeout(debounceRef.current);
     }
 
-    debounceRef.current = setTimeout(() => {
+    debounceRef.current = setTimeout(async () => {
       if (!value.trim()) {
         setResults([]);
         setShowDropdown(false);
         return;
       }
 
-      const filtered = videoData.filter((video) =>
-        video.title.toLowerCase().includes(value.toLowerCase())
-      );
-      setResults(filtered);
-      setShowDropdown(true);
-    }, 2000);
-  };
+      try {
+        const res = await axios.get(`${BACKEND_URL}/api/content/video/search`, {
+          params: { query: value },
+          withCredentials: true,
+        });
 
-  const handleClickOutside = () => {
-    setShowDropdown(false);
+        setResults(res.data || []);
+        setShowDropdown(true);
+      } catch (error) {
+        console.error("Search error:", error);
+        setResults([]);
+        setShowDropdown(true);
+      }
+    }, 500);
   };
 
   return (
-    <div className="p-4 relative w-full" onBlur={handleClickOutside}>
+    <div className="p-4 relative w-full" ref={containerRef}>
       <div className="relative">
         <input
           type="text"
@@ -71,9 +91,9 @@ const SearchBar = () => {
           <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
             {results.length > 0 ? (
               results.map((video) => (
-                <Link
+                <a
                   key={video.id}
-                  to={`/watch/${video.id}`}
+                  href={`/player/${video.id}`}
                   className="flex items-start px-4 py-3 hover:bg-gray-100 dark:hover:bg-zinc-700"
                   onClick={() => {
                     setQuery("");
@@ -92,7 +112,7 @@ const SearchBar = () => {
                       {video.description}
                     </div>
                   </div>
-                </Link>
+                </a>
               ))
             ) : (
               <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-300">
@@ -101,7 +121,6 @@ const SearchBar = () => {
             )}
           </div>
         )}
-
       </div>
     </div>
   );

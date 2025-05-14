@@ -7,7 +7,7 @@ class VideoController {
     // for admins
     async uploadVideoController(req: Request, res: Response) {
         try {
-            
+
             if (!req.files || !("video" in req.files) || !("thumbnail" in req.files)) {
                 return res.status(400).json({ message: "Both video and thumbnail are required" });
             }
@@ -16,8 +16,8 @@ class VideoController {
                 return res.status(400).json({ message: "No file uploaded because of Empty title and description" });
             }
 
-            const { 
-                title, 
+            const {
+                title,
                 description,
                 status,
                 adId,
@@ -52,7 +52,7 @@ class VideoController {
 
             return res.status(200).json({ message: "Video uploaded successfully", video });
             // return res.status(200).json({ message: "Video uploaded successfully" });
-            
+
         } catch (error: any) {
             console.error(error);
             return res.status(500).json({ message: "Internal server error" });
@@ -76,26 +76,26 @@ class VideoController {
                 return res.status(400).json({ message: "Video id is required" });
             }
 
-            const isVideoExist  = await videoService.getVideoById(videoId);
+            const isVideoExist = await videoService.getVideoById(videoId);
             if (!isVideoExist) {
                 return res.status(404).json({ message: "Video not found" });
             }
-            
-            
+
+
             const {
                 title,
                 description,
                 status,
                 adId,
-                categoryIds  
+                categoryIds
             }: {
                 title: string,
                 description: string;
                 categoryIds: string;
                 adId: string;
                 status: VideoStatus
-            } = req.body; 
-           
+            } = req.body;
+
             let video;
             if (req.files && ("thumbnail" in req.files)) {
                 const thumbnailFile = (req.files as any)["thumbnail"][0];
@@ -109,7 +109,7 @@ class VideoController {
                     thumbnailFile.buffer,
                     thumbnailFile.originalname,
                 );
-            } else{
+            } else {
                 video = await videoService.updateVideo(
                     videoId,
                     title,
@@ -126,7 +126,7 @@ class VideoController {
             }
             return res.status(200).json({ message: "Video updated successfully", video });
             // return res.status(200).json({ message: "Video updated successfully" });
-            
+
         } catch (error: any) {
             console.error(error);
             return res.status(500).json({ message: "Internal server error" });
@@ -150,7 +150,7 @@ class VideoController {
                 return res.status(400).json({ message: "Video id is required" });
             }
 
-            const isVideoExist  = await videoService.getVideoById(videoId);
+            const isVideoExist = await videoService.getVideoById(videoId);
             if (!isVideoExist) {
                 return res.status(404).json({ message: "Video not found" });
             }
@@ -247,6 +247,23 @@ class VideoController {
             return res.status(500).json({ message: "Internal server error" });
         }
     };
+
+    async getSearchedVideosController(req: Request, res: Response) {
+        try {
+            const query = req.query.query as string;
+
+            if (!query || query.trim() === "") {
+                return res.status(400).json({ message: "Query is required" });
+            }
+
+            const videos = await videoService.getSearchedVideos(query);
+            return res.status(200).json(videos);
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    }
 }
 
 export default new VideoController();

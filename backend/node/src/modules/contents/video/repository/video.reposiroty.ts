@@ -151,6 +151,24 @@ class VideoRepository {
         });
     }
 
+    async getSearchedVideos(query: string) {
+        return await prisma.video.findMany({
+            where: {
+                title: {
+                    contains: query,
+                    mode: "insensitive",
+                },
+            },
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                thumbnail: true,
+            },
+            take: 5,
+        });
+    }
+
     async getVideoByCategoryId(categoryId: string) {
         return prisma.video.findMany({
             where: {

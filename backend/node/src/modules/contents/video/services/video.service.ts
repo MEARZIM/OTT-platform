@@ -168,6 +168,9 @@ class VideoService {
         return videoReposiroty.getTopRatedVideos();
     }
 
+    async getSearchedVideos(query: string) {
+        return videoReposiroty.getSearchedVideos(query);
+    }
 }
 
 export default new VideoService;
