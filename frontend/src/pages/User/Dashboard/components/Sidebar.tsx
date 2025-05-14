@@ -11,7 +11,8 @@ import {
   LogOut,
   Settings,
   SquareTerminal,
-  User
+  User,
+  Crown
 } from "lucide-react"
 import {
   Sidebar,
@@ -34,7 +35,7 @@ import {
 import { Link, useNavigate } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar"
-import { User as UserType } from "../../../../hooks/use-user"
+import { User as UserType } from "../../../../types/User"
 import { Button } from "../../../../components/ui/button"
 import { BACKEND_URL } from "../../../../lib/utils"
 
@@ -88,9 +89,14 @@ const SidebarComponent = ({ user }: SidebarProps) => {
                 </AvatarFallback>
               </Avatar>
             }
-
           </Avatar>
-          <p className="text-lg font-semibold">{user?.name}</p>
+          <p className="text-lg font-semibold inline-flex items-center gap-1">
+            {user?.name}
+            {subscription && (
+              <Crown className="text-yellow-500 w-4 h-4" />
+            )}
+          </p>
+
           <p className="text-sm text-zinc-700 dark:text-zinc-400">Premium Member</p>
         </div>
 
@@ -207,11 +213,7 @@ const SidebarComponent = ({ user }: SidebarProps) => {
 
       {/* Upgrade to Plus Button */}
       <div className="block px-4 py-4 bg-zinc-50 dark:bg-zinc-900 text-center">
-        {subscription ? (
-          <p className="text-green-600 font-semibold">
-            ✅ You are a subscribed user
-          </p>
-        ) : (
+        {!subscription && (
           <Link
             to="/subscription"
             className="w-full inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:opacity-90 text-white font-semibold py-2 rounded-lg shadow-md transition-all duration-300 cursor-pointer"
@@ -219,6 +221,8 @@ const SidebarComponent = ({ user }: SidebarProps) => {
             🚀 Upgrade to Premium
           </Link>
         )}
+
+
       </div>
 
       {/* Footer */}
