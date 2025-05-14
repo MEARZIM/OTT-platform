@@ -1,7 +1,14 @@
 import { ArrowLeft, LogOut, History, User } from "lucide-react"
 import { Link } from "react-router-dom"
+import { BACKEND_URL } from "../../../../../lib/utils";
+import { Button } from "../../../../../components/ui/button";
 
 export default function SettingsPage() {
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    window.location.href = `${BACKEND_URL}/api/auth/logout`
+  }
   return (
     <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white">
       {/* Main Content */}
@@ -53,10 +60,16 @@ export default function SettingsPage() {
                 </Link>
 
                 {/* Sign Out */}
-                <div className="flex items-center justify-between px-6 py-4 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition rounded-b-md cursor-pointer">
+                <div className="flex items-center justify-between px-6 py-4 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition rounded-b-md ">
                   <div className="flex items-center gap-2 text-[#028fbe] font-semibold">
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign Out</span>
+                    <Button
+                      className="bg-inherit text-inherit hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:cursor-pointer"
+                      onClick={handleLogout}
+                      size={"lg"}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Sign Out</span>
+                    </Button>
                   </div>
                 </div>
               </div>

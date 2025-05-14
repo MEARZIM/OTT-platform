@@ -1,10 +1,6 @@
-import { useState } from "react"
-import axios from "axios"
+import { Link } from "react-router-dom"
+
 import { useSubscription } from '../../../../hooks/use-subscription';
-
-
-
-
 import {
   ChevronRight,
   HomeIcon,
@@ -32,7 +28,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from "../../../../components/ui/collapsible"
-import { Link, useNavigate } from "react-router-dom"
 
 import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar"
 import { User as UserType } from "../../../../types/User"
@@ -44,25 +39,14 @@ interface SidebarProps {
 }
 
 
-
 const SidebarComponent = ({ user }: SidebarProps) => {
-  const navigate = useNavigate();
+  
   const { subscription } = useSubscription();
-  const [isLoading, setIsLoading] = useState(false)
 
-  const handleLogout = async () => {
-    setIsLoading(true)
-    try {
-      await axios.get(`${BACKEND_URL}/api/auth/logout`, {
-        withCredentials: true,
-      })
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
 
-      navigate("/");
-    } catch (error) {
-      console.error("Error during sign out:", error)
-    } finally {
-      setIsLoading(false)
-    }
+    window.location.href = `${BACKEND_URL}/api/auth/logout`
   }
 
   return (
@@ -149,35 +133,15 @@ const SidebarComponent = ({ user }: SidebarProps) => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              {/* Help */}
-              {/* <Collapsible>
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
-                      <CircleHelp size={22} />
-                      <span className="text-lg">Help</span>
-                      <ChevronRight size={24} className="ml-auto transition-transform" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    {["Support", "Feedback"].map((item, index) => (
-                      <SidebarMenuSub key={index}>
-                        <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
-                          <span className="text-md text-black dark:text-white">{item}</span>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSub>
-                    ))}
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible> */}
 
-              {/* Playground */}
+
+              {/* Accounts */}
               <Collapsible defaultOpen>
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton className="cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
                       <SquareTerminal size={22} />
-                      <span className="text-lg">Playground</span>
+                      <span className="text-lg">Accounts</span>
                       <ChevronRight size={24} className="ml-auto transition-transform" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -231,7 +195,6 @@ const SidebarComponent = ({ user }: SidebarProps) => {
           <Button
             className="flex items-center gap-2 hover:text-red-400 transition-colors hover:cursor-pointer"
             onClick={handleLogout}
-            disabled={isLoading}
             variant={"outline"}
           >
             <LogOut size={20} />
