@@ -20,7 +20,9 @@ const ManageAdmins = () => {
     const fetchAdmins = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${BACKEND_URL}/api/admin`);
+        const res = await axios.get(`${BACKEND_URL}/api/admin`,{
+          withCredentials: true
+        });
         const data = res.data;
 
         const formatted: AdminColumn[] = data.map((item: {

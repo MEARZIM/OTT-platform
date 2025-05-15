@@ -18,7 +18,9 @@ const SuperAdminId = () => {
         const fetchAdmin = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get(`${BACKEND_URL}/api/admin/${id}`);
+                const res = await axios.get(`${BACKEND_URL}/api/admin/${id}`,{
+                    withCredentials: true
+                });
                 setInitialData(res.data);
             } catch (err: any) {
                 // console.error("Failed to fetch admins:", err);

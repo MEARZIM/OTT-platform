@@ -59,8 +59,8 @@ const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
     const form = useForm<AdminFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData
-            ? { name: initialData.name ,email: initialData.email, password: "" }
-            : { name:"" ,email: "", password: "" }
+            ? { name: initialData.name, email: initialData.email, password: "" }
+            : { name: "", email: "", password: "" }
     });
 
 
@@ -70,12 +70,15 @@ const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
 
             setLoading(true);
             if (initialData) {
-                await axios.patch(`${BACKEND_URL}/api/admin/update/${id}`, data)
+                await axios.patch(`${BACKEND_URL}/api/admin/update/${id}`, data, {
+                    withCredentials: true
+                })
             } else {
-                await axios.post(`${BACKEND_URL}/api/admin/create`, data)
+                await axios.post(`${BACKEND_URL}/api/admin/create`, data, {
+                    withCredentials: true
+                })
             }
-            console.log(data);
-
+           
             toast({
                 title: toastTitle,
                 description: toastDesc,
@@ -99,7 +102,7 @@ const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
 
     return (
         <>
-           
+
             <div className="flex justify-between items-center">
                 <Heading
                     title={title}
@@ -112,7 +115,7 @@ const UpdateAdminForm = ({ initialData }: UpdateAdminFormProps) => {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
                     <div className="grid grid-cols-3 gap-8">
-                    <FormField
+                        <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
