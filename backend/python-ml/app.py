@@ -59,20 +59,24 @@ def recommend_videos():
             return jsonify({"error": "Failed to fetch user data by ID"}), 500
         
         watched_videos = get_history(token)
+        #return jsonify(watched_videos)
         if watched_videos is None:
             return jsonify({"error": "Failed to fetch watched videos"}), 500
         
         liked_videos = user_details.get('likedVideos', [])
+        #return jsonify(liked_videos)
         if not liked_videos:
             return jsonify({"error": "No liked videos found for the user"}), 404
         
         liked_videos_ids = extract_liked_video_ids(liked_videos)
+        #return jsonify(liked_videos_ids)
         if not liked_videos_ids:
             return jsonify({"error": "No liked videos found for the user"}), 404
         
         video_details = []
         for video_id in liked_videos_ids:
             video = get_video_by_id(video_id)
+            #return jsonify(video)
             if video:
                 category_info = [{
                         "id": cat["category"]["id"],
@@ -88,6 +92,8 @@ def recommend_videos():
                     "thumbnail": video.get("thumbnail"),
                     "categories": category_info
                 })
+                
+        #return jsonify(video_details)
                 
         all_liked_categories = [video["categories"] for video in video_details if "categories" in video]
         videos = fetch_videos()

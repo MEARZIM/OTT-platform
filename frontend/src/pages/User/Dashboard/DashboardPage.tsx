@@ -54,10 +54,14 @@ const DashboardPage = () => {
             <Banner />
           </div>
 
+        {
+          user && 
 
           <div >
             <RecommendedContent />
           </div>
+        }
+          
 
           <div>
             <PopularContent />

@@ -47,20 +47,27 @@ def get_priority_categories(liked_category_ids, watched_category_ids):
     both = Counter()
     only_watched = Counter()
     
-    videos = fetch_videos()  # Fetch all videos from the backend
+    
+    for cat_id in watched_category_ids:
+        if cat_id in liked_category_ids:
+            both[cat_id] += 1
+        else:
+            only_watched[cat_id] += 1
+    
+    # videos = fetch_videos()  # Fetch all videos from the backend
 
-    for video in videos:
-        video_id = video.get("id")
-        video_category_ids = [cat["categoryId"] for cat in video.get("categories", [])]
-         # Check if any of the video categories are in the watched categories
-        common_categories_ids = set(video_category_ids).intersection(watched_category_ids)
+    # for video in videos:
+    #     video_id = video.get("id")
+    #     video_category_ids = [cat["categoryId"] for cat in video.get("categories", [])]
+    #      # Check if any of the video categories are in the watched categories
+    #     common_categories_ids = set(video_category_ids).intersection(watched_category_ids)
         
-        # If there's an intersection with liked categories, add to 'both' counter
-        liked_common_categories_ids = set(video_category_ids).intersection(liked_category_ids)
-        if liked_common_categories_ids and common_categories_ids:
-            both.update(liked_common_categories_ids)
-        elif common_categories_ids:  # If only watched categories
-            only_watched.update(common_categories_ids)
+    #     # If there's an intersection with liked categories, add to 'both' counter
+    #     liked_common_categories_ids = set(video_category_ids).intersection(liked_category_ids)
+    #     if liked_common_categories_ids and common_categories_ids:
+    #         both.update(liked_common_categories_ids)
+    #     elif common_categories_ids:  # If only watched categories
+    #         only_watched.update(common_categories_ids)
 
     # Return sorted list: first from both, then from watched-only
     sorted_both = [cat for cat, _ in both.most_common()]
@@ -76,7 +83,7 @@ def generate_category_recommendations(all_liked_categories, watched_videos):
     #watched = set(user.get("watchHistory", []))
     
     liked_category_ids = [cat["id"] for sublist in all_liked_categories for cat in sublist if "id" in cat]
-    watched_video_ids = [item["videoId"] for item in watched_videos.get("data", [])]
+    watched_video_ids = [item["videoId"] for item in watched_videos]
     watched_category_ids = []
     for video_id in watched_video_ids:
         video = get_video_by_id(video_id)
