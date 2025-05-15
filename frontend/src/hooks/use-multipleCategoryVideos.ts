@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Video } from "../types/Video";
-import { fetchVideosByCategory } from "../lib/fetchVideosByCategory";
+import { fetchVideosByCategory } from "../lib/actions/fetchVideosByCategory";
 
 /**
  * useMultipleCategoryVideos

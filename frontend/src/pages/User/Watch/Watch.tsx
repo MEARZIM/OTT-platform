@@ -15,6 +15,9 @@ import { useToast } from "../../../hooks/use-toast"
 import { useUser } from "../../../hooks/use-user"
 import { useVideosCategory } from "../../../hooks/use-videosCategory"
 import { useWatchlistStatus } from "../../../hooks/use-watchlistStatus"
+import RateVideo from "../../../components/RateVideo"
+import { useVideoRating } from "../../../hooks/use-videoRating"
+
 
 export default function VideoPlayer() {
     const { id } = useParams<{ id: string }>();
@@ -23,7 +26,8 @@ export default function VideoPlayer() {
     const [open, setOpen] = useState(false);
     const { video, loading } = useVideo(id);
     const { user } = useUser();
-
+    const { rating: initialRating, loading: loadingRating } = useVideoRating(id);
+    
     const categoryId = video?.categories?.map((cat) => cat.categoryId) || [];
     const { videos, videoCategoryLoading } = useVideosCategory(categoryId[0]);
 
@@ -92,7 +96,7 @@ export default function VideoPlayer() {
         )
     }
 
-    if (video === null || !video) {
+    if (video === null || !video ) {
         return (
             <>
                 <Error
@@ -138,7 +142,7 @@ export default function VideoPlayer() {
 
                 {/* Action Buttons */}
                 <Card className="mb-4 bg-white dark:bg-black border-none shadow-none">
-                    <CardContent className="p-4 flex flex-wrap justify-around gap-2">
+                    <CardContent className="p-4 flex  flex-wrap justify-around gap-2">
                         {user && (
                             <>
                                 <Button
@@ -173,6 +177,29 @@ export default function VideoPlayer() {
                     </CardContent>
                 </Card>
 
+
+                {user &&
+                    loadingRating ?
+                    <>
+                        <div className="animate-pulse space-y-2">
+                            <div className="bg-zinc-300 dark:bg-zinc-800 w-[225px] h-[30px] rounded" />
+                            <div className="h-4 bg-zinc-300 dark:bg-zinc-800 rounded w-3/4" />
+                        </div>
+                    </>
+                    :
+                    <Card className="mb-4 bg-white dark:bg-black border-none shadow-none">
+                        <CardContent className="p-4 flex flex-wrap justify-around gap-2">
+                            <RateVideo
+                                title={video.title}
+                                videoId={video.id}
+                                initialRating={initialRating}
+                            />
+                        </CardContent>
+                    </Card>
+                }
+
+
+
                 {/* Suggested Content */}
                 {videos &&
                     (
@@ -183,7 +210,7 @@ export default function VideoPlayer() {
                                 </h2>
                                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
                                     {videos.map((v) => (
-                                        <Link to={`/player/${v.id}`} key={v.id}>
+                                        <a href={`/player/${v.id}`} key={v.id}>
                                             <div className="relative aspect-[2/3] rounded-lg hover:bg-[#0d519b] cursor-pointer transition-colors">
                                                 <img
                                                     src={v.thumbnail}
@@ -195,7 +222,7 @@ export default function VideoPlayer() {
                                                     <CircleArrowRight className="w-6 h-6 text-[#b0b0b0]" />
                                                 </div>
                                             </div>
-                                        </Link>
+                                        </a>
                                     ))}
                                 </div>
                             </CardContent>

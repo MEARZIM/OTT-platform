@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
-import { SidebarProvider, SidebarTrigger } from '../../../components/ui/sidebar';
+
 import Banner from './components/Banner';
-import PopularContent from './components/PopularContent';
-import SearchBar from './components/SearchBar';
-import Sidebar from './components/Sidebar';
-// import SuggestedContent from './components/SuggestedContent'
-// import WatchNext from './components/WatchNext'
 import Footer from './components/Footer';
-import { ModeToggle } from '../../../components/mode-toggle';
+import Sidebar from './components/Sidebar';
+import SearchBar from './components/SearchBar';
 import { useUser } from '../../../hooks/use-user';
+import PopularContent from './components/PopularContent';
 import MostLikedContent from './components/MostLikedContent';
+import { ModeToggle } from '../../../components/mode-toggle';
+import { SidebarProvider, SidebarTrigger } from '../../../components/ui/sidebar';
 
 const DashboardPage = () => {
   const { user } = useUser();

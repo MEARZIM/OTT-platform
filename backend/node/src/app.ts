@@ -18,6 +18,7 @@ import likedRouter from "./modules/contents/liked/routes/liked.routes";
 import subscriptionRouter from "./modules/subscriptions/routes/subscription.routes";
 import webhookRouter from "./modules/webhook/routes/webhook.routes";
 import watchlistRouter from "./modules/contents/watchlist/routes/watchlist.route";
+import videoRatingRouter from "./modules/contents/rating/routes/rating.routes";
 
 dotenv.config();
 const app = express();
@@ -56,6 +57,7 @@ app.use("/api/content/video", videoRouter);
 app.use("/api/content/history", historyRouter);
 app.use("/api/content/watchlist", watchlistRouter);
 app.use("/api/content/video-category", videoCategoryRouter);
+app.use("/api/content/rating", videoRatingRouter);
 app.use("/api/subscription/", subscriptionRouter);
 
 
