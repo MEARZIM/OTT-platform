@@ -2,9 +2,11 @@ import requests
 from flask import Flask, request, jsonify
 from recommendation import generate_category_recommendations, get_video, get_category_name
 from services.user_service import get_users_details, get_users_details_by_id
-from services.video_service import extract_liked_video_ids, get_video_by_id, fetch_videos, get_watchlist
+from services.video_service import extract_liked_video_ids, get_history, get_video_by_id, fetch_videos
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
 @app.route('/')
 def home():
@@ -40,7 +42,7 @@ def recommend_videos():
 
     try:
         token = request.headers.get('Authorization')
-        print(f"Received token: {token}")
+        # print(f"Received token: {request.headers}")
         if not token:
             return jsonify({"error": "Missing Authorization token"}), 401
         
@@ -56,7 +58,7 @@ def recommend_videos():
         if user_details is None:
             return jsonify({"error": "Failed to fetch user data by ID"}), 500
         
-        watched_videos = get_watchlist(token)
+        watched_videos = get_history(token)
         if watched_videos is None:
             return jsonify({"error": "Failed to fetch watched videos"}), 500
         

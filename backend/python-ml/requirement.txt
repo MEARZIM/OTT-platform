@@ -1,1 +1,1 @@
-install flask, sklearn, requests
+pip install flask, scikit-learn, requests, pandas, dotenv, flask-cors

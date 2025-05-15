@@ -27,15 +27,12 @@ class AuthController {
     }
 
     async getToken(req: Request, res: Response) {
-        const token = req.cookies.token; // ✅ Get token from cookies
+        const token = req.cookies.token;
+        // console.log(token)
         if (!token) return res.status(401).json({ message: "Unauthorized" });
 
         try {
-            const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string); // Only get the Id
-            const user  = await AuthService.findById(decoded.id);
-            if (!user) return res.status(401).json({ message: "Invalid token" });
-            // console.log(user);
-            return res.json({ user: user }); // Send the user data
+            return res.json(token); // Send the user data
         } catch (error) {
             return res.status(401).json({ message: "Invalid token" });
         }

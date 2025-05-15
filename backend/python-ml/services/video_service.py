@@ -42,13 +42,13 @@ def fetch_videos():
         print(f"Error fetching video data: {e}")
         return None
     
-def get_watchlist(token):
+def get_history(token):
     """
     Fetches the watchlist of the authenticated user from the Node.js backend
     using the provided Authorization token.
     """
     
-    url = f'{BACKEND_URL}/api/content/watchlist/'
+    url = f'{BACKEND_URL}/api/content/history/'
     headers = {'Authorization': token}
     
     try:
@@ -56,5 +56,5 @@ def get_watchlist(token):
         response.raise_for_status()  # Raise an error for bad responses
         return response.json()
     except requests.exceptions.RequestException as e:
-        print(f"Error fetching watchlist data: {e}")
+        print(f"Error fetching history data: {e}")
         return None
