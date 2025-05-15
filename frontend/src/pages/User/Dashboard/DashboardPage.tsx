@@ -9,12 +9,13 @@ import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
 import { ModeToggle } from '../../../components/mode-toggle';
 import { useUser } from '../../../hooks/use-user';
+import MostLikedContent from './components/MostLikedContent';
 
 const DashboardPage = () => {
   const { user } = useUser();
 
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-zinc-900 dark:text-white w-full flex flex-col md:flex-row overflow-hidden">
+    <div className="bg-white h-full text-black dark:bg-zinc-900 dark:text-white w-full flex flex-col md:flex-row overflow-hidden">
       <SidebarProvider>
         {/* Sidebar - hidden on small screens, toggle with SidebarTrigger */}
         {user && (
@@ -24,11 +25,11 @@ const DashboardPage = () => {
         )}
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-y-auto">
+        <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
           {/* Navbar */}
           <div className="flex flex-col sm:flex-row sm:items-center p-4 gap-4 bg-white dark:bg-zinc-900 w-full">
             <div className="flex items-center justify-start gap-x-4 w-fit">
-              <SidebarTrigger  />
+              <SidebarTrigger />
               <Link to="/" className="flex-shrink-0">
                 <img src="/assets/PrimeViewLogo.png" alt="Logo" className="h-10 w-auto sm:h-12" />
               </Link>
@@ -49,20 +50,21 @@ const DashboardPage = () => {
           </div>
 
           {/* Sections */}
-          <div className="flex-1">
+          <div className="">
             <Banner />
           </div>
 
+
           {/* <div className="flex-1">
-            <WatchNext />
+            <SuggestedContent />
+            </div> */}
+
+          <div className="">
+            <PopularContent />
           </div>
 
-          <div className="flex-1">
-            <SuggestedContent />
-          </div> */}
-
-          <div className="flex-1">
-            <PopularContent />
+          <div className="">
+            <MostLikedContent />
           </div>
 
           <Footer />

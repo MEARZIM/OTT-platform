@@ -135,9 +135,7 @@ export default function MyStuffPage() {
                           <img
                             src={item.video.thumbnail}
                             alt={item.video.title}
-                            width={100}
-                            height={100}
-                            className="w-full rounded-sm transition-opacity group-hover:opacity-70"
+                            className="w-full rounded-sm transition-opacity group-hover:opacity-70 aspect-2/3"
                           />
                           <h3 className="mt-2 text-lg font-medium truncate">{item.video.title}</h3>
                           <p className="text-s text-zinc-800 dark:text-zinc-400">{"Movie"}</p>
@@ -168,9 +166,7 @@ export default function MyStuffPage() {
                           <img
                             src={item.video.thumbnail}
                             alt={item.video.title}
-                            width={100}
-                            height={100}
-                            className="w-full rounded-sm transition-opacity group-hover:opacity-70"
+                            className="w-full rounded-sm transition-opacity group-hover:opacity-70 aspect-2/3"
                           />
                           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white/80 dark:from-black/80 to-transparent h-16">
                             <div className="absolute bottom-0 left-0 right-0 px-2 pb-1">

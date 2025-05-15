@@ -6,31 +6,34 @@ import {
     CarouselNext,
     CarouselPrevious
 } from "../../../../components/ui/carousel";
-import { useVideos } from "../../../../hooks/use-videos";
+import { useMostLikedVideos } from "../../../../hooks/use-mostLikedVideo";
 
-const PopularContent = () => {
-    const { videos, loading } = useVideos();
+
+const MostLikedContent = () => {
+    const { mostLikedvideos, loading } = useMostLikedVideos();
 
     if (loading) {
-        return <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {Array(10).fill(0).map((_, i) => (
-                <div key={i} className="animate-pulse space-y-2">
-                    <div className="bg-zinc-300 dark:bg-zinc-800 h-[225px] w-full rounded" />
-                    <div className="h-4 bg-zinc-300 dark:bg-zinc-800 rounded w-3/4" />
-                </div>
-            ))}
-        </div>;
+        return (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {Array(10).fill(0).map((_, i) => (
+                    <div key={i} className="animate-pulse space-y-2">
+                        <div className="bg-zinc-300 dark:bg-zinc-800 h-[225px] w-full rounded" />
+                        <div className="h-4 bg-zinc-300 dark:bg-zinc-800 rounded w-3/4" />
+                    </div>
+                ))}
+            </div>
+        );
     }
 
     return (
         <div className="relative w-full px-4 overflow-hidden mb-6">
             <div className="flex items-center mb-4 px-8">
-                <h2 className="text-lg sm:text-3xl font-extrabold">Popular Content</h2>
+                <h2 className="text-lg sm:text-3xl font-extrabold">Most Liked Videos</h2>
             </div>
 
             <Carousel className="relative w-full px-14">
                 <CarouselContent className="flex gap-4">
-                    {videos.map((video) => (
+                    {mostLikedvideos.map((video) => (
                         <CarouselItem
                             key={video.id}
                             className="
@@ -62,4 +65,4 @@ const PopularContent = () => {
     );
 };
 
-export default PopularContent;
+export default MostLikedContent;

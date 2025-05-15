@@ -53,7 +53,7 @@ const CategoryPage = () => {
                     to={`/player/${video.id}`}
                     className="block group w-full"
                   >
-                    <div className="w-full aspect-[2/3] rounded-lg overflow-hidden bg-zinc-300 dark:bg-zinc-700">
+                    <div className="w-full aspect-2/3 rounded-lg overflow-hidden bg-zinc-300 dark:bg-zinc-700">
                       <img
                         src={video.thumbnail}
                         alt={video.title}
