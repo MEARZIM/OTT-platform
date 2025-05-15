@@ -35,8 +35,8 @@ export default function WatchHistoryPage() {
             </Link>
             <h1 className="text-2xl font-bold">Watch History</h1>
           </div>
-          <div className="max-w-3xl mt-10 flex items-center justify-center mx-auto">
-            <div className="bg-zinc-200 dark:bg-zinc-900 rounded-lg p-6 shadow-md space-y-6">
+          <div className="w-full mt-10 flex items-center justify-center mx-auto">
+            <div className="w-full md:w-3/4 lg:w-2/3 bg-zinc-200 dark:bg-zinc-900 rounded-lg p-8 shadow-md space-y-6">
 
               {/* Section Title */}
               <h2 className="text-lg font-semibold">Manage your Watch History</h2>

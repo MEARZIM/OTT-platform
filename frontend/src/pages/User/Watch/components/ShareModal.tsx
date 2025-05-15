@@ -36,8 +36,8 @@ const ShareModal = ({
 
   return (
     <Modal
-      title="Share this post"
-      description="Share this post to anywhere"
+      title="Share this content"
+      description="Share this content to anywhere"
       isOpen={isOpen}
       onClose={onClose}
     >
