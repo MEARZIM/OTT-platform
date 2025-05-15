@@ -8,35 +8,39 @@ import {
 } from "../../../../components/ui/carousel";
 import { useVideos } from "../../../../hooks/use-videos";
 
-
 const PopularContent = () => {
     const { videos, loading } = useVideos();
 
     if (loading) {
-        return (<>
-            loading...
-        </>)
+        return <div className="px-4 text-sm text-gray-500">Loading popular content...</div>;
     }
-    
+
     return (
         <div className="relative w-full px-4 overflow-hidden mb-6">
             <div className="flex items-center mb-4">
-                <h2 className="text-xl font-extrabold">Popular Content</h2>
+                <h2 className="text-lg sm:text-xl font-extrabold">Popular Content</h2>
             </div>
+
             <Carousel className="relative w-full">
-                <CarouselContent className="flex gap-4 flex-nowrap">
+                <CarouselContent className="flex gap-4">
                     {videos.map((video) => (
                         <CarouselItem
                             key={video.id}
-                            className="flex-none w-[calc(100%/2)] sm:w-[calc(100%/1)] md:w-[calc(100%/3)] lg:w-[calc(100%/5)] xl:w-[calc(100%/7)]"
+                            className="
+                                flex-none 
+                                w-[85%] 
+                                xs:w-[70%] 
+                                sm:w-[50%] 
+                                md:w-[33.3333%] 
+                                lg:w-[20%] 
+                                xl:w-[14.2857%]
+                            "
                         >
                             <Link to={`/player/${video.id}`}>
                                 <img
                                     src={video.thumbnail}
                                     alt={video.title}
-                                    width={250}
-                                    height={200}
-                                    className="rounded-md object-cover"
+                                    className="rounded-md object-cover w-full aspect-2/3"
                                 />
                             </Link>
                         </CarouselItem>

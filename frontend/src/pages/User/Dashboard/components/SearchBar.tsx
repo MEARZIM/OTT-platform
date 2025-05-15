@@ -17,7 +17,6 @@ const SearchBar = () => {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Handle outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -32,7 +31,6 @@ const SearchBar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Cleanup debounce timer
   useEffect(() => {
     return () => {
       if (debounceRef.current) {
@@ -73,16 +71,16 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="p-4 relative w-full" ref={containerRef}>
+    <div className="p-2 sm:p-4 relative w-full" ref={containerRef}>
       <div className="relative">
         <input
           type="text"
           placeholder="Search"
           value={query}
           onChange={handleChange}
-          className="w-full bg-zinc-100 dark:bg-zinc-900 border border-gray-400 rounded-md py-2 px-4 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-[#00a8e1]"
+          className="w-full bg-zinc-100 dark:bg-zinc-900 border border-gray-400 rounded-md py-2 px-10 text-sm sm:text-base text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-[#00a8e1]"
         />
-        <div className="absolute right-3 top-2.5">
+        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
           <Search className="h-5 w-5 text-black dark:text-white" />
         </div>
 
@@ -104,10 +102,10 @@ const SearchBar = () => {
                   <img
                     src={video.thumbnail}
                     alt={video.title}
-                    className="w-16 h-10 object-cover rounded mr-4"
+                    className="w-16 h-10 object-cover rounded mr-3 flex-shrink-0"
                   />
-                  <div>
-                    <div className="font-medium text-sm">{video.title}</div>
+                  <div className="overflow-hidden">
+                    <div className="font-medium text-sm line-clamp-1">{video.title}</div>
                     <div className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
                       {video.description}
                     </div>

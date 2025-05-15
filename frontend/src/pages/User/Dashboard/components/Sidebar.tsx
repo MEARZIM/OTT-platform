@@ -54,7 +54,6 @@ const SidebarComponent = ({ user }: SidebarProps) => {
     window.location.href = `${BACKEND_URL}/api/auth/logout`
   }
 
-  console.log(categories);
 
   return (
     <Sidebar className="border-none">
@@ -140,7 +139,7 @@ const SidebarComponent = ({ user }: SidebarProps) => {
                           categories.map((category) => (
                             <SidebarMenuSub key={category.id}>
                               <SidebarMenuSubButton className="hover:bg-zinc-400 dark:hover:bg-zinc-800 text-black dark:text-white dark:hover:text-white">
-                                <Link to={`/categories/${category.id}`}>
+                                <Link to={`/categories/${category.id}/${category.name}`}>
                                   <span className="text-md text-black dark:text-white">{category.name}</span>
                                 </Link>
                               </SidebarMenuSubButton>

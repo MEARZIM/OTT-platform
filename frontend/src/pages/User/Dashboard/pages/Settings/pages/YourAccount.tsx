@@ -1,7 +1,10 @@
-import { ArrowLeft, Crown} from "lucide-react"
+import { ArrowLeft, Crown } from "lucide-react"
 import { Link } from "react-router-dom"
+
 import { useUser } from "../../../../../../hooks/use-user"
 import { useSubscription } from "../../../../../../hooks/use-subscription";
+import Sidebar from "../../../components/Sidebar";
+import { SidebarProvider } from "../../../../../../components/ui/sidebar";
 
 export default function YourAccountPage() {
     const { user } = useUser();
@@ -9,6 +12,12 @@ export default function YourAccountPage() {
 
     return (
         <div className="flex h-screen bg-white dark:bg-black text-black dark:text-white">
+            <SidebarProvider>
+            {user &&
+                <Sidebar
+                    user={user}
+                />
+            }
             <div className="flex-1 overflow-y-auto px-6 py-8">
                 {/* Header */}
                 <div className="flex items-center mb-10">
@@ -34,7 +43,7 @@ export default function YourAccountPage() {
                                 <Crown className="absolute -bottom-1 -right-1 text-yellow-400 fill-amber-400 rounded-full p-1 w-10 h-10" />
                             )}
                         </div>
-                         
+
 
                     </div>
 
@@ -61,6 +70,7 @@ export default function YourAccountPage() {
                     </form>
                 </div>
             </div>
-        </div>
+        </SidebarProvider>
+        </div >
     );
 }

@@ -126,18 +126,13 @@ export default function VideoPlayer() {
                 {/* Title and Description */}
                 <Card className="mb-4 bg-white dark:bg-black border-none shadow-none">
                     <CardContent className="p-4 md:p-6">
-                        <h1 className="text-xl md:text-2xl font-bold text-black dark:text-white mb-2">
+                        <h1 className="text-xl md:text-5xl font-bold text-black dark:text-white mb-6">
                             {video.title || "Video Not Found"}
                         </h1>
-                        <p className="text-zinc-500 mb-4">
+                        <p className="text-zinc-500 text-sm md:text-xl mb-4">
                             {video?.description || "No description available for this video."}
                         </p>
 
-                        <div className="flex flex-wrap gap-3">
-                            <Button className="bg-zinc-200 hover:bg-[#3d3d3d] text-black font-bold hover:text-white">
-                                <Play className="mr-2 h-4 w-4" /> Play
-                            </Button>
-                        </div>
                     </CardContent>
                 </Card>
 
