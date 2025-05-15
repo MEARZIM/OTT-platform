@@ -9,6 +9,7 @@ import PopularContent from './components/PopularContent';
 import MostLikedContent from './components/MostLikedContent';
 import { ModeToggle } from '../../../components/mode-toggle';
 import { SidebarProvider, SidebarTrigger } from '../../../components/ui/sidebar';
+import RecommendedContent from './components/Recommendation';
 
 const DashboardPage = () => {
   const { user } = useUser();
@@ -54,15 +55,15 @@ const DashboardPage = () => {
           </div>
 
 
-          {/* <div className="flex-1">
-            <SuggestedContent />
-            </div> */}
+          <div >
+            <RecommendedContent />
+          </div>
 
-          <div className="">
+          <div>
             <PopularContent />
           </div>
 
-          <div className="">
+          <div>
             <MostLikedContent />
           </div>
 
