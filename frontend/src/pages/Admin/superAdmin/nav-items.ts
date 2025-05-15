@@ -1,12 +1,12 @@
 import { Award, BarChart, Layers, Settings, ShieldUser } from "lucide-react";
 
 export const NAV_ITEMS = [
-    {
-        id: "dashboard",
-        label: "Super Admin Dashboard",
-        icon: BarChart,
-        path: "/super-admin/dashboard"
-    },
+    // {
+    //     id: "dashboard",
+    //     label: "Super Admin Dashboard",
+    //     icon: BarChart,
+    //     path: "/super-admin/dashboard"
+    // },
     {
         id: "manage-admins",
         label: "Manage Admins",
