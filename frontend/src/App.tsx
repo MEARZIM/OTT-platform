@@ -62,7 +62,7 @@ const App = () => {
               <Route path="/settings/watch-history" element={<WatchHistoryPage />} />
               <Route path="/player/:id" element={<Watch />} />
               <Route path="/settings/account" element={<YourAccountPage />} />
-              <Route path="/categories/:id" element={<CategoryPage />} />
+              <Route path="/categories/:id/:name" element={<CategoryPage />} />
             </Route>
 
             {/* Super Admin Routes */}
