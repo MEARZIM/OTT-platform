@@ -31,7 +31,7 @@ videoRouter.post(
         { name: "thumbnail", maxCount: 1 },
     ]),
     videoController.uploadVideoController as any
-); 
+);
 
 videoRouter.patch(
     "/:videoId",
@@ -41,7 +41,7 @@ videoRouter.patch(
         { name: "thumbnail", maxCount: 1 },
     ]),
     videoController.updateVideoController as any
-) 
+)
 
 videoRouter.delete(
     "/:videoId",
@@ -59,26 +59,6 @@ videoRouter.get(
 
 // PUBLIC ROUTES
 videoRouter.get(
-    "/",
-    videoController.getAllVideosController as any
-);
-
-videoRouter.get(
-    "/search",
-    videoController.getSearchedVideosController as any
-);
-
-videoRouter.get(
-    "/:id",
-    videoController.getVideoByIdController as any
-);
-
-videoRouter.get(
-    "/category/:categoryId",
-    videoController.getVideoByCategoryIdController as any
-)
-
-videoRouter.get(
     "/most-liked",
     videoController.getMostLikedVideosController as any
 );
@@ -87,5 +67,26 @@ videoRouter.get(
     "/top-rated",
     videoController.getTopRatedVideosController as any
 );
+
+videoRouter.get(
+    "/search",
+    videoController.getSearchedVideosController as any
+);
+
+videoRouter.get(
+    "/category/:categoryId",
+    videoController.getVideoByCategoryIdController as any
+);
+
+videoRouter.get(
+    "/",
+    videoController.getAllVideosController as any
+);
+
+videoRouter.get(
+    "/:id",
+    videoController.getVideoByIdController as any
+);
+
 
 export default videoRouter;
