@@ -13,6 +13,7 @@ def get_users_details(token):
     """
     
     url = f'{BACKEND_URL}/api/users'
+    print(f"Fetching user details from {url} with token: {token}")
     headers = {'Authorization': token}
     
     try:

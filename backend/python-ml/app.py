@@ -6,7 +6,7 @@ from services.video_service import extract_liked_video_ids, get_history, get_vid
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+CORS(app, supports_credentials=True)
 
 @app.route('/')
 def home():
@@ -121,4 +121,4 @@ def recommend_videos():
         return jsonify({"error": "Failed to fetch data", "details": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001)

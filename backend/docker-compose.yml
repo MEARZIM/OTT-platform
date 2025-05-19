@@ -1,0 +1,26 @@
+services:
+  node-backend:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    image: primeview-node:latest
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./node/.env
+    restart: unless-stopped
+    volumes:
+      - ./node:/app
+  
+
+  python-ml-service:
+    build:
+      context: ./python-ml
+      dockerfile: Dockerfile
+    image: primeview-python-ml:latest
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./python-ml/.env
+    volumes:
+      - ./python-ml:/app
