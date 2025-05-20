@@ -19,8 +19,10 @@ services:
       dockerfile: Dockerfile
     image: primeview-python-ml:latest
     ports:
-      - "5001:5001"
+      - "5050:5000"
     env_file:
       - ./python-ml/.env
+    environment:
+      - BACKEND_URL=http://node-backend:8080
     volumes:
       - ./python-ml:/app

@@ -6,7 +6,7 @@ class UserController {
     // ✅ Get user by email
     async getUserInfo(req: Request, res: Response) {
         try {
-            console.log("User info request", req.user);
+            // console.log("User info request", req.user);
             if (!req.user) return res.status(401).json({ message: "Unauthorized" });
             const user = req.user as User;
 

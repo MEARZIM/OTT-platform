@@ -121,4 +121,4 @@ def recommend_videos():
         return jsonify({"error": "Failed to fetch data", "details": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5050)
