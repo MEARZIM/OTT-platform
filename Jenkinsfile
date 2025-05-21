@@ -7,7 +7,7 @@ pipeline {
     }
 
     tools {
-        nodejs 'NodeJS 18'
+        nodejs 'node'
     }
 
     stages {
