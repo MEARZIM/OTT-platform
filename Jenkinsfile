@@ -17,9 +17,13 @@ pipeline {
             steps {
                 dir("${DEPLOY_DIR}") {
                     /* groovylint-disable-next-line NestedBlockDepth */
-                    script {
-                        sh 'docker-compose down'
-                        sh 'docker-compose up --build -d'
+                    withCredentials([file(credentialsId: 'backend-env', variable: 'ENV_FILE')]) {
+                        /* groovylint-disable-next-line NestedBlockDepth */
+                        script {
+                            sh 'cp $ENV_FILE node/.env'
+                            sh 'docker-compose down'
+                            sh 'docker-compose up --build -d'
+                        }
                     }
                 }
             }
