@@ -6,8 +6,6 @@ pipeline {
         DEPLOY_DIR = "${env.WORKSPACE}/backend"
     }
 
-    tools {nodejs "node"}
-
     stages {
         stage('Clone') {
             steps {
