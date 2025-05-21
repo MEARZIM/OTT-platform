@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     image: primeview-node:latest
     ports:
-      - "8080:8080"
+      - "8000:8000"
     env_file:
       - ./node/.env
     restart: unless-stopped
