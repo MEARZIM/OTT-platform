@@ -21,6 +21,7 @@ pipeline {
                         /* groovylint-disable-next-line NestedBlockDepth */
                         script {
                             sh 'cp $ENV_FILE node/.env'
+                            sh 'cp $ENV_FILE python-ml/.env'
                             sh 'docker-compose down'
                             sh 'docker-compose up --build -d'
                         }
